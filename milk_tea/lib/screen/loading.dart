@@ -11,7 +11,11 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   @override
   void initState() {
-    // Navigator.pushReplacementNamed(context, Routes().intro);
+    new Future.delayed(const Duration(seconds: 4), () =>
+      Navigator.pushReplacementNamed(context, Routes().intro)
+    );
+
+
     super.initState();
   }
 
