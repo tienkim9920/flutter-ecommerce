@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:milk_tea/route/route.dart';
+import 'package:milk_tea/constant/route.dart';
 
 class Loading extends StatefulWidget {
   const Loading({ Key? key }) : super(key: key);

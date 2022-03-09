@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:milk_tea/route/route.dart';
+import 'package:milk_tea/constant/route.dart';
 import 'package:milk_tea/screen/index.dart';
 import 'package:milk_tea/screen/intro.dart';
 import 'package:milk_tea/screen/loading.dart';

@@ -3,6 +3,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
+import 'package:milk_tea/constant/name-component.dart';
 import 'package:milk_tea/models/menu-item.dart';
 import 'package:milk_tea/view/cart.dart';
 import 'package:milk_tea/view/history.dart';
@@ -18,15 +19,15 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
-  String currentItem = 'trangchu';
-  String currentScreen = 'Trang Chủ';
+  String currentItem = IDComponent().trangchu;
+  String currentScreen = NameComponent().trangchu;
 
   List<MenuItem> menuItems = [
-    MenuItem('trangchu', 'Trang chủ', Icons.home),
-    MenuItem('sanpham', 'Sản phẩm', Icons.shopping_cart),
-    MenuItem('giohang', 'Giỏ hàng', Icons.shopping_bag),
-    MenuItem('hoso', 'Hồ sơ', Icons.person),
-    MenuItem('lichsu', 'Lịch sử', Icons.menu_book),
+    MenuItem(IDComponent().trangchu, NameComponent().trangchu, Icons.home),
+    MenuItem(IDComponent().sanpham, NameComponent().sanpham, Icons.shopping_cart),
+    MenuItem(IDComponent().giohang, NameComponent().giohang, Icons.shopping_bag),
+    MenuItem(IDComponent().hoso, NameComponent().hoso, Icons.person),
+    MenuItem(IDComponent().lichsu, NameComponent().lichsu, Icons.menu_book),
   ];
 
   dynamic getScreen(){
@@ -44,12 +45,19 @@ class _IndexState extends State<Index> {
     }
   }
 
+  void updateCurrentItem(String id, String name){
+    setState(() => {
+      currentItem = id,
+      currentScreen = name
+    });
+  }
+
   @override
   Widget build(BuildContext context) => ZoomDrawer(
     style: DrawerStyle.Style1,
     borderRadius: 20,
-    angle: -5,
-    slideWidth: MediaQuery.of(context).size.width * .75,
+    angle: -7,
+    slideWidth: MediaQuery.of(context).size.width * .73,
     showShadow: true,
     backgroundColor: Color.fromRGBO(4, 118, 78, 0.7),
     menuScreen: Builder(
@@ -64,15 +72,22 @@ class _IndexState extends State<Index> {
     mainScreen: Scaffold(
       appBar: AppBar(
         title: Text(currentScreen, 
-          style: GoogleFonts.quicksand()),
-        backgroundColor: Colors.blue,
+          style: GoogleFonts.quicksand(
+            color: Color.fromRGBO(20, 20, 20, 0.7)
+          ),
+        ),
         centerTitle: true,
-        leading: MenuWidget()
+        leading: MenuWidget(),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: Image.asset('assets/buy.png'),
+            onPressed: () => updateCurrentItem(IDComponent().giohang, NameComponent().giohang),
+          )
+        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: getScreen(),
-      ),
+      body: getScreen(),
     )
   );
 }
