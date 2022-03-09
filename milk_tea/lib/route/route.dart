@@ -4,6 +4,5 @@ class Routes{
   String login = '/login';
   String signin = '/signin';
   String signup = '/signup';
-  String product = '/product';
-  String home = '/home';
+  String index = '/index';
 }
