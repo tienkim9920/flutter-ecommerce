@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/models/menu-item.dart';
@@ -47,8 +48,8 @@ class _IndexState extends State<Index> {
   Widget build(BuildContext context) => ZoomDrawer(
     style: DrawerStyle.Style1,
     borderRadius: 20,
-    angle: -3,
-    slideWidth: MediaQuery.of(context).size.width * .85,
+    angle: -5,
+    slideWidth: MediaQuery.of(context).size.width * .75,
     showShadow: true,
     backgroundColor: Color.fromRGBO(4, 118, 78, 0.7),
     menuScreen: Builder(
@@ -62,12 +63,16 @@ class _IndexState extends State<Index> {
     ),
     mainScreen: Scaffold(
       appBar: AppBar(
-        title: Text(currentScreen),
+        title: Text(currentScreen, 
+          style: GoogleFonts.quicksand()),
         backgroundColor: Colors.blue,
         centerTitle: true,
-        leading: MenuWidget(),
+        leading: MenuWidget()
       ),
-      body: getScreen(),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: getScreen(),
+      ),
     )
   );
 }
