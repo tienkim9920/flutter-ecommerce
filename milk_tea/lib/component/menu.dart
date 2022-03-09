@@ -3,18 +3,19 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:milk_tea/models/menu-item.dart';
 import 'package:milk_tea/route/route.dart';
 
-List<MenuItem> menuItems = [
-  MenuItem('trangchu', 'Trang chủ', Icons.home, Routes().home),
-  MenuItem('giohang', 'Giỏ hàng', Icons.shopping_bag, '/giohang'),
-  MenuItem('sanpham', 'Sản phẩm', Icons.shopping_cart, Routes().product),
-  MenuItem('hoso', 'Hồ sơ', Icons.person, '/giohang'),
-  MenuItem('lichsu', 'Lịch sử', Icons.menu_book, '/giohang'),
-];
+// List<MenuItem> menuItems = [
+//   MenuItem('trangchu', 'Trang chủ', Icons.home, Routes().home),
+//   MenuItem('giohang', 'Giỏ hàng', Icons.shopping_bag, '/giohang'),
+//   MenuItem('sanpham', 'Sản phẩm', Icons.shopping_cart, Routes().product),
+//   MenuItem('hoso', 'Hồ sơ', Icons.person, '/giohang'),
+//   MenuItem('lichsu', 'Lịch sử', Icons.menu_book, '/giohang'),
+// ];
 
 class Menu extends StatelessWidget {
   final String currentItem;
+  final List<MenuItem> menuItems;
 
-  const Menu(this.currentItem, { Key? key }) : super(key: key);
+  const Menu(this.currentItem, this.menuItems, { Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +41,7 @@ class Menu extends StatelessWidget {
                   Color.fromRGBO(180, 180, 180, 1)
                 ),
               ),
-              onTap: () => {
-                ZoomDrawer.of(context)!.close(),
-                Navigator.pushNamed(context, item.route)
-              },
+              onTap: () => {},
             )).toList(),
             Spacer(flex: 2),
             Text(currentItem)

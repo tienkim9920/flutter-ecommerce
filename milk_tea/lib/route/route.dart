@@ -6,4 +6,5 @@ class Routes{
   String signup = '/signup';
   String product = '/product';
   String home = '/home';
+  String index = '/index';
 }

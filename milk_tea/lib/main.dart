@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:milk_tea/route/route.dart';
 import 'package:milk_tea/screen/home.dart';
+import 'package:milk_tea/screen/index.dart';
 import 'package:milk_tea/screen/product.dart';
 import 'package:milk_tea/screen/intro.dart';
 import 'package:milk_tea/screen/loading.dart';
@@ -10,7 +11,7 @@ import 'package:milk_tea/screen/signup.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: Routes().home,
+    initialRoute: Routes().index,
     routes: {
       Routes().loading: (context) => Loading(),
       Routes().intro: (context) => Intro(),
@@ -19,6 +20,7 @@ void main() {
       Routes().signup: (context) => SignUp(),
       Routes().product: (context) => Product(),
       Routes().home: (context) => Home(),
+      Routes().index: (context) => Index(),
     },
   ));
 }
