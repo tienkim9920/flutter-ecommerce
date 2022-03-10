@@ -4,6 +4,7 @@ class IDComponent{
   String giohang = 'giohang';
   String hoso = 'hoso';
   String lichsu = 'lichsu';
+  String chitietsanpham = 'chitietsanpham';
 }
 
 class NameComponent{
@@ -12,4 +13,5 @@ class NameComponent{
   String giohang = 'Giỏ hàng';
   String hoso = 'Hồ sơ';
   String lichsu = 'Lịch sử';
+  String chitietsanpham = 'Chi tiết sản phẩm';
 }

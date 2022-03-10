@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:milk_tea/models/menu-item.dart';
+import 'package:milk_tea/pattern/menu-item.dart';
 
 class Menu extends StatelessWidget {
   final String currentItem;

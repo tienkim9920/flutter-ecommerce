@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:milk_tea/component/button.dart';
+import 'package:milk_tea/component/input-password.dart';
+import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class SignIn extends StatefulWidget {
@@ -10,12 +12,21 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+  TextEditingController inputUsername = TextEditingController();
+  TextEditingController inputPassword = TextEditingController();
+  bool isPassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Button(10, 10, 'Đăng Nhập', CustomColor(4, 118, 78, 1), () => print("Click Me"))
+          Button(10, 10, 'Đăng Nhập', CustomColor(4, 118, 78, 1), () => print("Click Me")),
+          Input(inputUsername, "Tên đăng nhập"),
+          InputPassword(inputPassword, "Mật khẩu", isPassword, () => {
+            setState(() => isPassword = !isPassword)
+          }),
         ],
       )
     );

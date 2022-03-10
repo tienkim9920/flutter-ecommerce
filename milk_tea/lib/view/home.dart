@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:milk_tea/component/button.dart';
+import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Home extends StatelessWidget {
@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Button(10, 10, 'Gửi', CustomColor(4, 118, 78, 1), () => print("Click Me"))
+          ButtonIcon(10, 10, 'Đăng Nhập với Facebook', CustomColor(4, 118, 78, 1), () => print("Click Me"), Icons.mail),
         ],
       ),
     );
