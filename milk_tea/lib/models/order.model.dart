@@ -5,6 +5,7 @@ class OrderModel{
   late String total;
   late String delivery; // status delivery
   late bool pay;
+  late String note;
   late String createTime;
   late String userId;
   late String paymentId;
