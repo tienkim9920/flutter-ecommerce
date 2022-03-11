@@ -5,4 +5,6 @@ class ProductModel{
   late String image;
   late String describe;
   late String productCategoryId;
+
+  // ProductModel(this.id, this.name, this.price, this.image, this.describe, this.productCategoryId)
 }

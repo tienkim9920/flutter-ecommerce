@@ -7,10 +7,13 @@ class ButtonIcon extends StatelessWidget {
   final double paddingBottom;
   final String text;
   final CustomColor color;
+  final String itemId;
   final Function excutiveEvent;
   final IconData icon;
+  final bool widthHorizontal;
 
-  const ButtonIcon(this.paddingTop, this.paddingBottom, this.text, this.color, this.excutiveEvent, this.icon, { Key? key }) : super(key: key);
+  const ButtonIcon(this.paddingTop, this.paddingBottom, this.text, this.color, this.itemId, this.excutiveEvent, 
+  this.icon, this.widthHorizontal, { Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class ButtonIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width,
+          width: widthHorizontal ? MediaQuery.of(context).size.width : null,
           child: Padding(
             padding: EdgeInsets.fromLTRB(30, paddingTop, 30, paddingBottom),
             child: SizedBox(
@@ -27,15 +30,15 @@ class ButtonIcon extends StatelessWidget {
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                   backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(color.R, color.G, color.B, color.O)),
+                  shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0)
-                      // side: BorderSide(color: Colors.red)
+                      borderRadius: BorderRadius.circular(60.0)
                     )
                   ),
                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0))
                 ),
-                onPressed: () => excutiveEvent(),
+                onPressed: () => excutiveEvent(itemId),
                 label: Text(text),
                 icon: Icon(icon),
               )              
