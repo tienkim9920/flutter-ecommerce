@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
+import 'package:milk_tea/pattern/category-item.dart';
+import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/view/cart.dart';
@@ -25,6 +27,7 @@ class _IndexState extends State<Index> {
   // Change Current Screen
   String currentItem = IDComponent().trangchu;
   String currentScreen = NameComponent().trangchu;
+  late CurrentParent currentParent;
 
   // List Drawer Menu
   List<MenuItem> menuItems = [
@@ -43,18 +46,48 @@ class _IndexState extends State<Index> {
     });
   }
 
+  void updateCurrentParent(CurrentParent parent){
+    setState(() {
+      currentParent = parent;
+    });
+  }
+
   // Product Detail
   ProductModel product = ProductModel();
   List<ProductModel> products = [];
+
+  // input search
+  TextEditingController inputSearch = TextEditingController();
+
+  // category product
+  List<CategoryItem> categoryItems = [
+    CategoryItem('1', 'Tất Cả'),
+    CategoryItem('2', 'Trà Sữa'),
+    CategoryItem('3', 'Trà Hoa Quả'),
+    CategoryItem('4', 'Coffee'),
+  ];
+  String currentCategoryItem = '1';
 
   // get Screen
   dynamic getScreen(){
     switch(currentItem){
       case 'trangchu':
-        return Home();
+        updateCurrentParent(CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
+        return Home((productId) => {
+          // GET API Detail Product
+          product.id = productId,
+          updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
+        });
       case 'sanpham':
+        updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
         // GET API List Product
-        return Product(products, (productId) => {
+        return Product(categoryItems, currentCategoryItem, (categoryItemId) => {
+          setState(() => {
+            currentCategoryItem = categoryItemId
+          })
+        }, inputSearch, (onInputSearch) => {
+          print(onInputSearch)
+        }, products, (productId) => {
           // GET API Detail Product
           product.id = productId,
           updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
@@ -66,7 +99,7 @@ class _IndexState extends State<Index> {
       case 'lichsu':
         return History();
       case 'chitietsanpham':
-        return ProductDetail(product, (id, name) => updateCurrentItem(id, name));
+        return ProductDetail(product, (id, name) => updateCurrentItem(id, name), currentParent);
     }
   }
 
