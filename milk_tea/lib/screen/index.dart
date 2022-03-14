@@ -25,9 +25,10 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   // Change Current Screen
-  String currentItem = IDComponent().trangchu;
-  String currentScreen = NameComponent().trangchu;
-  late CurrentParent currentParent;
+  String currentItem = IDComponent().chitietsanpham;
+  String currentScreen = NameComponent().chitietsanpham;
+  late CurrentParent currentParent = CurrentParent(IDComponent().sanpham, NameComponent().sanpham);
+  // late CurrentParent currentParent;
 
   // List Drawer Menu
   List<MenuItem> menuItems = [
@@ -55,6 +56,8 @@ class _IndexState extends State<Index> {
   // Product Detail
   ProductModel product = ProductModel();
   List<ProductModel> products = [];
+  double sizeProductDetail = 0;
+  int countProductDetail = 1;
 
   // input search
   TextEditingController inputSearch = TextEditingController();
@@ -73,25 +76,34 @@ class _IndexState extends State<Index> {
     switch(currentItem){
       case 'trangchu':
         updateCurrentParent(CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
-        return Home((productId) => {
-          // GET API Detail Product
-          product.id = productId,
-          updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-        });
+        return Home(
+          (productId) => {
+            // GET API Detail Product
+            product.id = productId,
+            updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
+          }
+        );
       case 'sanpham':
         updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
         // GET API List Product
-        return Product(categoryItems, currentCategoryItem, (categoryItemId) => {
-          setState(() => {
-            currentCategoryItem = categoryItemId
-          })
-        }, inputSearch, (onInputSearch) => {
-          print(onInputSearch)
-        }, products, (productId) => {
-          // GET API Detail Product
-          product.id = productId,
-          updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-        });
+        return Product(
+          categoryItems, 
+          currentCategoryItem, 
+          (categoryItemId) => {
+            setState(() => {
+              currentCategoryItem = categoryItemId
+            })
+          }, 
+          inputSearch, 
+          (onInputSearch) => {
+            print(onInputSearch)
+          }, products, 
+          (productId) => {
+            // GET API Detail Product
+            product.id = productId,
+            updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
+          }
+        );
       case 'giohang':
         return Cart();
       case 'hoso':
@@ -99,7 +111,27 @@ class _IndexState extends State<Index> {
       case 'lichsu':
         return History();
       case 'chitietsanpham':
-        return ProductDetail(product, (id, name) => updateCurrentItem(id, name), currentParent);
+        return ProductDetail(
+          product, 
+          (id, name) => updateCurrentItem(id, name), 
+          currentParent, 
+          sizeProductDetail, 
+          (size) => {
+            setState(() => {
+              sizeProductDetail = size
+            }),
+          },
+          countProductDetail,
+          () => {
+            setState(() => countProductDetail--)
+          },
+          () => {
+            setState(() => countProductDetail++)
+          },
+          (data) => {
+            print("Them san pham ${data} vao gio hang")
+          }
+        );
     }
   }
 

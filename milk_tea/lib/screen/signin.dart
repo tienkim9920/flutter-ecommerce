@@ -22,7 +22,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       body: Column(
         children: [
-          Button(10, 10, 'Đăng Nhập', CustomColor(4, 118, 78, 1), () => print("Click Me")),
+          Button(10, 10, 'Đăng Nhập', CustomColor(), () => print("Click Me")),
           Input(inputUsername, "Tên đăng nhập"),
           InputPassword(inputPassword, "Mật khẩu", isPassword, () => {
             setState(() => isPassword = !isPassword)

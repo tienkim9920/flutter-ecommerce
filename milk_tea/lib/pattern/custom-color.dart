@@ -1,8 +1,6 @@
 class CustomColor{
-  int R;
-  int G;
-  int B;
-  double O;
-
-  CustomColor(this.R, this.G, this.B, this.O);
+  int R = 4;
+  int G = 118;
+  int B = 78;
+  double O = 1;
 }

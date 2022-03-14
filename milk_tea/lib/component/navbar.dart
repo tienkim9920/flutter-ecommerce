@@ -26,20 +26,20 @@ class Navbar extends StatelessWidget {
             MouseRegion(
             cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                child: Image.asset('assets/back-arrow.png', width: 35, height: 35),
+                child: Image.asset('assets/back-arrow.png', width: 40, height: 40),
                 onTap: () => backStep(),
             ),
           )],
           if (showCenter) ...[
             Text(contentCenter, style: GoogleFonts.quicksand(
             fontSize: 19,
-            color: Color.fromRGBO(20, 20, 20, 0.7)
+            color: bgColor ? Color.fromRGBO(20, 20, 20, 0.7) : Colors.white
           ))],
           if (showRight) ...[
             MouseRegion(
             cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                child: Image.asset('assets/${contentRight}', width: 22, height: 22),
+                child: Image.asset('assets/${contentRight}', width: 30, height: 30),
                 onTap: () {},
             ),
           )],

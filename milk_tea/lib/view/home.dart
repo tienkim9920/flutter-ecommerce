@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          ButtonIcon(10, 10, 'Đăng Nhập với Facebook', CustomColor(4, 118, 78, 1), 'id', (id) => print(id), Icons.mail, true),
+          ButtonIcon(10, 10, 'Đăng Nhập với Facebook', CustomColor(), 'id', (id) => print(id), Icons.mail, true),
           TextButton(
             onPressed: () => { productId('123') }, 
             child: Text("Go to detail")

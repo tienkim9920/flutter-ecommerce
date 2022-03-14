@@ -70,6 +70,7 @@ class Product extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 140.0,
+                  margin: EdgeInsets.only(top: 5),
                   // color: Colors.red,
                   child: Row(
                     children: [
@@ -81,7 +82,7 @@ class Product extends StatelessWidget {
                               clipBehavior: Clip.none,
                               children: [
                                 Positioned(
-                                  child: Image.asset('assets/bakery.png', width: 120, height: 120),
+                                  child: Image.asset('assets/tradao.png', width: 120, height: 120),
                                 ),
                                 Positioned(
                                   top: 90,
@@ -137,7 +138,7 @@ class Product extends StatelessWidget {
                                   fontSize: 16
                                 )
                               ),
-                              ButtonIcon(0, 0, 'Mua', CustomColor(4, 118, 78, 1), 'id', (id) => { productId(id) }, Icons.shopping_cart, false)
+                              ButtonIcon(0, 0, 'Mua', CustomColor(), 'id', (id) => { productId(id) }, Icons.shopping_cart, false)
                             ],
                           ),
                           SizedBox(height: 20.0),
@@ -146,7 +147,7 @@ class Product extends StatelessWidget {
                             style: GoogleFonts.quicksand(
                               color: Color.fromRGBO(20, 20, 20, 1),
                               fontSize: 18,
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.w500
                             )
                           ),
                           
