@@ -25,9 +25,9 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   // Change Current Screen
-  String currentItem = IDComponent().chitietsanpham;
-  String currentScreen = NameComponent().chitietsanpham;
-  late CurrentParent currentParent = CurrentParent(IDComponent().sanpham, NameComponent().sanpham);
+  String currentItem = IDComponent().trangchu;
+  String currentScreen = NameComponent().trangchu;
+  late CurrentParent currentParent;
   // late CurrentParent currentParent;
 
   // List Drawer Menu
@@ -52,6 +52,13 @@ class _IndexState extends State<Index> {
       currentParent = parent;
     });
   }
+
+  // Home
+  List slideProduct = [
+    { 'id': '1', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
+    { 'id': '2', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
+    { 'id': '3', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
+  ];
 
   // Product Detail
   ProductModel product = ProductModel();
@@ -81,7 +88,12 @@ class _IndexState extends State<Index> {
             // GET API Detail Product
             product.id = productId,
             updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-          }
+          },
+          inputSearch,
+          (onInputSearch) => {
+            print(onInputSearch)
+          },
+          slideProduct
         );
       case 'sanpham':
         updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
