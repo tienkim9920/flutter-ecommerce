@@ -13,6 +13,7 @@ class ProductDetail extends StatelessWidget {
 
   final ProductModel product;
   final Function backStep;
+  final Function nextStep;
   final CurrentParent currentParent;
   final double sizeProductDetail;
   final Function onChangeSize;
@@ -22,7 +23,7 @@ class ProductDetail extends StatelessWidget {
   final Function addCart;
 
   const ProductDetail(this.product, this.backStep, this.currentParent, this.sizeProductDetail, this.onChangeSize, 
-    this.countProductDetail, this.onCountDown, this.onCountUp, this.addCart, { Key? key }) : super(key: key);
+    this.countProductDetail, this.onCountDown, this.onCountUp, this.addCart, this.nextStep, { Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,9 @@ class ProductDetail extends StatelessWidget {
                 Positioned(
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    child: Navbar(true, true, true, false, 'Chi tiết sản phẩm', 'flag.png', () => backStep(currentParent.id, currentParent.name))
+                    child: Navbar(true, true, true, false, 'Chi tiết sản phẩm', 'flag.png', 
+                      () => backStep(currentParent.id, currentParent.name), 
+                      () => nextStep())
                   )
                 ),
                 Positioned(

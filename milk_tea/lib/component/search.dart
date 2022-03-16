@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class InputSearch extends StatelessWidget {
   final TextEditingController inputText;
   final String placeHolder;
-  final Function onPassword;
+  final Function onInputSearch;
 
-  const InputSearch(this.inputText, this.placeHolder, this.onPassword, {Key? key}) : super(key: key);
+  const InputSearch(this.inputText, this.placeHolder, this.onInputSearch, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class InputSearch extends StatelessWidget {
                     suffixIcon: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                        onTap: () => onPassword(inputText.text),
+                        onTap: () => onInputSearch(inputText.text),
                         child: Icon(Icons.search, color: Color.fromRGBO(150, 150, 150, 1)),
                       ),
                     ),  

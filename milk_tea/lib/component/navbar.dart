@@ -10,9 +10,10 @@ class Navbar extends StatelessWidget {
   final String contentCenter;
   final String contentRight;
   final Function backStep;
+  final Function nextStep;
 
   const Navbar(this.showLeft, this.showCenter, this.showRight, this.bgColor, this.contentCenter, 
-  this.contentRight, this.backStep, { Key? key }) : super(key: key);
+  this.contentRight, this.backStep, this.nextStep, { Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class Navbar extends StatelessWidget {
             cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 child: Image.asset('assets/${contentRight}', width: 30, height: 30),
-                onTap: () {},
+                onTap: () => nextStep(),
             ),
           )],
         ],

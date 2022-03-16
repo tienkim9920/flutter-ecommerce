@@ -5,6 +5,8 @@ class IDComponent{
   String hoso = 'hoso';
   String lichsu = 'lichsu';
   String chitietsanpham = 'chitietsanpham';
+  String nhanxet = 'nhanxet';
+  String feedback = 'feedback';
 }
 
 class NameComponent{
@@ -14,4 +16,6 @@ class NameComponent{
   String hoso = 'Hồ sơ';
   String lichsu = 'Lịch sử';
   String chitietsanpham = 'Chi tiết sản phẩm';
+  String nhanxet = 'Nhận xét';
+  String feedback = 'Danh sách đánh giá';
 }

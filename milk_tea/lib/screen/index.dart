@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,8 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/view/cart.dart';
+import 'package:milk_tea/view/comment.dart';
+import 'package:milk_tea/view/feedback.dart';
 import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
 import 'package:milk_tea/view/product-detail.dart';
@@ -27,8 +31,8 @@ class _IndexState extends State<Index> {
   // Change Current Screen
   String currentItem = IDComponent().trangchu;
   String currentScreen = NameComponent().trangchu;
+  // late CurrentParent currentParent = CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet);
   late CurrentParent currentParent;
-  // late CurrentParent currentParent;
 
   // List Drawer Menu
   List<MenuItem> menuItems = [
@@ -78,6 +82,19 @@ class _IndexState extends State<Index> {
   ];
   String currentCategoryItem = '1';
 
+  // Comment
+  List star = [
+    { 'id': 0, 'status': true},
+    { 'id': 1, 'status': true},
+    { 'id': 2, 'status': true},
+    { 'id': 3, 'status': true},
+    { 'id': 4, 'status': false},
+  ]; 
+  int countStar = 4;
+  TextEditingController textComment = TextEditingController();
+
+  // Cart
+
   // get Screen
   dynamic getScreen(){
     switch(currentItem){
@@ -117,7 +134,9 @@ class _IndexState extends State<Index> {
           }
         );
       case 'giohang':
-        return Cart();
+        return Cart(
+          (productId) => print(productId),
+        );
       case 'hoso':
         return Profile();
       case 'lichsu':
@@ -125,7 +144,7 @@ class _IndexState extends State<Index> {
       case 'chitietsanpham':
         return ProductDetail(
           product, 
-          (id, name) => updateCurrentItem(id, name), 
+          (id, name) => updateCurrentItem(id, name), // backStep
           currentParent, 
           sizeProductDetail, 
           (size) => {
@@ -142,8 +161,38 @@ class _IndexState extends State<Index> {
           },
           (data) => {
             print("Them san pham ${data} vao gio hang")
-          }
+          },
+          () => updateCurrentItem(IDComponent().nhanxet, NameComponent().nhanxet) // nextStep
         );
+      case 'nhanxet':
+        updateCurrentParent(CurrentParent(IDComponent().chitietsanpham, NameComponent().chitietsanpham));
+        return Comment(
+          product, 
+          currentParent,
+          (id, name) => {
+            updateCurrentItem(id, name),
+            updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham))
+          },  // backStep
+          () => updateCurrentItem(IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
+          star,
+          (index) => { 
+            setState(() => {
+                star[index]['status'] = !star[index]['status'],
+                if (star[index]['status']){
+                  countStar++
+                }else {
+                  countStar--
+                }
+              }
+            ) 
+          },
+          countStar,
+          textComment,
+          (text) => print(text)
+        );
+      case 'feedback':
+        updateCurrentParent(CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet));
+        return FeedBack();
     }
   }
 

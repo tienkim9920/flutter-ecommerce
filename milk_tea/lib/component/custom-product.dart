@@ -7,8 +7,9 @@ import 'package:milk_tea/pattern/custom-color.dart';
 class CustomProduct extends StatelessWidget {
 
   final Function productId;
+  final bool countChange;
 
-  const CustomProduct(this.productId, {Key? key}) : super(key: key);
+  const CustomProduct(this.productId, this.countChange, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +72,62 @@ class CustomProduct extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: GoogleFonts.quicksand(
                       color: Color.fromRGBO(20, 20, 20, 1), fontSize: 18)),
-              SizedBox(height: 20.0),
+              SizedBox(height: 15.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Loại SP",
                       textAlign: TextAlign.start,
                       style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(120, 120, 120, 1),
                           fontSize: 16)),
-                  ButtonIcon(0, 0, 'Mua', CustomColor(), 'id',
+                  countChange ? 
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60),
+                        border: Border.all(color: Color.fromRGBO(220, 220, 220, 1))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                child: Icon(Icons.keyboard_arrow_down, size: 30, color: Color.fromRGBO(40, 40, 40, 1)),
+                                onTap: () => {
+                                  print("Down")
+                                },
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 26,
+                            child: Text("30",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.quicksand(
+                               color: Color.fromRGBO(40, 40, 40, 1),
+                                fontSize: 19,
+                                fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                child: Icon(Icons.keyboard_arrow_up, size: 30, color: Color.fromRGBO(40, 40, 40, 1)),
+                                onTap: () => print("Up") ,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ) : ButtonIcon(0, 0, 'Mua', CustomColor(), 'id',
                       (id) => { productId(id) }, Icons.shopping_cart, false)
                 ],
               ),

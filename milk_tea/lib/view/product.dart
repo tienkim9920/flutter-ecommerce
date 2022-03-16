@@ -67,7 +67,7 @@ class Product extends StatelessWidget {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  CustomProduct((id) => productId(id))
+                  CustomProduct((id) => productId(id), false)
               ],
             ),
           ))
