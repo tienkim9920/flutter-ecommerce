@@ -36,14 +36,25 @@ class Navbar extends StatelessWidget {
             fontSize: 19,
             color: bgColor ? Color.fromRGBO(20, 20, 20, 0.7) : Colors.white
           ))],
-          if (showRight) ...[
-            MouseRegion(
+          // if (showRight) ...[
+          //   MouseRegion(
+          //   cursor: SystemMouseCursors.click,
+          //     child: GestureDetector(
+          //       child: Image.asset('assets/${contentRight}', width: 30, height: 30),
+          //       onTap: () => nextStep(),
+          //   ),
+          // )],
+          showRight ? MouseRegion(
             cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 child: Image.asset('assets/${contentRight}', width: 30, height: 30),
                 onTap: () => nextStep(),
             ),
-          )],
+          ) : Container(
+            width: 30,
+            height: 30,
+            color: Colors.white,
+          )
         ],
       ),
     );

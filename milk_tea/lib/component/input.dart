@@ -14,24 +14,25 @@ class Input extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: SizedBox(
                 height: 50,
                 child: TextFormField(
+                  style: GoogleFonts.quicksand(),
                   controller: inputText,
                   cursorColor: Color.fromRGBO(4, 118, 78, 1),
                   decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              color: Color.fromRGBO(230, 230, 230, 1),
-                              width: 1.0)),
+                              color: Color.fromRGBO(235, 235, 235, 1),
+                              width: .9)),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: Color.fromRGBO(4, 118, 78, 1),
-                              width: 2.0)),
+                              width: 2.0,)),
                       labelStyle:
                           GoogleFonts.quicksand(color: Color.fromRGBO(150, 150, 150, 1)),
-                      labelText: placeHolder
+                      labelText: placeHolder,
                     ),
                 ),
               )),

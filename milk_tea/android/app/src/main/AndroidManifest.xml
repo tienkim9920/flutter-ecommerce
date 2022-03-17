@@ -4,6 +4,8 @@
         android:label="milk_tea"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAcQjrfAudzl6Ton7GA7D-gVqOINMFE7ns"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

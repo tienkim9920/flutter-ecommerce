@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:milk_tea/component/button.dart';
 import 'package:milk_tea/component/navbar.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
@@ -66,10 +67,7 @@ class Comment extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Trà Xanh Đá Xay",
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.quicksand(
-                                color: Color.fromRGBO(20, 20, 20, 1), fontSize: 18)),
+                            TextLabel(false, false, false, true, false, 'Trà Xanh Đá Xay', 18, true, 0),
                             SizedBox(height: 15.0),
                             Text("Loại SP",
                               textAlign: TextAlign.start,
@@ -77,12 +75,7 @@ class Comment extends StatelessWidget {
                                   color: Color.fromRGBO(120, 120, 120, 1),
                                   fontSize: 16)),
                             SizedBox(height: 15.0),
-                            Text('${NumberFormat.decimalPattern().format(70000)} VNĐ',
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.quicksand(
-                                  color: Color.fromRGBO(20, 20, 20, 1),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500)),
+                            TextLabel(true, false, false, true, false, '70000', 18, true, 0),
                           ],
                         ),
                       )
@@ -95,29 +88,15 @@ class Comment extends StatelessWidget {
           Column(
             children: [
               SizedBox(height: 30.0),
-              Text("Bạn có thích sản phẩm này",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.quicksand(
-                  color: Color.fromRGBO(20, 20, 20, 1), 
-                  fontSize: 20,
-                  )),
+              TextLabel(false, false, false, true, false, 'Bạn có thích sản phẩm này', 20, false, 1),
               SizedBox(height: 15.0),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text("Vui lòng để lại đánh giá và nhận xét của bạn để chúng tôi biết!",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.quicksand(
-                    color: Color.fromRGBO(20, 20, 20, 1), 
-                    fontSize: 16,
-                    )),
+                child: 
+                TextLabel(false, false, false, true, false, 'Vui lòng để lại đánh giá và nhận xét của bạn để chúng tôi biết!', 16, false, 1),
               ),
               SizedBox(height: 30.0),
-              Text('${countStar.toString()}.0',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.quicksand(
-                  color: Color.fromRGBO(20, 20, 20, 1), 
-                  fontSize: 60,
-                  )),
+              TextLabel(false, false, false, true, false, '${countStar.toString()}.0', 60, false, 1),
               SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/custom-product.dart';
 import 'package:milk_tea/component/search.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Home extends StatelessWidget {
@@ -94,13 +95,7 @@ class Home extends StatelessWidget {
                                       bottom: 0,
                                       left: 20,
                                       right: 0,
-                                      child: Text(
-                                        '${NumberFormat.decimalPattern().format(int.parse(item['price']))} VNĐ',
-                                        style: GoogleFonts.quicksand(
-                                          color: Colors.white,
-                                          fontSize: 19
-                                        ),
-                                      )
+                                      child: TextLabel(true, true, false, false, false, item['price'], 19, false, 3)
                                     ),
                                   ],
                                 )
@@ -118,15 +113,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Row(
                   children: [
-                    Text(
-                      'Loại sản phẩm',
-                      textAlign: TextAlign.start,
-                      style: GoogleFonts.quicksand(
-                        color: Color.fromRGBO(20, 20, 20, 1),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500
-                      ),
-                    )
+                    TextLabel(false, false, false, true, false, 'Loại sản phẩm', 20, true, 0)
                   ],
                 ),
               ),
@@ -165,22 +152,8 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
                             child: Column(
                               children: [
-                                Text(
-                                  'Tất cả',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(20, 20, 20, 1),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  '19 loại',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(CustomColor().R, CustomColor().G, CustomColor().B, 1),
-                                    fontSize: 16,
-                                  ),
-                                ),
+                                TextLabel(false, false, false, true, false, 'Tất cả', 20, false, 0),
+                                TextLabel(false, false, true, false, false, '19 loại', 16, false, 0),
                               ],
                             ),
                           )
@@ -215,22 +188,8 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
                             child: Column(
                               children: [
-                                Text(
-                                  'Trà Sữa',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(20, 20, 20, 1),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  '23 loại',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(CustomColor().R, CustomColor().G, CustomColor().B, 1),
-                                    fontSize: 16,
-                                  ),
-                                ),
+                                TextLabel(false, false, false, true, false, 'Trà Sữa', 20, false, 0),
+                                TextLabel(false, false, true, false, false, '19 loại', 16, false, 0),
                               ],
                             ),
                           )
@@ -265,22 +224,8 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
                             child: Column(
                               children: [
-                                Text(
-                                  'Hoa Quả',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(20, 20, 20, 1),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  '21 loại',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(CustomColor().R, CustomColor().G, CustomColor().B, 1),
-                                    fontSize: 16,
-                                  ),
-                                ),
+                                TextLabel(false, false, false, true, false, 'Hoa Quả', 20, false, 0),
+                                TextLabel(false, false, true, false, false, '19 loại', 16, false, 0),
                               ],
                             ),
                           )
@@ -315,22 +260,8 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
                             child: Column(
                               children: [
-                                Text(
-                                  'Coffee',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(20, 20, 20, 1),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  '5 loại',
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.quicksand(
-                                    color: Color.fromRGBO(CustomColor().R, CustomColor().G, CustomColor().B, 1),
-                                    fontSize: 16,
-                                  ),
-                                ),
+                                TextLabel(false, false, false, true, false, 'Coffee', 20, false, 0),
+                                TextLabel(false, false, true, false, false, '19 loại', 16, false, 0),                               
                               ],
                             ),
                           )
@@ -344,15 +275,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Row(
                   children: [
-                    Text(
-                      'Sản phẩm bán chạy',
-                      textAlign: TextAlign.start,
-                      style: GoogleFonts.quicksand(
-                        color: Color.fromRGBO(20, 20, 20, 1),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500
-                      ),
-                    )
+                    TextLabel(false, false, false, true, false, 'Sản phẩm bán chạy', 20, true, 0)
                   ],
                 ),
               ),

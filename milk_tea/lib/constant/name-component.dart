@@ -7,6 +7,8 @@ class IDComponent{
   String chitietsanpham = 'chitietsanpham';
   String nhanxet = 'nhanxet';
   String feedback = 'feedback';
+  String checkout = 'checkout';
+  String address = 'address';
 }
 
 class NameComponent{
@@ -17,5 +19,6 @@ class NameComponent{
   String lichsu = 'Lịch sử';
   String chitietsanpham = 'Chi tiết sản phẩm';
   String nhanxet = 'Nhận xét';
-  String feedback = 'Danh sách đánh giá';
+  String checkout = 'Nhập thông tin đặt hàng';
+  String address = 'Địa chỉ nhận hàng';
 }

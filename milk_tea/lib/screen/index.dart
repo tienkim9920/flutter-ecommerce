@@ -1,20 +1,24 @@
 import 'dart:html';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
 import 'package:milk_tea/pattern/category-item.dart';
+import 'package:milk_tea/pattern/checkout-item.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/view/cart.dart';
+import 'package:milk_tea/view/checkout.dart';
 import 'package:milk_tea/view/comment.dart';
 import 'package:milk_tea/view/feedback.dart';
 import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
+import 'package:milk_tea/view/map.dart';
 import 'package:milk_tea/view/product-detail.dart';
 import 'package:milk_tea/view/product.dart';
 import 'package:milk_tea/view/profile.dart';
@@ -95,6 +99,23 @@ class _IndexState extends State<Index> {
 
   // Cart
 
+  // Checkout
+  CheckoutItem checkoutItem = CheckoutItem();
+
+  // Map
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
   // get Screen
   dynamic getScreen(){
     switch(currentItem){
@@ -135,7 +156,7 @@ class _IndexState extends State<Index> {
         );
       case 'giohang':
         return Cart(
-          (productId) => print(productId),
+          (productId) => updateCurrentItem(IDComponent().checkout, NameComponent().checkout), // click order
         );
       case 'hoso':
         return Profile();
@@ -193,6 +214,29 @@ class _IndexState extends State<Index> {
       case 'feedback':
         updateCurrentParent(CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet));
         return FeedBack();
+      case 'checkout':
+        updateCurrentParent(CurrentParent(IDComponent().giohang, NameComponent().giohang));
+        return Checkout(
+          currentParent, 
+          (id, name) => {
+            updateCurrentItem(id, name)
+          }, // backStep
+          () => print("Đặt hàng thành công =))"), // nextStep
+          checkoutItem,
+          (id) => updateCurrentItem(IDComponent().address, NameComponent().address)
+        );
+      case 'address':
+        updateCurrentParent(CurrentParent(IDComponent().checkout, NameComponent().checkout));
+        return MapAddress(
+          currentParent, 
+          (id, name) => {
+            updateCurrentItem(id, name)
+          }, // backStep
+          () => print("Đặt hàng thành công =))"), // nextStep
+          _controller,
+          _kGooglePlex,
+          _kLake
+        );
     }
   }
 

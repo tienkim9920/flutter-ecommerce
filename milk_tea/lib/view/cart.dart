@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/button-white.dart';
 import 'package:milk_tea/component/custom-product.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Cart extends StatelessWidget {
@@ -205,14 +206,7 @@ class Cart extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
-                      Text('${NumberFormat.decimalPattern().format(70000)} VNĐ',
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.quicksand(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500
-                        )
-                      ),
+                      TextLabel(true, true, false, false, false, '70000', 24, true, 0),
                       Container(
                         margin: EdgeInsets.only(left: 40),
                         child: ButtonIconWhite(0, 0, 'Mua', 'id',

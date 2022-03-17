@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/navbar.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
@@ -78,16 +79,9 @@ class ProductDetail extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Trà Đào', style: GoogleFonts.quicksand(
-                            fontSize: 24,
-                            color: Color.fromRGBO(30, 30, 30, 1),
-                            fontWeight: FontWeight.w500
-                          ),),
+                          TextLabel(false, false, false, true, false, 'Trà Đào', 24, true, 3),
                           SizedBox(height: 8.0),
-                          Text('Trà Đào kết hợp với lá trà mang đầy sức sống, cho bạn hương thơm thật là tuyệt vời.', style: GoogleFonts.quicksand(
-                            fontSize: 18,
-                            color: Color.fromRGBO(60, 60, 60, 1)
-                          ),),
+                          TextLabel(false, false, false, false, true, 'Trà Đào kết hợp với lá trà mang đầy sức sống, cho bạn hương thơm thật là tuyệt vời.', 18, false, 3),
                           SizedBox(height: 10.0),
                           SliderTheme(
                             data: SliderThemeData(
@@ -130,14 +124,7 @@ class ProductDetail extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${NumberFormat.decimalPattern().format(70000)} VNĐ',
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.quicksand(
-                                  color: Color.fromRGBO(20, 20, 20, 1),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500
-                                )
-                              ),
+                              TextLabel(true, false, false, true, false, '70000', 24, true, 0),
                               Container(
                                 height: 45,
                                 decoration: BoxDecoration(
@@ -188,14 +175,7 @@ class ProductDetail extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 20.0),
-                          Text(
-                            'Nếu bạn thích sản phẩm này vui lòng them vào giỏ hàng',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.quicksand(
-                              color: Color.fromRGBO(40, 40, 40, 1),
-                              fontSize: 16
-                            ),
-                          )
+                          TextLabel(false, false, false, true, false, 'Nếu bạn thích sản phẩm này vui lòng them vào giỏ hàng', 16, false, 1),
                         ],
                       ),
                     ),
