@@ -33,37 +33,37 @@ class Checkout extends StatelessWidget {
           SizedBox(height: 25),
           Input(checkoutItem.email, 'Địa chỉ email'),
           SizedBox(height: 35),
-          ButtonIcon(0, 0, 'Vui lòng chọn địa chỉ', CustomColor(), 'id', 
-            (id) => gotoMapAddress(id), Icons.map, true)
-          // Container(
-          //   child: Column(
-          //     children: [
-          //       Row(
-          //         mainAxisAlignment: MainAxisAlignment.start,
-          //         children: [
-          //           Padding(
-          //             padding: EdgeInsets.symmetric(horizontal: 40),
-          //             child: TextLabel(false, false, false, false, true, "Tỉnh/TP", 12, false, 0),
-          //           )
-          //         ],
-          //       ),
-          //       Row(
-          //         children: [
-          //           Padding(
-          //             padding: EdgeInsets.symmetric(horizontal: 40),
-          //             child: TextLabel(false, false, false, true, false, "Thành Phố Quy Nhơn, Tỉnh Bình Định", 16, false, 0),
-          //           )
-          //         ],
-          //       ),
-          //       SizedBox(height: 5),
-          //       Container(
-          //         margin: EdgeInsets.symmetric(horizontal: 40),
-          //         width: MediaQuery.of(context).size.width,
-          //         height: .9,
-          //         color: Color.fromRGBO(235, 235, 235, 1),
-          //       )
-          //   ]),
-          // )
+          // ButtonIcon(0, 0, 'Vui lòng chọn địa chỉ', CustomColor(), 'id', 
+          //   (id) => gotoMapAddress(id), Icons.map, true)
+          Container(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: TextLabel(false, false, false, false, true, "Tỉnh/TP", 12, false, 0),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: TextLabel(false, false, false, true, false, "Thành Phố Quy Nhơn, Tỉnh Bình Định", 16, false, 0),
+                    )
+                  ],
+                ),
+                SizedBox(height: 5),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 40),
+                  width: MediaQuery.of(context).size.width,
+                  height: .9,
+                  color: Color.fromRGBO(235, 235, 235, 1),
+                )
+            ]),
+          )
         ]
       ),
     );
