@@ -206,7 +206,7 @@ class Cart extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
-                      TextLabel(true, true, false, false, false, '70000', 24, true, 0),
+                      TextLabel(true, true, false, false, false, '70000', 24, false, 0),
                       Container(
                         margin: EdgeInsets.only(left: 40),
                         child: ButtonIconWhite(0, 0, 'Mua', 'id',

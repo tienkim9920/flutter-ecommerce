@@ -39,7 +39,7 @@ class Comment extends StatelessWidget {
                   () => backStep(currentParent.id, currentParent.name), () => nextStep()),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                  padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
                   child: Row(
                     children: [
                       Container(
@@ -67,7 +67,7 @@ class Comment extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextLabel(false, false, false, true, false, 'Trà Xanh Đá Xay', 18, true, 0),
+                            TextLabel(false, false, false, true, false, 'Trà Xanh Đá Xay', 18, false, 0),
                             SizedBox(height: 15.0),
                             Text("Loại SP",
                               textAlign: TextAlign.start,
@@ -91,7 +91,7 @@ class Comment extends StatelessWidget {
               TextLabel(false, false, false, true, false, 'Bạn có thích sản phẩm này', 20, false, 1),
               SizedBox(height: 15.0),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: 
                 TextLabel(false, false, false, true, false, 'Vui lòng để lại đánh giá và nhận xét của bạn để chúng tôi biết!', 16, false, 1),
               ),
@@ -117,7 +117,7 @@ class Comment extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     child: SizedBox(
                       height: 130,
                       child: TextFormField(

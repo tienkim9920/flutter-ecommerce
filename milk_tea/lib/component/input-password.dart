@@ -16,7 +16,7 @@ class InputPassword extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: SizedBox(
                 height: 50,
                 child: TextFormField(

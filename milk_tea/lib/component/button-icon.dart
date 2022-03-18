@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
+import 'package:milk_tea/component/text-label.dart';
 
 class ButtonIcon extends StatelessWidget {
 
@@ -39,7 +40,8 @@ class ButtonIcon extends StatelessWidget {
                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0))
                 ),
                 onPressed: () => excutiveEvent(itemId),
-                label: Text(text),
+                label: TextLabel(false, true, false, false, false, text, 17,
+                false, 1),
                 icon: Icon(icon),
               )              
             )

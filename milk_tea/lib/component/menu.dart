@@ -23,11 +23,11 @@ class Menu extends StatelessWidget {
                 children: [
                   Image.asset('assets/logo_color.png', width: 50, height: 40),
                   Text(
-                    'Milk Tea', 
+                    'Ombee', 
                     style: GoogleFonts.lato(
                       textStyle: TextStyle(
                         color: Colors.black,
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold
                       )
                     ),
@@ -88,7 +88,7 @@ class Menu extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text('Milk Tea Coffee',
+                      Text('Ombee Coffee',
                         style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(180, 180, 180, 1),
                           fontSize: 16
@@ -98,7 +98,7 @@ class Menu extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text('HUFLIT',
+                      Text('Quy Nhơn',
                         style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(200, 200, 200, 1),
                           fontSize: 13

@@ -8,6 +8,7 @@ class IDComponent{
   String nhanxet = 'nhanxet';
   String feedback = 'feedback';
   String checkout = 'checkout';
+  String kiemtra = 'kiemtra';
 }
 
 class NameComponent{
@@ -19,4 +20,5 @@ class NameComponent{
   String chitietsanpham = 'Chi tiết sản phẩm';
   String nhanxet = 'Nhận xét';
   String checkout = 'Nhập thông tin đặt hàng';
+  String kiemtra = 'Kiểm tra đơn hàng';
 }

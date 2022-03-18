@@ -10,5 +10,4 @@ class OrderModel{
   late String userId;
   late String paymentId;
   late String couponId;
-  late String tickUserId;
 }

@@ -12,6 +12,7 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/view/cart.dart';
+import 'package:milk_tea/view/checking-order.dart';
 import 'package:milk_tea/view/checkout.dart';
 import 'package:milk_tea/view/comment.dart';
 import 'package:milk_tea/view/feedback.dart';
@@ -31,10 +32,10 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   // Change Current Screen
-  String currentItem = IDComponent().trangchu;
-  String currentScreen = NameComponent().trangchu;
-  // late CurrentParent currentParent = CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet);
-  late CurrentParent currentParent;
+  String currentItem = IDComponent().checkout;
+  String currentScreen = NameComponent().checkout;
+  late CurrentParent currentParent = CurrentParent(IDComponent().checkout, NameComponent().checkout);
+  // late CurrentParent currentParent;
 
   // List Drawer Menu
   List<MenuItem> menuItems = [
@@ -99,6 +100,7 @@ class _IndexState extends State<Index> {
 
   // Checkout
   CheckoutItem checkoutItem = CheckoutItem();
+  bool modalCheckout = false;
 
   // get Screen
   dynamic getScreen(){
@@ -205,9 +207,24 @@ class _IndexState extends State<Index> {
           (id, name) => {
             updateCurrentItem(id, name)
           }, // backStep
-          () => print("Đặt hàng thành công =))"), // nextStep
           checkoutItem,
-          (id) => print(id)
+          (CheckoutItem informationUser) => {
+            print(informationUser.addressShow),
+            updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
+            setState(() => modalCheckout = false)
+          },
+          modalCheckout,
+          () => {
+            setState(() => modalCheckout = true)
+          }
+        );
+      case 'kiemtra':
+        updateCurrentParent(CurrentParent(IDComponent().lichsu, NameComponent().lichsu));
+        return CheckingOrder(
+          currentParent, 
+          (id, name) => {
+            updateCurrentItem(id, name)
+          },
         );
     }
   }

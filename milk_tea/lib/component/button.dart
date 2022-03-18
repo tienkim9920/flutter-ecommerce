@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Button extends StatelessWidget {
@@ -19,7 +20,7 @@ class Button extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(30, paddingTop, 30, paddingBottom),
+            padding: EdgeInsets.fromLTRB(40, paddingTop, 40, paddingBottom),
             child: SizedBox(
               height: 40,
               child: TextButton(
@@ -35,7 +36,8 @@ class Button extends StatelessWidget {
                   padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0))
                 ),
                 onPressed: () => excutiveEvent(),
-                child: Text(text),
+                child: TextLabel(false, true, false, false, false, text, 17,
+                false, 1),
               )              
             )
           ),
