@@ -9,7 +9,7 @@ import 'package:milk_tea/screen/signup.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: Routes().signin,
+    initialRoute: Routes().loading,
     routes: {
       Routes().loading: (context) => Loading(),
       Routes().intro: (context) => Intro(),

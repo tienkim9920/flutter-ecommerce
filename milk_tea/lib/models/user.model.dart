@@ -5,6 +5,7 @@ class UserModel{
   late String username;
   late String password;
   late String fullname;
+  late String address;
   late String image;
   late String email;
   late String score;

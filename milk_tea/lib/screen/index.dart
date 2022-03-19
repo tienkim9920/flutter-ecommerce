@@ -20,6 +20,7 @@ import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
 import 'package:milk_tea/view/product-detail.dart';
 import 'package:milk_tea/view/product.dart';
+import 'package:milk_tea/view/profile-detail.dart';
 import 'package:milk_tea/view/profile.dart';
 
 class Index extends StatefulWidget {
@@ -32,10 +33,10 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   // Change Current Screen
-  String currentItem = IDComponent().checkout;
-  String currentScreen = NameComponent().checkout;
-  late CurrentParent currentParent = CurrentParent(IDComponent().checkout, NameComponent().checkout);
-  // late CurrentParent currentParent;
+  String currentItem = IDComponent().trangchu;
+  String currentScreen = NameComponent().trangchu;
+  // late CurrentParent currentParent = CurrentParent(IDComponent().checkout, NameComponent().checkout);
+  late CurrentParent currentParent;
 
   // List Drawer Menu
   List<MenuItem> menuItems = [
@@ -101,6 +102,12 @@ class _IndexState extends State<Index> {
   // Checkout
   CheckoutItem checkoutItem = CheckoutItem();
   bool modalCheckout = false;
+
+  // Profile
+
+  // Edit Profile
+  TextEditingController user = TextEditingController();
+  bool isPasswordUser = true;
 
   // get Screen
   dynamic getScreen(){
@@ -226,6 +233,19 @@ class _IndexState extends State<Index> {
             updateCurrentItem(id, name)
           },
         );
+      case 'chinhsuahoso':
+        updateCurrentParent(CurrentParent(IDComponent().hoso, NameComponent().hoso));
+        return ProfileDetail(
+          currentParent, 
+          (id, name) => {
+            updateCurrentItem(id, name)
+          },
+          user,
+          isPasswordUser,
+          () => {
+            setState(() => isPasswordUser = !isPasswordUser)
+          }
+        );
     }
   }
 
@@ -260,8 +280,12 @@ class _IndexState extends State<Index> {
       backgroundColor: Colors.white,
       actions: [
         IconButton(
-          icon: Image.asset('assets/buy.png'),
-          onPressed: () => updateCurrentItem(IDComponent().giohang, NameComponent().giohang),
+          icon: currentItem == IDComponent().hoso ? Image.asset('assets/pencil.png') : Image.asset('assets/buy.png'),
+          onPressed: () => {
+            currentItem == IDComponent().hoso
+            ? updateCurrentItem(IDComponent().chinhsuahoso, NameComponent().chinhsuahoso) 
+            : updateCurrentItem(IDComponent().giohang, NameComponent().giohang)
+          },
         )
       ],
     );

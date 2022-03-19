@@ -160,7 +160,7 @@ class CheckingOrder extends StatelessWidget {
                                 ),
                                 Row(
                                   children: [
-                                    TextLabel(false, true, false, false, false, "Score 500", 16, false, 0),
+                                    TextLabel(false, true, false, false, false, "Điểm của bạn 500", 16, false, 0),
                                   ],
                                 )
                               ],
@@ -205,7 +205,13 @@ class CheckingOrder extends StatelessWidget {
                                   child: TextLabel(false, false, false, true, false, "299 Nguyễn Thị Minh Khai", 18, false, 0),
                                 ),
                                 SizedBox(height: 3),
-                                TextLabel(false, false, false, false, true, "Nguyễn Kim Tiền", 15, false, 0),
+                                Row(
+                                  children: [
+                                    TextLabel(false, false, false, false, true, "Tổng đơn hàng: ", 15, false, 0),
+                                    TextLabel(true, false, false, false, true, '70000', 15, false, 0),
+                                  ],
+                                )
+                                
                               ],
                             ),
                           )
