@@ -24,48 +24,69 @@ import 'package:milk_tea/view/profile-detail.dart';
 import 'package:milk_tea/view/profile.dart';
 
 class Index extends StatefulWidget {
-  const Index({ Key? key }) : super(key: key);
+  const Index({Key? key}) : super(key: key);
 
   @override
   State<Index> createState() => _IndexState();
 }
 
 class _IndexState extends State<Index> {
-
   // Change Current Screen
   String currentItem = IDComponent().trangchu;
   String currentScreen = NameComponent().trangchu;
   // late CurrentParent currentParent = CurrentParent(IDComponent().checkout, NameComponent().checkout);
   late CurrentParent currentParent;
 
+  bool identify = false;
+
   // List Drawer Menu
   List<MenuItem> menuItems = [
     MenuItem(IDComponent().trangchu, NameComponent().trangchu, Icons.home),
-    MenuItem(IDComponent().sanpham, NameComponent().sanpham, Icons.shopping_cart),
-    MenuItem(IDComponent().giohang, NameComponent().giohang, Icons.shopping_bag),
+    MenuItem(
+        IDComponent().sanpham, NameComponent().sanpham, Icons.shopping_cart),
+    MenuItem(
+        IDComponent().giohang, NameComponent().giohang, Icons.shopping_bag),
     MenuItem(IDComponent().hoso, NameComponent().hoso, Icons.person),
     MenuItem(IDComponent().lichsu, NameComponent().lichsu, Icons.menu_book),
   ];
 
   // Update Current Item
-  void updateCurrentItem(String id, String name){
-    setState(() => {
-      currentItem = id,
-      currentScreen = name
-    });
+  void updateCurrentItem(String id, String name) {
+    setState(() => {currentItem = id, currentScreen = name});
   }
 
-  void updateCurrentParent(CurrentParent parent){
+  void updateCurrentParent(CurrentParent parent) {
     setState(() {
       currentParent = parent;
+
+      if (parent.id == IDComponent().trangchu) {
+        identify = false;
+      } else if (parent.id == IDComponent().sanpham) {
+        identify = true;
+      }
     });
   }
 
   // Home
   List slideProduct = [
-    { 'id': '1', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
-    { 'id': '2', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
-    { 'id': '3', 'image': 'assets/tradao.png', 'name': 'Trà Đào', 'price': '70000' },
+    {
+      'id': '1',
+      'image': 'assets/tradao.png',
+      'name': 'Trà Đào',
+      'price': '70000'
+    },
+    {
+      'id': '2',
+      'image': 'assets/tradao.png',
+      'name': 'Trà Đào',
+      'price': '70000'
+    },
+    {
+      'id': '3',
+      'image': 'assets/tradao.png',
+      'name': 'Trà Đào',
+      'price': '70000'
+    },
   ];
 
   // Product Detail
@@ -88,12 +109,12 @@ class _IndexState extends State<Index> {
 
   // Comment
   List star = [
-    { 'id': 0, 'status': true},
-    { 'id': 1, 'status': true},
-    { 'id': 2, 'status': true},
-    { 'id': 3, 'status': true},
-    { 'id': 4, 'status': false},
-  ]; 
+    {'id': 0, 'status': true},
+    {'id': 1, 'status': true},
+    {'id': 2, 'status': true},
+    {'id': 3, 'status': true},
+    {'id': 4, 'status': false},
+  ];
   int countStar = 4;
   TextEditingController textComment = TextEditingController();
 
@@ -109,149 +130,145 @@ class _IndexState extends State<Index> {
   TextEditingController user = TextEditingController();
   bool isPasswordUser = true;
 
+  // History
+
   // get Screen
-  dynamic getScreen(){
-    switch(currentItem){
+  dynamic getScreen() {
+    switch (currentItem) {
       case 'trangchu':
-        updateCurrentParent(CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
+        updateCurrentParent(
+            CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
         return Home(
-          (productId) => {
-            // GET API Detail Product
-            product.id = productId,
-            updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-          },
-          inputSearch,
-          (onInputSearch) => {
-            print(onInputSearch)
-          },
-          slideProduct
-        );
+            (productId) => {
+                  // GET API Detail Product
+                  product.id = productId,
+
+                  updateCurrentItem(IDComponent().chitietsanpham,
+                      NameComponent().chitietsanpham),
+                },
+            inputSearch,
+            (onInputSearch) => {print(onInputSearch)},
+            slideProduct);
       case 'sanpham':
-        updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
+        updateCurrentParent(
+            CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
         // GET API List Product
         return Product(
-          categoryItems, 
-          currentCategoryItem, 
-          (categoryItemId) => {
-            setState(() => {
-              currentCategoryItem = categoryItemId
-            })
-          }, 
-          inputSearch, 
-          (onInputSearch) => {
-            print(onInputSearch)
-          }, products, 
-          (productId) => {
-            // GET API Detail Product
-            product.id = productId,
-            updateCurrentItem(IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-          }
-        );
+            categoryItems,
+            currentCategoryItem,
+            (categoryItemId) => {
+                  setState(() => {currentCategoryItem = categoryItemId})
+                },
+            inputSearch,
+            (onInputSearch) => {print(onInputSearch)},
+            products,
+            (productId) => {
+                  // GET API Detail Product
+                  product.id = productId,
+                  updateCurrentItem(IDComponent().chitietsanpham,
+                      NameComponent().chitietsanpham)
+                });
       case 'giohang':
         return Cart(
-          (productId) => updateCurrentItem(IDComponent().checkout, NameComponent().checkout), // click order
+          (productId) => updateCurrentItem(
+              IDComponent().checkout, NameComponent().checkout), // click order
         );
       case 'hoso':
         return Profile();
       case 'lichsu':
-        return History();
+        return History(() =>
+            updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra));
       case 'chitietsanpham':
         return ProductDetail(
-          product, 
-          (id, name) => updateCurrentItem(id, name), // backStep
-          currentParent, 
-          sizeProductDetail, 
-          (size) => {
-            setState(() => {
-              sizeProductDetail = size
-            }),
-          },
-          countProductDetail,
-          () => {
-            setState(() => countProductDetail--)
-          },
-          () => {
-            setState(() => countProductDetail++)
-          },
-          (data) => {
-            print("Them san pham ${data} vao gio hang")
-          },
-          () => updateCurrentItem(IDComponent().nhanxet, NameComponent().nhanxet) // nextStep
-        );
+            product,
+            (id, name) => updateCurrentItem(id, name), // backStep
+            currentParent,
+            sizeProductDetail,
+            (size) => {
+                  setState(() => {sizeProductDetail = size}),
+                },
+            countProductDetail,
+            () => {setState(() => countProductDetail--)},
+            () => {setState(() => countProductDetail++)},
+            (data) => {print("Them san pham ${data} vao gio hang")},
+            () => updateCurrentItem(
+                IDComponent().nhanxet, NameComponent().nhanxet) // nextStep
+            );
       case 'nhanxet':
-        updateCurrentParent(CurrentParent(IDComponent().chitietsanpham, NameComponent().chitietsanpham));
+        updateCurrentParent(CurrentParent(
+            IDComponent().chitietsanpham, NameComponent().chitietsanpham));
         return Comment(
-          product, 
-          currentParent,
-          (id, name) => {
-            updateCurrentItem(id, name),
-            updateCurrentParent(CurrentParent(IDComponent().sanpham, NameComponent().sanpham))
-          },  // backStep
-          () => updateCurrentItem(IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
-          star,
-          (index) => { 
-            setState(() => {
-                star[index]['status'] = !star[index]['status'],
-                if (star[index]['status']){
-                  countStar++
-                }else {
-                  countStar--
-                }
-              }
-            ) 
-          },
-          countStar,
-          textComment,
-          (text) => print(text)
-        );
+            product,
+            currentParent,
+            (id, name) => {
+                  updateCurrentItem(id, name),
+                  if (identify)
+                    {
+                      updateCurrentParent(CurrentParent(
+                          IDComponent().sanpham, NameComponent().sanpham))
+                    }
+                  else
+                    {
+                      updateCurrentParent(CurrentParent(
+                          IDComponent().trangchu, NameComponent().trangchu))
+                    }
+                }, // backStep
+            () => updateCurrentItem(
+                IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
+            star,
+            (index) => {
+                  setState(() => {
+                        star[index]['status'] = !star[index]['status'],
+                        if (star[index]['status'])
+                          {countStar++}
+                        else
+                          {countStar--}
+                      })
+                },
+            countStar,
+            textComment,
+            (text) => print(text));
       case 'feedback':
-        updateCurrentParent(CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet));
+        updateCurrentParent(
+            CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet));
         return FeedBack();
       case 'checkout':
-        updateCurrentParent(CurrentParent(IDComponent().giohang, NameComponent().giohang));
+        updateCurrentParent(
+            CurrentParent(IDComponent().giohang, NameComponent().giohang));
         return Checkout(
-          currentParent, 
-          (id, name) => {
-            updateCurrentItem(id, name)
-          }, // backStep
-          checkoutItem,
-          (CheckoutItem informationUser) => {
-            print(informationUser.addressShow),
-            updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
-            setState(() => modalCheckout = false)
-          },
-          modalCheckout,
-          () => {
-            setState(() => modalCheckout = true)
-          }
-        );
+            currentParent,
+            (id, name) => {updateCurrentItem(id, name)}, // backStep
+            checkoutItem,
+            (CheckoutItem informationUser) => {
+                  print(informationUser.addressShow),
+                  updateCurrentItem(
+                      IDComponent().kiemtra, NameComponent().kiemtra),
+                  setState(() => modalCheckout = false)
+                },
+            modalCheckout,
+            () => {setState(() => modalCheckout = true)});
       case 'kiemtra':
-        updateCurrentParent(CurrentParent(IDComponent().lichsu, NameComponent().lichsu));
+        updateCurrentParent(
+            CurrentParent(IDComponent().lichsu, NameComponent().lichsu));
         return CheckingOrder(
-          currentParent, 
-          (id, name) => {
-            updateCurrentItem(id, name)
-          },
+          currentParent,
+          (id, name) => {updateCurrentItem(id, name)},
         );
       case 'chinhsuahoso':
-        updateCurrentParent(CurrentParent(IDComponent().hoso, NameComponent().hoso));
+        updateCurrentParent(
+            CurrentParent(IDComponent().hoso, NameComponent().hoso));
         return ProfileDetail(
-          currentParent, 
-          (id, name) => {
-            updateCurrentItem(id, name)
-          },
-          user,
-          isPasswordUser,
-          () => {
-            setState(() => isPasswordUser = !isPasswordUser)
-          }
-        );
+            currentParent,
+            (id, name) => {updateCurrentItem(id, name)},
+            user,
+            isPasswordUser,
+            () => {setState(() => isPasswordUser = !isPasswordUser)});
     }
   }
 
   // get AppBar
-  dynamic getAppBar(){
-    switch(currentItem){
+  dynamic getAppBar() {
+    switch (currentItem) {
       case 'trangchu':
         return showAppBar();
       case 'sanpham':
@@ -267,12 +284,11 @@ class _IndexState extends State<Index> {
     }
   }
 
-  dynamic showAppBar(){
+  dynamic showAppBar() {
     return AppBar(
-      title: Text(currentScreen, 
-        style: GoogleFonts.quicksand(
-          color: Color.fromRGBO(20, 20, 20, 0.7)
-        ),
+      title: Text(
+        currentScreen,
+        style: GoogleFonts.quicksand(color: Color.fromRGBO(20, 20, 20, 0.7)),
       ),
       centerTitle: true,
       leading: MenuWidget(),
@@ -280,11 +296,15 @@ class _IndexState extends State<Index> {
       backgroundColor: Colors.white,
       actions: [
         IconButton(
-          icon: currentItem == IDComponent().hoso ? Image.asset('assets/pencil.png') : Image.asset('assets/buy.png'),
+          icon: currentItem == IDComponent().hoso
+              ? Image.asset('assets/pencil.png')
+              : Image.asset('assets/buy.png'),
           onPressed: () => {
             currentItem == IDComponent().hoso
-            ? updateCurrentItem(IDComponent().chinhsuahoso, NameComponent().chinhsuahoso) 
-            : updateCurrentItem(IDComponent().giohang, NameComponent().giohang)
+                ? updateCurrentItem(
+                    IDComponent().chinhsuahoso, NameComponent().chinhsuahoso)
+                : updateCurrentItem(
+                    IDComponent().giohang, NameComponent().giohang)
           },
         )
       ],
@@ -293,24 +313,24 @@ class _IndexState extends State<Index> {
 
   @override
   Widget build(BuildContext context) => ZoomDrawer(
-    style: DrawerStyle.Style1,
-    borderRadius: 20,
-    angle: -7,
-    slideWidth: MediaQuery.of(context).size.width * .73,
-    showShadow: true,
-    backgroundColor: Color.fromRGBO(4, 118, 78, 0.7),
-    menuScreen: Builder(
-      builder: (context) => Menu(currentItem, menuItems, (item) => {
-        setState(() => {
-          currentItem = item.id,
-          currentScreen = item.title
-        }),
-        ZoomDrawer.of(context)!.close(),
-      }),
-    ),
-    mainScreen: Scaffold(
-      appBar: getAppBar(),
-      body: getScreen(),
-    )
-  );
+      style: DrawerStyle.Style1,
+      borderRadius: 20,
+      angle: -7,
+      slideWidth: MediaQuery.of(context).size.width * .73,
+      showShadow: true,
+      backgroundColor: Color.fromRGBO(4, 118, 78, 0.7),
+      menuScreen: Builder(
+        builder: (context) => Menu(
+            currentItem,
+            menuItems,
+            (item) => {
+                  setState(() =>
+                      {currentItem = item.id, currentScreen = item.title}),
+                  ZoomDrawer.of(context)!.close(),
+                }),
+      ),
+      mainScreen: Scaffold(
+        appBar: getAppBar(),
+        body: getScreen(),
+      ));
 }

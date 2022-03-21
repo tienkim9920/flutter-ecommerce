@@ -3,16 +3,16 @@ import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class History extends StatelessWidget {
-  const History({Key? key}) : super(key: key);
+  final Function nextStep;
+
+  const History(this.nextStep, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          Padding(
+      body: ListView(scrollDirection: Axis.vertical, children: [
+        Padding(
           padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
           child: Column(children: [
             Container(
@@ -41,8 +41,8 @@ class History extends StatelessWidget {
                               'Điểm của bạn', 20, false, 0)
                         ]),
                         Row(children: [
-                          TextLabel(false, true, false, false, false, '8700', 32,
-                              false, 0)
+                          TextLabel(false, true, false, false, false, '8700',
+                              32, false, 0)
                         ]),
                         SizedBox(height: 10),
                         Row(children: [
@@ -83,40 +83,62 @@ class History extends StatelessWidget {
               padding: EdgeInsets.only(top: 15),
               child: Column(
                 children: [
-                  Container(
+                  GestureDetector(
+                    onTap: () => nextStep(),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            TextLabel(false, false, false, true, false,
-                                'Đơn hàng có mã số 1NSHJKGH1500', 18, false, 0),
-                          ],
+                        Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextLabel(
+                                      false,
+                                      false,
+                                      false,
+                                      true,
+                                      false,
+                                      'Đơn hàng có mã số 1NSHJKGH1500',
+                                      18,
+                                      false,
+                                      0),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextLabel(
+                                      false,
+                                      false,
+                                      false,
+                                      false,
+                                      true,
+                                      'Ngày 18/02/2022 | 7:00 AM',
+                                      16,
+                                      false,
+                                      0),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            TextLabel(false, false, false, false, true,
-                                'Ngày 18/02/2022 | 7:00 AM', 16, false, 0),
-                          ],
-                        ),
+                        SizedBox(height: 13),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: .9,
+                          color: Color.fromARGB(255, 241, 241, 241),
+                        )
                       ],
                     ),
-                  ),
-                  SizedBox(height: 13),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: .9,
-                    color: Color.fromARGB(255, 241, 241, 241),
                   )
                 ],
               ),
             ),
           ]),
         ),
-        ]
-      ),
+      ]),
     );
   }
 }
