@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/button.dart';
+import 'package:milk_tea/component/input-hint.dart';
 import 'package:milk_tea/component/input-password.dart';
 import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/component/text-label.dart';
@@ -78,18 +79,20 @@ class ProfileDetail extends StatelessWidget {
               ),
             ]),
             SizedBox(height: 20),
-            Input(user, 'Họ và tên'),
+            Input(user, 'Họ và tên', 'Họ và tên không được để trống', false),
             SizedBox(height: 20),
-            Input(user, 'Địa chỉ'),
+            Input(user, 'Địa chỉ', 'Đại chỉ không được để trống', false),
             SizedBox(height: 20),
-            Input(user, 'Email'),
+            Input(user, 'Email', 'Email không được để trống', false),
             SizedBox(height: 20),
-            Input(user, 'Số điện thoại'),
+            Input(user, 'Số điện thoại', 'Số điện thoại không được để trống',
+                false),
             SizedBox(height: 20),
-            Input(user, 'Tên đăng nhập'),
+            Input(user, 'Tên đăng nhập', 'Tên đăng nhập không được để trống',
+                false),
             SizedBox(height: 20),
-            InputPassword(
-                user, 'Mật khẩu', isPasswordUser, () => onPasswordUser()),
+            InputPassword(user, 'Mật khẩu', isPasswordUser,
+                () => onPasswordUser(), 'Mật khẩu không được để trống', false),
             SizedBox(height: 35),
             Button(0, 0, 'Chỉnh sửa', CustomColor(), () => print('123'))
           ],

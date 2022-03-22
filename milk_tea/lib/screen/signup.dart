@@ -5,8 +5,12 @@ import 'package:milk_tea/component/input-password.dart';
 import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/component/modal.dart';
 import 'package:milk_tea/component/spinner-loading.dart';
+import 'package:milk_tea/component/text-error.dart';
 import 'package:milk_tea/component/text-label.dart';
+import 'package:milk_tea/mapping/user.mapping.dart';
+import 'package:milk_tea/models/user.model.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
+import 'package:milk_tea/service/user.service.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -16,14 +20,89 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController inputUsername = TextEditingController();
-  TextEditingController inputPassword = TextEditingController();
+  bool _validateEmail = false;
+  bool emailUsed = false;
+
+  bool _validateUsername = false;
+  bool usernameUsed = false;
+
+  bool _validateFullname = false;
+  bool _validatePassword = false;
+
   bool isPassword = true;
   bool modal = false;
   bool spinnerLoading = false;
 
-  void handlerSignUp() {
-    setState(() => spinnerLoading = true);
+  UserModel userModel = UserModel();
+
+  void handlerSignUp() async {
+    bool checkingInfo = checkValidation();
+
+    if (!checkingInfo) {
+      return;
+    }
+
+    clearError();
+
+    var res = await ServiceUser()
+        .postSignUp(UserMapping().MapServiceSignUp(userModel));
+
+    Future.delayed(
+        const Duration(seconds: 3),
+        () => {
+              if (res == 'Email has already been used')
+                {
+                  setState(() => {emailUsed = true, _validateEmail = true})
+                }
+              else if (res == 'Username has already been used')
+                {
+                  setState(
+                      () => {usernameUsed = true, _validateUsername = true})
+                }
+              else
+                {setState(() => modal = true)},
+              setState(() => spinnerLoading = false)
+            });
+  }
+
+  void clearError() {
+    setState(() {
+      spinnerLoading = true;
+      emailUsed = false;
+      usernameUsed = false;
+    });
+  }
+
+  void clearInput() {
+    userModel.fullname.text = '';
+    userModel.email.text = '';
+    userModel.username.text = '';
+    userModel.password.text = '';
+  }
+
+  dynamic checkValidation() {
+    setState(() {
+      userModel.fullname.text.isEmpty
+          ? _validateFullname = true
+          : _validateFullname = false;
+      userModel.email.text.isEmpty
+          ? _validateEmail = true
+          : _validateEmail = false;
+      userModel.username.text.isEmpty
+          ? _validateUsername = true
+          : _validateUsername = false;
+      userModel.password.text.isEmpty
+          ? _validatePassword = true
+          : _validatePassword = false;
+    });
+
+    if (_validateFullname ||
+        _validateEmail ||
+        _validatePassword ||
+        _validateUsername) {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -101,14 +180,32 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                   SizedBox(height: 25),
-                  Input(inputUsername, "Họ và tên"),
-                  SizedBox(height: 25),
-                  Input(inputUsername, "Email"),
-                  SizedBox(height: 25),
-                  Input(inputUsername, "Tên đăng nhập"),
-                  SizedBox(height: 25),
-                  InputPassword(inputPassword, "Mật khẩu", isPassword,
-                      () => {setState(() => isPassword = !isPassword)}),
+                  Input(userModel.fullname, "Họ và tên",
+                      'Họ và tên không được để trống', _validateFullname),
+                  SizedBox(height: 20),
+                  Input(
+                      userModel.email,
+                      "Email",
+                      emailUsed
+                          ? 'Email đã được sử dụng'
+                          : 'Email không được để trống',
+                      _validateEmail),
+                  SizedBox(height: 20),
+                  Input(
+                      userModel.username,
+                      "Tên đăng nhập",
+                      usernameUsed
+                          ? 'Tên đăng nhập đã được sử dụng'
+                          : 'Tên đăng nhập không được để trống',
+                      _validateUsername),
+                  SizedBox(height: 20),
+                  InputPassword(
+                      userModel.password,
+                      "Mật khẩu",
+                      isPassword,
+                      () => {setState(() => isPassword = !isPassword)},
+                      'Mật khẩu không được để trống',
+                      _validatePassword),
                   SizedBox(height: 35),
                   Button(0, 0, 'Đăng ký', CustomColor(), () => handlerSignUp()),
                   SizedBox(height: 25),
@@ -129,7 +226,7 @@ class _SignUpState extends State<SignUp> {
             ),
             if (modal) ...[
               Modal('Bạn đã đăng ký thành công', 'Xác nhận',
-                  () => setState(() => modal = false))
+                  () => setState(() => {modal = false, clearInput()}))
             ],
             if (spinnerLoading) ...[SpinnerLoading()]
           ],

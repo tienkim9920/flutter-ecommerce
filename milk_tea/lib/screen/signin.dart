@@ -7,6 +7,7 @@ import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/constant/route.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
+import 'package:milk_tea/pattern/user-login.dart';
 import 'package:milk_tea/screen/signup.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -18,9 +19,40 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  TextEditingController inputUsername = TextEditingController();
-  TextEditingController inputPassword = TextEditingController();
+  bool _validateUsername = false;
+  bool usernameInvalid = false;
+
+  bool _validatePassword = false;
+  bool passwordInvalid = false;
+
+  UserLogin user = UserLogin();
   bool isPassword = true;
+
+  void handlerSignIn() async {
+    bool checkingInfo = checkValidation();
+
+    if (!checkingInfo) {
+      return;
+    }
+
+    Navigator.pushNamed(context, Routes().index);
+  }
+
+  dynamic checkValidation() {
+    setState(() {
+      user.username.text.isEmpty
+          ? _validateUsername = true
+          : _validateUsername = false;
+      user.password.text.isEmpty
+          ? _validatePassword = true
+          : _validatePassword = false;
+    });
+
+    if (_validatePassword || _validateUsername) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +107,25 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             SizedBox(height: 25),
-            Input(inputUsername, "Tên đăng nhập"),
+            Input(
+                user.username,
+                "Tên đăng nhập",
+                usernameInvalid
+                    ? 'Vui lòng kiểm tra lại tên đăng nhập'
+                    : 'Tên đăng nhập không được để trống',
+                _validateUsername),
             SizedBox(height: 25),
-            InputPassword(inputPassword, "Mật khẩu", isPassword,
-                () => {setState(() => isPassword = !isPassword)}),
+            InputPassword(
+                user.password,
+                "Mật khẩu",
+                isPassword,
+                () => {setState(() => isPassword = !isPassword)},
+                passwordInvalid
+                    ? 'Vui lòng kiểm tra lại mật khẩu'
+                    : 'Mật khẩu không được để trống',
+                _validatePassword),
             SizedBox(height: 35),
-            Button(0, 0, 'Đăng nhập', CustomColor(),
-                () => Navigator.pushNamed(context, Routes().index)),
+            Button(0, 0, 'Đăng nhập', CustomColor(), () => handlerSignIn()),
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

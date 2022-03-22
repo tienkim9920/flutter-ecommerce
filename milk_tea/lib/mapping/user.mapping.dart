@@ -1,19 +1,29 @@
+import 'dart:convert';
+
+import 'package:milk_tea/models-interface/user.interface.dart';
 import 'package:milk_tea/models/user.model.dart';
+import 'package:milk_tea/pattern/user-login.dart';
 
 class UserMapping {
-  Map<dynamic, dynamic> MapServiceSignUp(UserModel model){
-    var data = {
-      'username': model.username,
-      'password': model.password
-    };
-    return data;
+  dynamic MapServiceSignUp(UserModel model) {
+    UserInterface user = UserInterface();
+    user.fullname = model.fullname.text;
+    user.email = model.email.text;
+    user.username = model.username.text;
+    user.password = model.password.text;
+    user.address = model.address;
+    user.image = model.image;
+    user.score = '0';
+    user.permissionId = '2';
+
+    return json.encode(user.toJson());
   }
 
-  Map<dynamic, dynamic> MapServiceSignIn(UserModel model){
-    var data = {
-      'username': model.username,
-      'password': model.password
-    };
-    return data;
+  dynamic MapServiceSignIn(UserLogin model) {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['username'] = model.username;
+    data['password'] = model.password;
+
+    return json.encode(data);
   }
 }

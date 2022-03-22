@@ -61,11 +61,14 @@ class Checkout extends StatelessWidget {
               ],
             ),
             SizedBox(height: 40),
-            Input(checkoutItem.phone, 'Số điện thoại'),
+            Input(checkoutItem.phone, 'Số điện thoại',
+                'Số điện thoại không được để trống', false),
             SizedBox(height: 25),
-            Input(checkoutItem.name, 'Họ và tên'),
+            Input(checkoutItem.name, 'Họ và tên',
+                'Họ và tên không được để trống', false),
             SizedBox(height: 25),
-            Input(checkoutItem.email, 'Địa chỉ email'),
+            Input(checkoutItem.email, 'Địa chỉ email',
+                'Email không được để trống', false),
             SizedBox(height: 25),
             Container(
               child: Column(children: [
@@ -98,7 +101,8 @@ class Checkout extends StatelessWidget {
               ]),
             ),
             SizedBox(height: 25),
-            Input(checkoutItem.addressHome, 'Địa chỉ nhận hàng'),
+            Input(checkoutItem.addressHome, 'Địa chỉ nhận hàng',
+                'Địa chỉ nhận hàng không được để trống', false),
             SizedBox(height: 25),
             Row(
               children: [

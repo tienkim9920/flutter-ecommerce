@@ -1,13 +1,13 @@
-import 'package:milk_tea/models/permission.model.dart';
+import 'package:flutter/cupertino.dart';
 
-class UserModel{
-  late String id;
-  late String username;
-  late String password;
-  late String fullname;
-  late String address;
-  late String image;
-  late String email;
-  late String score;
-  late PermissionModel permissionId;
+class UserModel {
+  String? id;
+  TextEditingController fullname = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  String? address;
+  String? image;
+  String? score;
+  String? permissionId;
 }

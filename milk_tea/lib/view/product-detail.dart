@@ -156,12 +156,8 @@ class ProductDetail extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AnimatedContainer(
-                                  margin: EdgeInsets.only(left: 50),
-                                  child: TextLabel(true, false, false, true,
-                                      false, '70000', 24, true, 0),
-                                  duration: Duration(milliseconds: 1000),
-                                ),
+                                TextLabel(true, false, false, true, false,
+                                    '70000', 24, true, 0),
                                 Container(
                                   height: 45,
                                   decoration: BoxDecoration(
