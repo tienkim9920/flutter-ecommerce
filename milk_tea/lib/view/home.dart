@@ -2,20 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:milk_tea/component/button-color.dart';
 import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/custom-product.dart';
 import 'package:milk_tea/component/search.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
-import 'package:milk_tea/screen/signup.dart';
-import 'package:page_transition/page_transition.dart';
 
 class Home extends StatelessWidget {
   final Function productId;
   final TextEditingController inputSearch;
   final Function onInputSearch;
-  final List slideProduct;
+  final List<dynamic> slideProduct;
 
   const Home(
       this.productId, this.inputSearch, this.onInputSearch, this.slideProduct,
@@ -66,58 +63,65 @@ class Home extends StatelessWidget {
                             items: slideProduct.map((item) {
                               return Builder(
                                 builder: (BuildContext context) {
-                                  return Container(
-                                      width: 400,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5.0),
-                                      decoration: BoxDecoration(
-                                          color: Color.fromRGBO(
-                                              CustomColor().R,
-                                              CustomColor().G,
-                                              CustomColor().B,
-                                              1),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      child: Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          Positioned(
-                                            top: -200,
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            child: Image.asset(item['image'],
-                                                width: 200, height: 200),
-                                          ),
-                                          Positioned(
-                                              top: 130,
+                                  return GestureDetector(
+                                    onTap: () =>
+                                        productId(item['id'].toString()),
+                                    child: Container(
+                                        width: 400,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 5.0),
+                                        decoration: BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                CustomColor().R,
+                                                CustomColor().G,
+                                                CustomColor().B,
+                                                1),
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Positioned(
+                                              top: -200,
                                               bottom: 0,
-                                              left: 20,
+                                              left: 0,
                                               right: 0,
-                                              child: Text(
-                                                item['name'],
-                                                style: GoogleFonts.quicksand(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 24),
-                                              )),
-                                          Positioned(
-                                              top: 165,
-                                              bottom: 0,
-                                              left: 20,
-                                              right: 0,
-                                              child: TextLabel(
-                                                  true,
-                                                  true,
-                                                  false,
-                                                  false,
-                                                  false,
-                                                  item['price'],
-                                                  19,
-                                                  false,
-                                                  3)),
-                                        ],
-                                      ));
+                                              child: Image.network(
+                                                  item['image'],
+                                                  width: 200,
+                                                  height: 200),
+                                            ),
+                                            Positioned(
+                                                top: 130,
+                                                bottom: 0,
+                                                left: 20,
+                                                right: 0,
+                                                child: Text(
+                                                  item['name'],
+                                                  style: GoogleFonts.quicksand(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 22),
+                                                )),
+                                            Positioned(
+                                                top: 165,
+                                                bottom: 0,
+                                                left: 20,
+                                                right: 0,
+                                                child: TextLabel(
+                                                    true,
+                                                    true,
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    item['price'],
+                                                    18,
+                                                    false,
+                                                    3)),
+                                          ],
+                                        )),
+                                  );
                                 },
                               );
                             }).toList(),
@@ -325,9 +329,9 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 25),
-                CustomProduct((id) => productId(id), false),
-                CustomProduct((id) => productId(id), false),
-                CustomProduct((id) => productId(id), false),
+                ...slideProduct.map((item) {
+                  return CustomProduct(item, (id) => productId(id), false);
+                }).toList(),
               ],
             ),
           ],

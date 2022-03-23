@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:milk_tea/component/button-icon.dart';
+import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class CustomProduct extends StatelessWidget {
-
+  final dynamic product;
   final Function productId;
   final bool countChange;
 
-  const CustomProduct(this.productId, this.countChange, {Key? key}) : super(key: key);
+  const CustomProduct(this.product, this.productId, this.countChange,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class CustomProduct extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Positioned(
-                      child: Image.asset('assets/tradao.png',
+                      child: Image.network(product['image'],
                           width: 120, height: 120),
                     ),
                     Positioned(
@@ -68,7 +71,7 @@ class CustomProduct extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Trà Xanh Đá Xay",
+              Text(product['name'],
                   textAlign: TextAlign.start,
                   style: GoogleFonts.quicksand(
                       color: Color.fromRGBO(20, 20, 20, 1), fontSize: 18)),
@@ -81,63 +84,69 @@ class CustomProduct extends StatelessWidget {
                       style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(120, 120, 120, 1),
                           fontSize: 16)),
-                  countChange ? 
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-                        border: Border.all(color: Color.fromRGBO(220, 220, 220, 1))
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                child: Icon(Icons.keyboard_arrow_down, size: 30, color: Color.fromRGBO(40, 40, 40, 1)),
-                                onTap: () => {
-                                  print("Down")
-                                },
+                  countChange
+                      ? Container(
+                          margin: EdgeInsets.only(left: 10),
+                          height: 40,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60),
+                              border: Border.all(
+                                  color: Color.fromRGBO(220, 220, 220, 1))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    child: Icon(Icons.keyboard_arrow_down,
+                                        size: 30,
+                                        color: Color.fromRGBO(40, 40, 40, 1)),
+                                    onTap: () => {print("Down")},
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            width: 26,
-                            child: Text("30",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.quicksand(
-                               color: Color.fromRGBO(40, 40, 40, 1),
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500
+                              Container(
+                                width: 26,
+                                child: Text(
+                                  "30",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.quicksand(
+                                      color: Color.fromRGBO(40, 40, 40, 1),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                child: Icon(Icons.keyboard_arrow_up, size: 30, color: Color.fromRGBO(40, 40, 40, 1)),
-                                onTap: () => print("Up") ,
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    child: Icon(Icons.keyboard_arrow_up,
+                                        size: 30,
+                                        color: Color.fromRGBO(40, 40, 40, 1)),
+                                    onTap: () => print("Up"),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ) : ButtonIcon(0, 0, 'Mua', CustomColor(), 'id',
-                      (id) => { productId(id) }, Icons.shopping_cart, false)
+                        )
+                      : ButtonIcon(
+                          0,
+                          0,
+                          'Mua',
+                          CustomColor(),
+                          product['id'].toString(),
+                          (id) => {productId(id)},
+                          Icons.shopping_cart,
+                          false)
                 ],
               ),
               SizedBox(height: 15.0),
-              Text('${NumberFormat.decimalPattern().format(70000)} VNĐ',
-                  textAlign: TextAlign.start,
-                  style: GoogleFonts.quicksand(
-                      color: Color.fromRGBO(20, 20, 20, 1),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
+              TextLabel(true, false, false, true, false, product['price'], 18,
+                  true, 0)
             ],
           )
         ],

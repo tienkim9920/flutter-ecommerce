@@ -11,7 +11,7 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class ProductDetail extends StatelessWidget {
-  final ProductModel product;
+  final Map product;
   final Function backStep;
   final Function nextStep;
   final CurrentParent currentParent;
@@ -72,7 +72,7 @@ class ProductDetail extends StatelessWidget {
                 Positioned(
                     top: 80,
                     left: 74,
-                    child: Image.asset('assets/tradao.png',
+                    child: Image.network(product['image'],
                         width: 250, height: 250)),
                 Positioned(
                     top: 370,
@@ -90,18 +90,10 @@ class ProductDetail extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextLabel(false, false, false, true, false,
-                                'Trà Đào', 24, true, 3),
+                                product['name'], 24, true, 3),
                             SizedBox(height: 8.0),
-                            TextLabel(
-                                false,
-                                false,
-                                false,
-                                false,
-                                true,
-                                'Trà Đào kết hợp với lá trà mang đầy sức sống, cho bạn hương thơm thật là tuyệt vời.',
-                                18,
-                                false,
-                                3),
+                            TextLabel(false, false, false, false, true,
+                                product['describe'], 18, false, 3),
                             SizedBox(height: 10.0),
                             SliderTheme(
                               data: SliderThemeData(
@@ -157,7 +149,7 @@ class ProductDetail extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextLabel(true, false, false, true, false,
-                                    '70000', 24, true, 0),
+                                    product['price'], 24, true, 0),
                                 Container(
                                   height: 45,
                                   decoration: BoxDecoration(

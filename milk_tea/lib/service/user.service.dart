@@ -9,11 +9,15 @@ class ServiceUser {
   Future<dynamic> postSignUp(String request) async {
     Response response = await post(
       Uri.parse(url),
-      headers: {"Content-type": "application/json"},
+      headers: headers,
       body: request,
     );
     return response.body;
   }
 
-  Future<dynamic> postSignIn(String request) async {}
+  Future<dynamic> postSignIn(String request) async {
+    Response response =
+        await post(Uri.parse('${url}/signin'), headers: headers, body: request);
+    return response.body;
+  }
 }

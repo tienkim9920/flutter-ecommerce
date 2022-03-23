@@ -11,6 +11,7 @@ import 'package:milk_tea/pattern/checkout-item.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
+import 'package:milk_tea/service/product.service.dart';
 import 'package:milk_tea/view/cart.dart';
 import 'package:milk_tea/view/checking-order.dart';
 import 'package:milk_tea/view/checkout.dart';
@@ -18,6 +19,7 @@ import 'package:milk_tea/view/comment.dart';
 import 'package:milk_tea/view/feedback.dart';
 import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
+import 'package:milk_tea/view/loading.dart';
 import 'package:milk_tea/view/product-detail.dart';
 import 'package:milk_tea/view/product.dart';
 import 'package:milk_tea/view/profile-detail.dart';
@@ -32,8 +34,8 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   // Change Current Screen
-  String currentItem = IDComponent().trangchu;
-  String currentScreen = NameComponent().trangchu;
+  String currentItem = IDComponent().loading;
+  String currentScreen = NameComponent().loading;
   // late CurrentParent currentParent = CurrentParent(IDComponent().checkout, NameComponent().checkout);
   late CurrentParent currentParent;
 
@@ -68,30 +70,11 @@ class _IndexState extends State<Index> {
   }
 
   // Home
-  List slideProduct = [
-    {
-      'id': '1',
-      'image': 'assets/tradao.png',
-      'name': 'Trà Đào',
-      'price': '70000'
-    },
-    {
-      'id': '2',
-      'image': 'assets/tradao.png',
-      'name': 'Trà Đào',
-      'price': '70000'
-    },
-    {
-      'id': '3',
-      'image': 'assets/tradao.png',
-      'name': 'Trà Đào',
-      'price': '70000'
-    },
-  ];
+  List<dynamic> slideProduct = [];
 
   // Product Detail
-  ProductModel product = ProductModel();
-  List<ProductModel> products = [];
+  Map product = {};
+  List<dynamic> products = [];
   double sizeProductDetail = 0;
   int countProductDetail = 1;
 
@@ -132,23 +115,78 @@ class _IndexState extends State<Index> {
 
   // History
 
+  // GET method API Home
+  void getDataHome() async {
+    var res = await ServiceProduct().getBanner();
+    slideProduct = res;
+  }
+
+  // GET method API Detail
+  void getDetailProduct(String id) async {
+    var res = await ServiceProduct().getDetail(id);
+    product = res;
+    arrayDetail.add(product);
+  }
+
+  // GET method API product category
+  void getDataProduct(String currentCategoryItem) async {
+    // var res = await
+  }
+
+  @override
+  void initState() {
+    getDataHomeAPI();
+    super.initState();
+  }
+
+  // GET Data Home
+  void getDataHomeAPI() {
+    getDataHome();
+    Future.delayed(
+        const Duration(seconds: 2),
+        () => {
+              updateCurrentItem(
+                  IDComponent().trangchu, NameComponent().trangchu)
+            });
+  }
+
+  // GET Data Detail Product
+  List<dynamic> arrayDetail = [];
+  void getDataDetailAPI(String productId) {
+    bool flag = false;
+    arrayDetail.forEach((element) => {
+          if (element['id'].toString() == productId.toString())
+            {product = element, flag = true}
+        });
+
+    if (flag) {
+      updateCurrentItem(
+          IDComponent().chitietsanpham, NameComponent().chitietsanpham);
+      return;
+    }
+
+    getDetailProduct(productId);
+    Future.delayed(
+        const Duration(seconds: 1),
+        () => {
+              updateCurrentItem(
+                  IDComponent().chitietsanpham, NameComponent().chitietsanpham)
+            });
+  }
+
+  // GET Data Product
+  void getDataCategoryAPI(String currentCategoryItem) {}
+
   // get Screen
   dynamic getScreen() {
     switch (currentItem) {
+      case 'loading':
+        return Loading();
       case 'trangchu':
         updateCurrentParent(
             CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
-        return Home(
-            (productId) => {
-                  // GET API Detail Product
-                  product.id = productId,
-
-                  updateCurrentItem(IDComponent().chitietsanpham,
-                      NameComponent().chitietsanpham),
-                },
-            inputSearch,
-            (onInputSearch) => {print(onInputSearch)},
-            slideProduct);
+        return Home((productId) => getDataDetailAPI(productId), inputSearch,
+            (onInputSearch) => {print(onInputSearch)}, slideProduct);
       case 'sanpham':
         updateCurrentParent(
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
@@ -164,7 +202,6 @@ class _IndexState extends State<Index> {
             products,
             (productId) => {
                   // GET API Detail Product
-                  product.id = productId,
                   updateCurrentItem(IDComponent().chitietsanpham,
                       NameComponent().chitietsanpham)
                 });

@@ -21,8 +21,8 @@ class UserMapping {
 
   dynamic MapServiceSignIn(UserLogin model) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = model.username;
-    data['password'] = model.password;
+    data['username'] = model.username.text;
+    data['password'] = model.password.text;
 
     return json.encode(data);
   }

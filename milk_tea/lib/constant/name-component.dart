@@ -1,4 +1,4 @@
-class IDComponent{
+class IDComponent {
   String trangchu = 'trangchu';
   String sanpham = 'sanpham';
   String giohang = 'giohang';
@@ -10,9 +10,10 @@ class IDComponent{
   String checkout = 'checkout';
   String kiemtra = 'kiemtra';
   String chinhsuahoso = 'chinhsuahoso';
+  String loading = 'loading';
 }
 
-class NameComponent{
+class NameComponent {
   String trangchu = 'Trang chủ';
   String sanpham = 'Sản phẩm';
   String giohang = 'Giỏ hàng';
@@ -23,4 +24,5 @@ class NameComponent{
   String checkout = 'Nhập thông tin đặt hàng';
   String kiemtra = 'Kiểm tra đơn hàng';
   String chinhsuahoso = 'Chỉnh sửa hồ sơ';
+  String loading = 'loading';
 }
