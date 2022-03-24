@@ -6,6 +6,7 @@ import 'package:milk_tea/service/environment.service.dart';
 
 class ServiceProduct {
   String url = '${Environment().http}/product';
+  String urlCategory = '${Environment().http}/product-category';
   Map<String, String> headers = {"Content-type": "application/json"};
 
   Future<dynamic> getBanner() async {
@@ -22,6 +23,24 @@ class ServiceProduct {
   Future<dynamic> getProductCategory(String category) async {
     Response response =
         await get(Uri.parse('${url}/category?category=${category}'));
+    List<dynamic> data = jsonDecode(response.body);
+    return data;
+  }
+
+  Future<dynamic> getProducts() async {
+    Response response = await get(Uri.parse(url));
+    List<dynamic> data = jsonDecode(response.body);
+    return data;
+  }
+
+  Future<dynamic> getCategories() async {
+    Response response = await get(Uri.parse(urlCategory));
+    List<dynamic> data = jsonDecode(response.body);
+    return data;
+  }
+
+  Future<dynamic> getCountProduct() async {
+    Response response = await get(Uri.parse('${url}/category/count'));
     List<dynamic> data = jsonDecode(response.body);
     return data;
   }

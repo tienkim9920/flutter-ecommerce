@@ -9,7 +9,7 @@ import 'package:milk_tea/pattern/category-item.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Product extends StatelessWidget {
-  final List<CategoryItem> categoryItem;
+  final List<dynamic> categoryItem;
   final String currentCategoryItem;
   final Function onCategoryItem;
   final TextEditingController inputSearch;
@@ -48,12 +48,13 @@ class Product extends StatelessWidget {
                     .map((e) => MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
-                            onTap: () => onCategoryItem(e.id),
+                            onTap: () => onCategoryItem(e['id']),
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10.0),
                               decoration: BoxDecoration(
                                   border: Border(
-                                      bottom: e.id == currentCategoryItem
+                                      bottom: e['id'].toString() ==
+                                              currentCategoryItem.toString()
                                           ? BorderSide(
                                               width: 2.0,
                                               color:
@@ -63,10 +64,11 @@ class Product extends StatelessWidget {
                                               color: Color.fromRGBO(
                                                   230, 230, 230, 1)))),
                               width: 125.0,
-                              child: Text(e.name,
+                              child: Text(e['name'],
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.quicksand(
-                                      color: e.id == currentCategoryItem
+                                      color: e['id'].toString() ==
+                                              currentCategoryItem.toString()
                                           ? Color.fromRGBO(4, 118, 78, 1)
                                           : Color.fromRGBO(200, 200, 200, 1),
                                       fontSize: 18)),
@@ -82,7 +84,20 @@ class Product extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: [CustomProduct(null, (id) => productId(id), false)],
+                  children: [
+                    if (currentCategoryItem == '0') ...[
+                      ...products.map((e) => CustomProduct(
+                          e, (id) => productId(id.toString()), false))
+                    ] else ...[
+                      ...products
+                          .where((item) =>
+                              item['productCategoryId'].toString() ==
+                              currentCategoryItem.toString())
+                          .map((e) => CustomProduct(
+                              e, (id) => productId(id.toString()), false))
+                          .toList()
+                    ]
+                  ],
                 ),
               ))
         ],

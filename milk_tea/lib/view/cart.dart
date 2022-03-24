@@ -9,9 +9,10 @@ import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Cart extends StatelessWidget {
+  final List<dynamic> carts;
   final Function productId;
 
-  const Cart(this.productId, {Key? key}) : super(key: key);
+  const Cart(this.carts, this.productId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,167 +29,30 @@ class Cart extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
+                    ...carts.map((item) => Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Slidable(
+                            actionPane: SlidableDrawerActionPane(),
+                            actionExtentRatio: 0.25,
+                            child: CustomProduct(
+                                item, (id) => productId(id), true),
+                            secondaryActions: <Widget>[
+                              IconSlideAction(
+                                caption: 'Xem',
+                                color: Color.fromRGBO(CustomColor().R,
+                                    CustomColor().G, CustomColor().B, 1),
+                                icon: Icons.more_horiz,
+                                onTap: () => print('Xem'),
+                              ),
+                              IconSlideAction(
+                                caption: 'Xóa',
+                                color: Colors.red,
+                                icon: Icons.delete,
+                                onTap: () => print('Xóa'),
+                              ),
+                            ],
                           ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: CustomProduct(null, (id) => productId(id), true),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Xem',
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
-                            icon: Icons.more_horiz,
-                            onTap: () => print('Xem'),
-                          ),
-                          IconSlideAction(
-                            caption: 'Xóa',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () => print('Xóa'),
-                          ),
-                        ],
-                      ),
-                    ),
+                        )),
                   ],
                 ),
               ),

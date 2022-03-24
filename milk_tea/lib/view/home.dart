@@ -13,9 +13,11 @@ class Home extends StatelessWidget {
   final TextEditingController inputSearch;
   final Function onInputSearch;
   final List<dynamic> slideProduct;
+  final List<dynamic> countProduct;
+  final Function chooseCategory;
 
-  const Home(
-      this.productId, this.inputSearch, this.onInputSearch, this.slideProduct,
+  const Home(this.productId, this.inputSearch, this.onInputSearch,
+      this.slideProduct, this.countProduct, this.chooseCategory,
       {Key? key})
       : super(key: key);
 
@@ -148,174 +150,59 @@ class Home extends StatelessWidget {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        width: 160,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                              color: Color.fromRGBO(245, 245, 245, 1)),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 243, 243, 243)
-                                  .withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Image.asset('assets/logo_color.png',
-                                  width: 35, height: 35),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
-                              child: Column(
-                                children: [
-                                  TextLabel(false, false, false, true, false,
-                                      'Tất cả', 20, false, 0),
-                                  TextLabel(false, false, true, false, false,
-                                      '19 loại', 16, false, 0),
+                      ...countProduct.map((item) => GestureDetector(
+                            onTap: () => chooseCategory(item['id']),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              width: 160,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: Color.fromRGBO(245, 245, 245, 1)),
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(255, 243, 243, 243)
+                                        .withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: Offset(2, 2),
+                                  ),
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        width: 160,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                              color: Color.fromRGBO(245, 245, 245, 1)),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 243, 243, 243)
-                                  .withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Image.asset('assets/logo_color.png',
-                                  width: 35, height: 35),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
-                              child: Column(
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TextLabel(false, false, false, true, false,
-                                      'Trà Sữa', 20, false, 0),
-                                  TextLabel(false, false, true, false, false,
-                                      '19 loại', 16, false, 0),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 15),
+                                    child: Image.asset('assets/logo_color.png',
+                                        width: 35, height: 35),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
+                                    child: Column(
+                                      children: [
+                                        TextLabel(false, false, false, true,
+                                            false, item['name'], 20, false, 0),
+                                        TextLabel(
+                                            false,
+                                            false,
+                                            true,
+                                            false,
+                                            false,
+                                            '${item['countProduct']} loại',
+                                            16,
+                                            false,
+                                            0),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        width: 160,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                              color: Color.fromRGBO(245, 245, 245, 1)),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 243, 243, 243)
-                                  .withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: Offset(2, 2),
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Image.asset('assets/logo_color.png',
-                                  width: 35, height: 35),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
-                              child: Column(
-                                children: [
-                                  TextLabel(false, false, false, true, false,
-                                      'Hoa Quả', 20, false, 0),
-                                  TextLabel(false, false, true, false, false,
-                                      '19 loại', 16, false, 0),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        width: 160,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                              color: Color.fromRGBO(245, 245, 245, 1)),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 243, 243, 243)
-                                  .withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 15),
-                              child: Image.asset('assets/logo_color.png',
-                                  width: 35, height: 35),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
-                              child: Column(
-                                children: [
-                                  TextLabel(false, false, false, true, false,
-                                      'Coffee', 20, false, 0),
-                                  TextLabel(false, false, true, false, false,
-                                      '19 loại', 16, false, 0),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                          )),
                     ],
                   ),
                 ),

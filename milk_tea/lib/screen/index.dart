@@ -71,6 +71,7 @@ class _IndexState extends State<Index> {
 
   // Home
   List<dynamic> slideProduct = [];
+  List<dynamic> countProduct = [];
 
   // Product Detail
   Map product = {};
@@ -82,13 +83,8 @@ class _IndexState extends State<Index> {
   TextEditingController inputSearch = TextEditingController();
 
   // category product
-  List<CategoryItem> categoryItems = [
-    CategoryItem('1', 'Tất Cả'),
-    CategoryItem('2', 'Trà Sữa'),
-    CategoryItem('3', 'Trà Hoa Quả'),
-    CategoryItem('4', 'Coffee'),
-  ];
-  String currentCategoryItem = '1';
+  List<dynamic> categoryItems = [];
+  String currentCategoryItem = '0';
 
   // Comment
   List star = [
@@ -102,6 +98,7 @@ class _IndexState extends State<Index> {
   TextEditingController textComment = TextEditingController();
 
   // Cart
+  List<dynamic> carts = [];
 
   // Checkout
   CheckoutItem checkoutItem = CheckoutItem();
@@ -129,13 +126,34 @@ class _IndexState extends State<Index> {
   }
 
   // GET method API product category
-  void getDataProduct(String currentCategoryItem) async {
-    // var res = await
+  void getDataProducts() async {
+    var res = await ServiceProduct().getProducts();
+    products = res;
+  }
+
+  // GET method API category
+  void getCategories() async {
+    var res = await ServiceProduct().getCategories();
+    categoryItems = res;
+    categoryItems.insert(0, {'id': '0', 'name': 'Tất cả'});
+  }
+
+  // GET method API count category product
+  void getCountProduct() async {
+    var res = await ServiceProduct().getCountProduct();
+    countProduct = res;
+
+    int sumProduct = 0;
+    countProduct
+        .forEach((element) => sumProduct += int.parse(element['countProduct']));
+    countProduct.insert(
+        0, {"id": 0, "name": "Tất cả", "countProduct": sumProduct.toString()});
   }
 
   @override
   void initState() {
     getDataHomeAPI();
+    getCountProduct();
     super.initState();
   }
 
@@ -174,9 +192,6 @@ class _IndexState extends State<Index> {
             });
   }
 
-  // GET Data Product
-  void getDataCategoryAPI(String currentCategoryItem) {}
-
   // get Screen
   dynamic getScreen() {
     switch (currentItem) {
@@ -185,8 +200,13 @@ class _IndexState extends State<Index> {
       case 'trangchu':
         updateCurrentParent(
             CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
-        return Home((productId) => getDataDetailAPI(productId), inputSearch,
-            (onInputSearch) => {print(onInputSearch)}, slideProduct);
+        return Home(
+            (productId) => getDataDetailAPI(productId),
+            inputSearch,
+            (onInputSearch) => {print(onInputSearch)},
+            slideProduct,
+            countProduct,
+            (id) => getDataViewScreenProduct(id.toString()));
       case 'sanpham':
         updateCurrentParent(
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
@@ -195,7 +215,8 @@ class _IndexState extends State<Index> {
             categoryItems,
             currentCategoryItem,
             (categoryItemId) => {
-                  setState(() => {currentCategoryItem = categoryItemId})
+                  setState(
+                      () => {currentCategoryItem = categoryItemId.toString()})
                 },
             inputSearch,
             (onInputSearch) => {print(onInputSearch)},
@@ -207,6 +228,7 @@ class _IndexState extends State<Index> {
                 });
       case 'giohang':
         return Cart(
+          slideProduct,
           (productId) => updateCurrentItem(
               IDComponent().checkout, NameComponent().checkout), // click order
         );
@@ -348,6 +370,39 @@ class _IndexState extends State<Index> {
     );
   }
 
+  void getDataViewScreenProduct(String id) {
+    if (products.length > 0) {
+      updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham);
+      setState(() => currentCategoryItem = id);
+      return;
+    }
+    getDataProducts();
+    getCategories();
+    Future.delayed(
+        const Duration(seconds: 1),
+        () =>
+            updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham));
+  }
+
+  void changeViewScreen(String id, String title) {
+    switch (id) {
+      case 'trangchu':
+        updateCurrentItem(id, title);
+        break;
+      case 'sanpham':
+        getDataViewScreenProduct(currentCategoryItem);
+        break;
+      case 'giohang':
+        break;
+      case 'hoso':
+        break;
+      case 'lichsu':
+        break;
+      case 'chitietsanpham':
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) => ZoomDrawer(
       style: DrawerStyle.Style1,
@@ -361,9 +416,8 @@ class _IndexState extends State<Index> {
             currentItem,
             menuItems,
             (item) => {
-                  setState(() =>
-                      {currentItem = item.id, currentScreen = item.title}),
-                  ZoomDrawer.of(context)!.close(),
+                  changeViewScreen(item.id, item.title),
+                  ZoomDrawer.of(context)!.close()
                 }),
       ),
       mainScreen: Scaffold(

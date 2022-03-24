@@ -79,14 +79,14 @@ class CustomProduct extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Loại SP",
+                  Text(product['product-category']['name'],
                       textAlign: TextAlign.start,
                       style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(120, 120, 120, 1),
                           fontSize: 16)),
                   countChange
                       ? Container(
-                          margin: EdgeInsets.only(left: 10),
+                          margin: EdgeInsets.only(left: 5),
                           height: 40,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(60),
@@ -134,8 +134,8 @@ class CustomProduct extends StatelessWidget {
                           ),
                         )
                       : ButtonIcon(
-                          0,
-                          0,
+                          10,
+                          10,
                           'Mua',
                           CustomColor(),
                           product['id'].toString(),

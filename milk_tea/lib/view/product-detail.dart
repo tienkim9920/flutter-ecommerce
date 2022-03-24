@@ -230,7 +230,7 @@ class ProductDetail extends StatelessWidget {
           Container(
             height: 100,
             decoration: BoxDecoration(color: Colors.white),
-            child: ButtonIcon(0, 0, 'Mua Hàng', CustomColor(), 'data',
+            child: ButtonIcon(30, 30, 'Mua Hàng', CustomColor(), 'data',
                 (data) => addCart(data), Icons.shopping_cart, true),
           )
         ],
