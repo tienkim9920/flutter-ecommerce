@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/service/product.service.dart';
+import 'package:milk_tea/store/cart.store.dart';
 import 'package:milk_tea/view/cart.dart';
 import 'package:milk_tea/view/checking-order.dart';
 import 'package:milk_tea/view/checkout.dart';
@@ -77,7 +79,9 @@ class _IndexState extends State<Index> {
   Map product = {};
   List<dynamic> products = [];
   double sizeProductDetail = 0;
+  String sizeRealProduct = "S";
   int countProductDetail = 1;
+  bool modalDetail = false;
 
   // input search
   TextEditingController inputSearch = TextEditingController();
@@ -98,7 +102,8 @@ class _IndexState extends State<Index> {
   TextEditingController textComment = TextEditingController();
 
   // Cart
-  List<dynamic> carts = [];
+  List<dynamic> carts = CartOrder().getCart();
+  dynamic total = 0;
 
   // Checkout
   CheckoutItem checkoutItem = CheckoutItem();
@@ -177,9 +182,17 @@ class _IndexState extends State<Index> {
             {product = element, flag = true}
         });
 
+    setState(() => {
+          sizeProductDetail = 0,
+          countProductDetail = 1,
+          sizeProductDetail = 0,
+          sizeRealProduct = 'S'
+        });
+
     if (flag) {
       updateCurrentItem(
           IDComponent().chitietsanpham, NameComponent().chitietsanpham);
+
       return;
     }
 
@@ -212,25 +225,30 @@ class _IndexState extends State<Index> {
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
         // GET API List Product
         return Product(
-            categoryItems,
-            currentCategoryItem,
-            (categoryItemId) => {
-                  setState(
-                      () => {currentCategoryItem = categoryItemId.toString()})
-                },
-            inputSearch,
-            (onInputSearch) => {print(onInputSearch)},
-            products,
-            (productId) => {
-                  // GET API Detail Product
-                  updateCurrentItem(IDComponent().chitietsanpham,
-                      NameComponent().chitietsanpham)
-                });
+          categoryItems,
+          currentCategoryItem,
+          (categoryItemId) => {
+            setState(() => {currentCategoryItem = categoryItemId.toString()})
+          },
+          inputSearch,
+          (onInputSearch) => {print(onInputSearch)},
+          products,
+          (productId) => {
+            // GET API Detail Product
+            updateCurrentItem(
+                IDComponent().chitietsanpham, NameComponent().chitietsanpham)
+          },
+        );
       case 'giohang':
+        carts = CartOrder().getCart();
+        total = CartOrder().totalCarts();
         return Cart(
-          slideProduct,
+          carts,
           (productId) => updateCurrentItem(
               IDComponent().checkout, NameComponent().checkout), // click order
+          (up) => increaseCount(up),
+          (down) => decreaseCount(down),
+          total.toString(),
         );
       case 'hoso':
         return Profile();
@@ -239,20 +257,20 @@ class _IndexState extends State<Index> {
             updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra));
       case 'chitietsanpham':
         return ProductDetail(
-            product,
-            (id, name) => updateCurrentItem(id, name), // backStep
-            currentParent,
-            sizeProductDetail,
-            (size) => {
-                  setState(() => {sizeProductDetail = size}),
-                },
-            countProductDetail,
-            () => {setState(() => countProductDetail--)},
-            () => {setState(() => countProductDetail++)},
-            (data) => {print("Them san pham ${data} vao gio hang")},
-            () => updateCurrentItem(
-                IDComponent().nhanxet, NameComponent().nhanxet) // nextStep
-            );
+          product,
+          (id, name) => updateCurrentItem(id, name), // backStep
+          currentParent,
+          sizeProductDetail,
+          (size) => handlerGetSizeProduct(size),
+          countProductDetail,
+          () => {setState(() => countProductDetail--)},
+          () => {setState(() => countProductDetail++)},
+          (id) => handlerCartOrder(id),
+          () => updateCurrentItem(
+              IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
+          modalDetail,
+          () => setState(() => modalDetail = false),
+        );
       case 'nhanxet':
         updateCurrentParent(CurrentParent(
             IDComponent().chitietsanpham, NameComponent().chitietsanpham));
@@ -370,6 +388,47 @@ class _IndexState extends State<Index> {
     );
   }
 
+  void increaseCount(dynamic up) {
+    int index = carts.indexWhere(
+        (element) => element['id'].toString() == up['id'].toString());
+    setState(() => carts[index]['count'] += 1);
+    CartOrder().setCart(carts);
+    setState(() => total = CartOrder().totalCarts());
+  }
+
+  void decreaseCount(dynamic down) {
+    int index = carts.indexWhere(
+        (element) => element['id'].toString() == down['id'].toString());
+    if (carts[index]['count'] == 1) {
+      return;
+    }
+    setState(() => carts[index]['count'] -= 1);
+    CartOrder().setCart(carts);
+    setState(() => total = CartOrder().totalCarts());
+  }
+
+  void handlerGetSizeProduct(double size) {
+    setState(() => sizeProductDetail = size);
+    if (sizeProductDetail >= 0 && sizeProductDetail <= 35) {
+      setState(() => sizeRealProduct = 'S');
+    } else if (sizeProductDetail > 35 && sizeProductDetail <= 70) {
+      setState(() => sizeRealProduct = 'M');
+    } else {
+      setState(() => sizeRealProduct = 'L');
+    }
+  }
+
+  void handlerCartOrder(String id) {
+    dynamic data = {
+      "id": Random().nextInt(1000000),
+      "product": product,
+      "count": countProductDetail,
+      "size": sizeRealProduct
+    };
+    CartOrder().addCart(data);
+    setState(() => modalDetail = true);
+  }
+
   void getDataViewScreenProduct(String id) {
     if (products.length > 0) {
       updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham);
@@ -393,10 +452,13 @@ class _IndexState extends State<Index> {
         getDataViewScreenProduct(currentCategoryItem);
         break;
       case 'giohang':
+        updateCurrentItem(id, title);
         break;
       case 'hoso':
+        updateCurrentItem(id, title);
         break;
       case 'lichsu':
+        updateCurrentItem(id, title);
         break;
       case 'chitietsanpham':
         break;

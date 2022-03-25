@@ -11,8 +11,14 @@ import 'package:milk_tea/pattern/custom-color.dart';
 class Cart extends StatelessWidget {
   final List<dynamic> carts;
   final Function productId;
+  final Function upCount;
+  final Function downCount;
+  final String total;
 
-  const Cart(this.carts, this.productId, {Key? key}) : super(key: key);
+  const Cart(
+      this.carts, this.productId, this.upCount, this.downCount, this.total,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +41,14 @@ class Cart extends StatelessWidget {
                             actionPane: SlidableDrawerActionPane(),
                             actionExtentRatio: 0.25,
                             child: CustomProduct(
-                                item, (id) => productId(id), true),
+                                item['product'],
+                                (id) => productId(id),
+                                true,
+                                item['id'].toString(),
+                                'Kích cỡ: ${item['size']}',
+                                item['count'].toString(),
+                                (up) => upCount(up),
+                                (down) => downCount(down)),
                             secondaryActions: <Widget>[
                               IconSlideAction(
                                 caption: 'Xem',
@@ -75,21 +88,22 @@ class Cart extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(children: [
-                          TextLabel(true, true, false, false, false, '70000',
-                              24, false, 0),
-                          Container(
-                            margin: EdgeInsets.only(left: 40),
-                            child: ButtonIconWhite(
-                                0,
-                                0,
-                                'Mua',
-                                'id',
-                                (id) => {productId(id)},
-                                Icons.shopping_cart,
-                                false),
-                          )
-                        ]),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextLabel(true, true, false, false, false, total,
+                                  24, false, 0),
+                              Container(
+                                child: ButtonIconWhite(
+                                    0,
+                                    0,
+                                    'Mua',
+                                    'id',
+                                    (id) => {productId(id)},
+                                    Icons.shopping_cart,
+                                    false),
+                              )
+                            ]),
                       ),
                     )
                   ],

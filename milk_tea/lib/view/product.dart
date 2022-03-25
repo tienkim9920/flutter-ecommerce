@@ -87,14 +87,28 @@ class Product extends StatelessWidget {
                   children: [
                     if (currentCategoryItem == '0') ...[
                       ...products.map((e) => CustomProduct(
-                          e, (id) => productId(id.toString()), false))
+                          e,
+                          (id) => productId(id.toString()),
+                          false,
+                          '',
+                          '',
+                          '',
+                          () => {},
+                          () => {}))
                     ] else ...[
                       ...products
                           .where((item) =>
                               item['productCategoryId'].toString() ==
                               currentCategoryItem.toString())
                           .map((e) => CustomProduct(
-                              e, (id) => productId(id.toString()), false))
+                              e,
+                              (id) => productId(id.toString()),
+                              false,
+                              '',
+                              '',
+                              '',
+                              () => {},
+                              () => {}))
                           .toList()
                     ]
                   ],

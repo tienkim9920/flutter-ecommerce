@@ -217,7 +217,8 @@ class Home extends StatelessWidget {
                 ),
                 SizedBox(height: 25),
                 ...slideProduct.map((item) {
-                  return CustomProduct(item, (id) => productId(id), false);
+                  return CustomProduct(item, (id) => productId(id), false, '',
+                      '', '', () => {}, () => {});
                 }).toList(),
               ],
             ),

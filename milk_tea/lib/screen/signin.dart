@@ -12,7 +12,7 @@ import 'package:milk_tea/pattern/custom-color.dart';
 import 'package:milk_tea/pattern/user-login.dart';
 import 'package:milk_tea/screen/signup.dart';
 import 'package:milk_tea/service/user.service.dart';
-import 'package:milk_tea/store/authenticate.dart';
+import 'package:milk_tea/store/authenticate.store.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SignIn extends StatefulWidget {

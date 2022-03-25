@@ -9,8 +9,14 @@ class CustomProduct extends StatelessWidget {
   final dynamic product;
   final Function productId;
   final bool countChange;
+  final String id;
+  final String size;
+  final String count;
+  final Function upCount;
+  final Function downCount;
 
-  const CustomProduct(this.product, this.productId, this.countChange,
+  const CustomProduct(this.product, this.productId, this.countChange, this.id,
+      this.size, this.count, this.upCount, this.downCount,
       {Key? key})
       : super(key: key);
 
@@ -79,7 +85,7 @@ class CustomProduct extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(product['product-category']['name'],
+                  Text(countChange ? size : product['product-category']['name'],
                       textAlign: TextAlign.start,
                       style: GoogleFonts.quicksand(
                           color: Color.fromRGBO(120, 120, 120, 1),
@@ -103,14 +109,18 @@ class CustomProduct extends StatelessWidget {
                                     child: Icon(Icons.keyboard_arrow_down,
                                         size: 30,
                                         color: Color.fromRGBO(40, 40, 40, 1)),
-                                    onTap: () => {print("Down")},
+                                    onTap: () => downCount({
+                                      'id': id,
+                                      'size': size,
+                                      'count': count
+                                    }),
                                   ),
                                 ),
                               ),
                               Container(
                                 width: 26,
                                 child: Text(
-                                  "30",
+                                  count,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.quicksand(
                                       color: Color.fromRGBO(40, 40, 40, 1),
@@ -126,7 +136,11 @@ class CustomProduct extends StatelessWidget {
                                     child: Icon(Icons.keyboard_arrow_up,
                                         size: 30,
                                         color: Color.fromRGBO(40, 40, 40, 1)),
-                                    onTap: () => print("Up"),
+                                    onTap: () => upCount({
+                                      'id': id,
+                                      'size': size,
+                                      'count': count
+                                    }),
                                   ),
                                 ),
                               ),
