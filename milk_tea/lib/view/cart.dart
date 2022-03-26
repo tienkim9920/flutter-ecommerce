@@ -14,9 +14,10 @@ class Cart extends StatelessWidget {
   final Function upCount;
   final Function downCount;
   final String total;
+  final Function onDelete;
 
-  const Cart(
-      this.carts, this.productId, this.upCount, this.downCount, this.total,
+  const Cart(this.carts, this.productId, this.upCount, this.downCount,
+      this.total, this.onDelete,
       {Key? key})
       : super(key: key);
 
@@ -61,7 +62,7 @@ class Cart extends StatelessWidget {
                                 caption: 'Xóa',
                                 color: Colors.red,
                                 icon: Icons.delete,
-                                onTap: () => print('Xóa'),
+                                onTap: () => onDelete(item['id']),
                               ),
                             ],
                           ),

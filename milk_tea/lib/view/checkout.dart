@@ -19,9 +19,16 @@ class Checkout extends StatelessWidget {
   final Function gotoCheckingOrder;
   final bool modalCheckout;
   final Function onChangeModal;
+  final String total;
 
-  const Checkout(this.currentParent, this.backStep, this.checkoutItem,
-      this.gotoCheckingOrder, this.modalCheckout, this.onChangeModal,
+  const Checkout(
+      this.currentParent,
+      this.backStep,
+      this.checkoutItem,
+      this.gotoCheckingOrder,
+      this.modalCheckout,
+      this.onChangeModal,
+      this.total,
       {Key? key})
       : super(key: key);
 
@@ -63,12 +70,6 @@ class Checkout extends StatelessWidget {
             SizedBox(height: 40),
             Input(checkoutItem.phone, 'Số điện thoại',
                 'Số điện thoại không được để trống', false),
-            SizedBox(height: 25),
-            Input(checkoutItem.name, 'Họ và tên',
-                'Họ và tên không được để trống', false),
-            SizedBox(height: 25),
-            Input(checkoutItem.email, 'Địa chỉ email',
-                'Email không được để trống', false),
             SizedBox(height: 25),
             Container(
               child: Column(children: [
@@ -114,6 +115,40 @@ class Checkout extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(height: 40),
+            SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                  child: SizedBox(
+                      height: 130,
+                      child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        minLines: 5,
+                        maxLines: 5,
+                        controller: checkoutItem.note,
+                        cursorColor: Color.fromRGBO(4, 118, 78, 1),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hoverColor: Color.fromRGBO(250, 250, 250, 1),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(230, 230, 230, 1),
+                                  width: 1)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(CustomColor().R,
+                                      CustomColor().G, CustomColor().B, 1),
+                                  width: 2)),
+                          hintStyle: GoogleFonts.quicksand(
+                              color: Color.fromRGBO(150, 150, 150, 1)),
+                          hintText: "Viết lời nhắn của bạn ở đây",
+                        ),
+                      )),
+                )),
             SizedBox(height: 25),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
@@ -122,13 +157,13 @@ class Checkout extends StatelessWidget {
                   TextLabel(false, false, false, true, false, 'Tổng đơn hàng: ',
                       20, true, 0),
                   TextLabel(
-                      true, false, false, true, false, '70000', 20, true, 0),
+                      true, false, false, true, false, total, 20, true, 0),
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 25),
             Button(0, 0, 'Tiến hành đặt hàng', CustomColor(),
-                () => onChangeModal())
+                () => onChangeModal(checkoutItem))
           ]),
         ),
         if (modalCheckout) ...[

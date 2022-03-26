@@ -249,6 +249,7 @@ class _IndexState extends State<Index> {
           (up) => increaseCount(up),
           (down) => decreaseCount(down),
           total.toString(),
+          (delete) => handleDeleteProduct(delete),
         );
       case 'hoso':
         return Profile();
@@ -313,17 +314,18 @@ class _IndexState extends State<Index> {
         updateCurrentParent(
             CurrentParent(IDComponent().giohang, NameComponent().giohang));
         return Checkout(
-            currentParent,
-            (id, name) => {updateCurrentItem(id, name)}, // backStep
-            checkoutItem,
-            (CheckoutItem informationUser) => {
-                  print(informationUser.addressShow),
-                  updateCurrentItem(
-                      IDComponent().kiemtra, NameComponent().kiemtra),
-                  setState(() => modalCheckout = false)
-                },
-            modalCheckout,
-            () => {setState(() => modalCheckout = true)});
+          currentParent,
+          (id, name) => {updateCurrentItem(id, name)}, // backStep
+          checkoutItem,
+          (CheckoutItem informationUser) => {
+            print(informationUser.addressShow),
+            updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
+            setState(() => modalCheckout = false)
+          },
+          modalCheckout,
+          (data) => handleCheckout(data),
+          total.toString(),
+        );
       case 'kiemtra':
         updateCurrentParent(
             CurrentParent(IDComponent().lichsu, NameComponent().lichsu));
@@ -388,6 +390,11 @@ class _IndexState extends State<Index> {
     );
   }
 
+  void handleCheckout(CheckoutItem data) {
+    print(data.phone.text);
+    modalCheckout = true;
+  }
+
   void increaseCount(dynamic up) {
     int index = carts.indexWhere(
         (element) => element['id'].toString() == up['id'].toString());
@@ -403,6 +410,14 @@ class _IndexState extends State<Index> {
       return;
     }
     setState(() => carts[index]['count'] -= 1);
+    CartOrder().setCart(carts);
+    setState(() => total = CartOrder().totalCarts());
+  }
+
+  void handleDeleteProduct(dynamic id) {
+    int index = carts
+        .indexWhere((element) => element['id'].toString() == id.toString());
+    carts.removeAt(index);
     CartOrder().setCart(carts);
     setState(() => total = CartOrder().totalCarts());
   }
