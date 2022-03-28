@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class History extends StatelessWidget {
   final Function nextStep;
+  final List<dynamic> history;
 
-  const History(this.nextStep, {Key? key}) : super(key: key);
+  const History(this.nextStep, this.history, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,61 +80,78 @@ class History extends StatelessWidget {
                     20, true, 0)
               ],
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.only(top: 15),
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () => nextStep(),
-                    child: Column(
-                      children: [
-                        Container(
+                  ...history.map((item) => GestureDetector(
+                        onTap: () => nextStep(),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10),
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  TextLabel(
-                                      false,
-                                      false,
-                                      false,
-                                      true,
-                                      false,
-                                      'Đơn hàng có mã số 1NSHJKGH1500',
-                                      18,
-                                      false,
-                                      0),
-                                ],
+                              Container(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        TextLabel(
+                                            false,
+                                            false,
+                                            false,
+                                            true,
+                                            false,
+                                            'Đơn hàng có mã số ${item['id']}',
+                                            18,
+                                            false,
+                                            0),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        TextLabel(
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            true,
+                                            '${item['createdAt'].toString().substring(0, 10)} | ',
+                                            16,
+                                            false,
+                                            0),
+                                        TextLabel(
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            true,
+                                            item['pay']
+                                                ? 'Đã thanh toán'
+                                                : 'Chưa thanh toán',
+                                            16,
+                                            false,
+                                            0),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  TextLabel(
-                                      false,
-                                      false,
-                                      false,
-                                      false,
-                                      true,
-                                      'Ngày 18/02/2022 | 7:00 AM',
-                                      16,
-                                      false,
-                                      0),
-                                ],
-                              ),
+                              SizedBox(height: 13),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: .9,
+                                color: Color.fromARGB(255, 241, 241, 241),
+                              )
                             ],
                           ),
                         ),
-                        SizedBox(height: 13),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: .9,
-                          color: Color.fromARGB(255, 241, 241, 241),
-                        )
-                      ],
-                    ),
-                  )
+                      ))
                 ],
               ),
             ),

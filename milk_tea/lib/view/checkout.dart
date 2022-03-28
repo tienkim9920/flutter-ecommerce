@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:milk_tea/component/button-color.dart';
 import 'package:milk_tea/component/button-custom.dart';
 import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/button.dart';
@@ -7,6 +8,7 @@ import 'package:milk_tea/component/input-custom.dart';
 import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/component/modal.dart';
 import 'package:milk_tea/component/navbar.dart';
+import 'package:milk_tea/component/spinner-loading.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/checkout-item.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
@@ -20,6 +22,7 @@ class Checkout extends StatelessWidget {
   final bool modalCheckout;
   final Function onChangeModal;
   final String total;
+  final bool loadingCheckout;
 
   const Checkout(
       this.currentParent,
@@ -29,6 +32,7 @@ class Checkout extends StatelessWidget {
       this.modalCheckout,
       this.onChangeModal,
       this.total,
+      this.loadingCheckout,
       {Key? key})
       : super(key: key);
 
@@ -166,6 +170,7 @@ class Checkout extends StatelessWidget {
                 () => onChangeModal(checkoutItem))
           ]),
         ),
+        if (loadingCheckout) ...[SpinnerLoading()],
         if (modalCheckout) ...[
           Modal('Bạn đã đặt hàng thành công', 'Kiểm tra đơn hàng',
               () => gotoCheckingOrder(checkoutItem))

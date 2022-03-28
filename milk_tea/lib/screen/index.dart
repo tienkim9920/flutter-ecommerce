@@ -4,15 +4,22 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
+import 'package:milk_tea/mapping/order.mapping.dart';
+import 'package:milk_tea/models/order.model.dart';
 import 'package:milk_tea/pattern/category-item.dart';
 import 'package:milk_tea/pattern/checkout-item.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
+import 'package:milk_tea/pattern/order-detail-item.dart';
+import 'package:milk_tea/service/order.service.dart';
 import 'package:milk_tea/service/product.service.dart';
+import 'package:milk_tea/store/authenticate.store.dart';
 import 'package:milk_tea/store/cart.store.dart';
 import 'package:milk_tea/view/cart.dart';
 import 'package:milk_tea/view/checking-order.dart';
@@ -35,6 +42,9 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+  final LocalStorage storage = LocalStorage('auth');
+  String? userId;
+
   // Change Current Screen
   String currentItem = IDComponent().loading;
   String currentScreen = NameComponent().loading;
@@ -108,6 +118,7 @@ class _IndexState extends State<Index> {
   // Checkout
   CheckoutItem checkoutItem = CheckoutItem();
   bool modalCheckout = false;
+  bool loadingCheckout = false;
 
   // Profile
 
@@ -116,6 +127,7 @@ class _IndexState extends State<Index> {
   bool isPasswordUser = true;
 
   // History
+  List<dynamic> history = [];
 
   // GET method API Home
   void getDataHome() async {
@@ -155,11 +167,24 @@ class _IndexState extends State<Index> {
         0, {"id": 0, "name": "Tất cả", "countProduct": sumProduct.toString()});
   }
 
+  // GET method API list order
+  void getDataOrders() async {
+    var res = await ServiceOrder().getListOrder(userId);
+    history = res;
+  }
+
   @override
   void initState() {
     getDataHomeAPI();
     getCountProduct();
+    getUserId();
     super.initState();
+  }
+
+  void getUserId() async {
+    await storage.ready;
+    Map<String, dynamic> payload = Jwt.parseJwt(await storage.getItem('jwt'));
+    userId = payload['user']['id'].toString();
   }
 
   // GET Data Home
@@ -233,11 +258,7 @@ class _IndexState extends State<Index> {
           inputSearch,
           (onInputSearch) => {print(onInputSearch)},
           products,
-          (productId) => {
-            // GET API Detail Product
-            updateCurrentItem(
-                IDComponent().chitietsanpham, NameComponent().chitietsanpham)
-          },
+          (productId) => {getDataDetailAPI(productId)},
         );
       case 'giohang':
         carts = CartOrder().getCart();
@@ -254,8 +275,11 @@ class _IndexState extends State<Index> {
       case 'hoso':
         return Profile();
       case 'lichsu':
-        return History(() =>
-            updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra));
+        return History(
+          () =>
+              updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
+          history,
+        );
       case 'chitietsanpham':
         return ProductDetail(
           product,
@@ -318,13 +342,13 @@ class _IndexState extends State<Index> {
           (id, name) => {updateCurrentItem(id, name)}, // backStep
           checkoutItem,
           (CheckoutItem informationUser) => {
-            print(informationUser.addressShow),
+            setState(() => modalCheckout = false),
             updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
-            setState(() => modalCheckout = false)
           },
           modalCheckout,
           (data) => handleCheckout(data),
           total.toString(),
+          loadingCheckout,
         );
       case 'kiemtra':
         updateCurrentParent(
@@ -390,9 +414,39 @@ class _IndexState extends State<Index> {
     );
   }
 
-  void handleCheckout(CheckoutItem data) {
-    print(data.phone.text);
-    modalCheckout = true;
+  void handleCheckout(CheckoutItem data) async {
+    setState(() => loadingCheckout = true);
+    checkoutItem.addressShow = '${data.addressHome.text}, ${data.addressState}';
+    OrderModel orderModel = OrderModel();
+    orderModel.address = checkoutItem.addressShow;
+    orderModel.phone = checkoutItem.phone.text;
+    orderModel.total = CartOrder().totalCarts().toString();
+    orderModel.delivery = '0';
+    orderModel.pay = false;
+    orderModel.note = checkoutItem.note.text;
+    orderModel.paymentId = '1';
+    orderModel.userId = userId;
+    if (checkoutItem.checkingCoupon == true) {
+      orderModel.couponId = checkoutItem.couponId;
+    }
+    for (var i = 0; i < carts.length; i++) {
+      Map orderDetailItem = {
+        'productId': carts[i]['product']['id'].toString(),
+        'count': carts[i]['count'].toString(),
+        'size': carts[i]['size'].toString()
+      };
+      orderModel.products.add(orderDetailItem);
+    }
+
+    var res = await ServiceOrder()
+        .postOrder(OrderMapping().MapServiceOrder(orderModel));
+
+    Future.delayed(
+        const Duration(seconds: 3),
+        () => {
+              setState(() => {modalCheckout = true, loadingCheckout = false}),
+              CartOrder().clearCart()
+            });
   }
 
   void increaseCount(dynamic up) {
@@ -458,6 +512,16 @@ class _IndexState extends State<Index> {
             updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham));
   }
 
+  void getDataViewHistory() {
+    if (history.length > 0) {
+      updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu);
+      return;
+    }
+    getDataOrders();
+    Future.delayed(const Duration(seconds: 1),
+        () => updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu));
+  }
+
   void changeViewScreen(String id, String title) {
     switch (id) {
       case 'trangchu':
@@ -473,7 +537,7 @@ class _IndexState extends State<Index> {
         updateCurrentItem(id, title);
         break;
       case 'lichsu':
-        updateCurrentItem(id, title);
+        getDataViewHistory();
         break;
       case 'chitietsanpham':
         break;

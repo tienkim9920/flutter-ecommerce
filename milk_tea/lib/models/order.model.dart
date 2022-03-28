@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:milk_tea/pattern/order-detail-item.dart';
 
 class OrderModel {
   String? id;
@@ -11,4 +12,5 @@ class OrderModel {
   String? userId;
   String? paymentId;
   String? couponId;
+  List<dynamic> products = [];
 }

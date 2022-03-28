@@ -7,6 +7,10 @@ class CartOrder {
     storage.setItem('cart', carts);
   }
 
+  void clearCart() {
+    storage.deleteItem('cart');
+  }
+
   dynamic getCart() {
     List<dynamic> payload = storage.getItem('cart') ?? [];
     return payload;
