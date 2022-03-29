@@ -21,4 +21,9 @@ class ServiceOrder {
     List<dynamic> data = jsonDecode(response.body);
     return data;
   }
+
+  Future<dynamic> getDetail(String orderId) async {
+    Response response = await get(Uri.parse('${url}/${orderId}'));
+    return jsonDecode(response.body);
+  }
 }

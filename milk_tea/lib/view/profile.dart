@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:milk_tea/component/button-custom.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+  final Map<dynamic, dynamic>? informationUser;
+  final Function nextStep;
+
+  const Profile(this.informationUser, this.nextStep, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +30,8 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                TextLabel(false, false, false, true, false, 'Nguyễn Kim Tiền',
-                    24, false, 1),
+                TextLabel(false, false, false, true, false,
+                    informationUser?['fullname'], 24, false, 1),
                 SizedBox(height: 5),
                 TextLabel(
                     false, false, true, false, false, 'Quy Nhơn', 16, false, 1),
@@ -76,8 +81,18 @@ class Profile extends StatelessWidget {
                             children: [
                               SizedBox(
                                   width: 220,
-                                  child: TextLabel(false, false, true, false,
-                                      false, '0763557366', 18, false, 0)),
+                                  child: TextLabel(
+                                      false,
+                                      false,
+                                      true,
+                                      false,
+                                      false,
+                                      informationUser?['phone'] == null
+                                          ? 'Chưa cập nhật'
+                                          : informationUser?['phone'],
+                                      18,
+                                      false,
+                                      0)),
                             ]),
                       ],
                     ),
@@ -131,7 +146,7 @@ class Profile extends StatelessWidget {
                                       true,
                                       false,
                                       false,
-                                      'tienkim9920@gmail.com',
+                                      informationUser?['email'],
                                       18,
                                       false,
                                       0)),
@@ -179,14 +194,26 @@ class Profile extends StatelessWidget {
                             children: [
                               SizedBox(
                                   width: 220,
-                                  child: TextLabel(false, false, true, false,
-                                      false, '16 Nguyễn Nghiêm', 18, false, 0)),
+                                  child: TextLabel(
+                                      false,
+                                      false,
+                                      true,
+                                      false,
+                                      false,
+                                      informationUser?['address'] == null
+                                          ? "Chựa cập nhật"
+                                          : informationUser?['address'],
+                                      18,
+                                      false,
+                                      0)),
                             ]),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
+              SizedBox(height: 30),
+              ButtonCustom('Thay đổi mật khẩu', () => nextStep())
             ],
           )
         ]),

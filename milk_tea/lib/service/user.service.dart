@@ -20,4 +20,13 @@ class ServiceUser {
         await post(Uri.parse('${url}/signin'), headers: headers, body: request);
     return response.body;
   }
+
+  Future<dynamic> postEditProfile(String request) async {
+    Response response = await post(
+      Uri.parse('${url}/edit'),
+      headers: headers,
+      body: request,
+    );
+    return response.body;
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/button.dart';
-import 'package:milk_tea/component/input-hint.dart';
 import 'package:milk_tea/component/input-password.dart';
 import 'package:milk_tea/component/input.dart';
 import 'package:milk_tea/component/spinner-loading.dart';
@@ -10,27 +9,35 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 import 'package:milk_tea/pattern/user-edit.dart';
 
-class ProfileDetail extends StatelessWidget {
+class PasswordChange extends StatelessWidget {
   final CurrentParent currentParent;
   final Function backStep;
-  final UserEdit user;
-  final bool isPasswordUser;
-  final Function onPasswordUser;
-  final Function handleEditProfile;
-  final bool modalEditProfile;
-  final bool errorFullname;
-  final bool errorEmail;
+  final UserPassword userPassword;
+  final bool modalPassword;
+  final Function handleUpdatePassword;
+  final bool errorPassword;
+  final bool errorNewPassword;
+  final bool errorConfirmPassword;
+  final bool passwordInvalid;
+  final bool newPasswordInvalid;
+  final bool confirmPasswordInvalid;
+  final bool showPassword;
+  final Function onShowPassword;
 
-  const ProfileDetail(
+  const PasswordChange(
       this.currentParent,
       this.backStep,
-      this.user,
-      this.isPasswordUser,
-      this.onPasswordUser,
-      this.handleEditProfile,
-      this.modalEditProfile,
-      this.errorFullname,
-      this.errorEmail,
+      this.userPassword,
+      this.modalPassword,
+      this.handleUpdatePassword,
+      this.errorPassword,
+      this.errorNewPassword,
+      this.errorConfirmPassword,
+      this.passwordInvalid,
+      this.newPasswordInvalid,
+      this.confirmPasswordInvalid,
+      this.showPassword,
+      this.onShowPassword,
       {Key? key})
       : super(key: key);
 
@@ -77,43 +84,32 @@ class ProfileDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Column(
-                    children: [
-                      SizedBox(height: 40),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(80.0),
-                        child: Image.asset(
-                          'assets/avt.png',
-                          width: 110,
-                          height: 110,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      TextLabel(false, false, true, false, false,
-                          'Thay đổi ảnh đại diện', 16, false, 1),
-                    ],
-                  ),
-                ]),
+                SizedBox(height: 50),
+                InputPassword(
+                    userPassword.password,
+                    "Mật khẩu",
+                    showPassword,
+                    () => onShowPassword(),
+                    passwordInvalid
+                        ? 'Vui lòng kiểm tra lại mật khẩu'
+                        : 'Mật khẩu không được để trống',
+                    errorPassword),
                 SizedBox(height: 20),
-                Input(user.fullname, 'Họ và tên',
-                    'Họ và tên không được để trống', errorFullname),
+                Input(userPassword.newPassword, 'Mật khẩu mới',
+                    'Mật khẩu mới không được để trống', errorNewPassword),
                 SizedBox(height: 20),
-                Input(user.address, 'Địa chỉ', 'Đại chỉ không được để trống',
-                    false),
-                SizedBox(height: 20),
-                Input(user.email, 'Email', 'Email không được để trống',
-                    errorEmail),
-                SizedBox(height: 20),
-                Input(user.phone, 'Số điện thoại',
-                    'Số điện thoại không được để trống', false),
+                Input(
+                    userPassword.confirmPassword,
+                    'Xác nhận mật khẩu mới',
+                    'Xác nhận mật khẩu không được để trống',
+                    errorConfirmPassword),
                 SizedBox(height: 35),
-                Button(0, 0, 'Chỉnh sửa', CustomColor(),
-                    () => handleEditProfile(user))
+                Button(0, 0, 'Thay đổi mật khẩu', CustomColor(),
+                    () => handleUpdatePassword(userPassword))
               ],
             ),
           ),
-          if (modalEditProfile) ...[SpinnerLoading()]
+          if (modalPassword) ...[SpinnerLoading()]
         ]));
   }
 }

@@ -10,6 +10,7 @@ import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
 import 'package:milk_tea/mapping/order.mapping.dart';
+import 'package:milk_tea/mapping/user.mapping.dart';
 import 'package:milk_tea/models/order.model.dart';
 import 'package:milk_tea/pattern/category-item.dart';
 import 'package:milk_tea/pattern/checkout-item.dart';
@@ -17,8 +18,10 @@ import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/pattern/order-detail-item.dart';
+import 'package:milk_tea/pattern/user-edit.dart';
 import 'package:milk_tea/service/order.service.dart';
 import 'package:milk_tea/service/product.service.dart';
+import 'package:milk_tea/service/user.service.dart';
 import 'package:milk_tea/store/authenticate.store.dart';
 import 'package:milk_tea/store/cart.store.dart';
 import 'package:milk_tea/view/cart.dart';
@@ -29,6 +32,7 @@ import 'package:milk_tea/view/feedback.dart';
 import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
 import 'package:milk_tea/view/loading.dart';
+import 'package:milk_tea/view/password-change.dart';
 import 'package:milk_tea/view/product-detail.dart';
 import 'package:milk_tea/view/product.dart';
 import 'package:milk_tea/view/profile-detail.dart';
@@ -44,6 +48,7 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   final LocalStorage storage = LocalStorage('auth');
   String? userId;
+  Map<dynamic, dynamic>? informationUser;
 
   // Change Current Screen
   String currentItem = IDComponent().loading;
@@ -120,19 +125,21 @@ class _IndexState extends State<Index> {
   bool modalCheckout = false;
   bool loadingCheckout = false;
 
-  // Profile
-
-  // Edit Profile
-  TextEditingController user = TextEditingController();
-  bool isPasswordUser = true;
-
   // History
-  List<dynamic> history = [];
+  List<dynamic> histories = [];
+  Map history = {};
 
   // GET method API Home
   void getDataHome() async {
     var res = await ServiceProduct().getBanner();
     slideProduct = res;
+  }
+
+  // GET method API Detail history
+  void getDetailHistory(String orderId) async {
+    var res = await ServiceOrder().getDetail(orderId);
+    history = res;
+    arrayDetailHistory.add(history);
   }
 
   // GET method API Detail
@@ -170,7 +177,7 @@ class _IndexState extends State<Index> {
   // GET method API list order
   void getDataOrders() async {
     var res = await ServiceOrder().getListOrder(userId);
-    history = res;
+    histories = res;
   }
 
   @override
@@ -178,6 +185,7 @@ class _IndexState extends State<Index> {
     getDataHomeAPI();
     getCountProduct();
     getUserId();
+    getInformationUser();
     super.initState();
   }
 
@@ -185,6 +193,12 @@ class _IndexState extends State<Index> {
     await storage.ready;
     Map<String, dynamic> payload = Jwt.parseJwt(await storage.getItem('jwt'));
     userId = payload['user']['id'].toString();
+  }
+
+  void getInformationUser() async {
+    await storage.ready;
+    Map<dynamic, dynamic> payload = Jwt.parseJwt(await storage.getItem('jwt'));
+    informationUser = payload['user'];
   }
 
   // GET Data Home
@@ -230,6 +244,28 @@ class _IndexState extends State<Index> {
             });
   }
 
+  // GET Data Detail History
+  List<dynamic> arrayDetailHistory = [];
+  void getDataDetailHistoryAPI(String orderId) {
+    bool flag = false;
+    arrayDetailHistory.forEach((element) => {
+          if (element['id'].toString() == orderId.toString())
+            {history = element, flag = true}
+        });
+
+    if (flag) {
+      updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra);
+      return;
+    }
+
+    getDetailHistory(orderId);
+    Future.delayed(
+        const Duration(seconds: 1),
+        () => {
+              updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra)
+            });
+  }
+
   // get Screen
   dynamic getScreen() {
     switch (currentItem) {
@@ -271,14 +307,23 @@ class _IndexState extends State<Index> {
           (down) => decreaseCount(down),
           total.toString(),
           (delete) => handleDeleteProduct(delete),
+          (id) => {
+            updateCurrentParent(
+                CurrentParent(IDComponent().giohang, NameComponent().giohang)),
+            getDataDetailAPI(id.toString()),
+          },
         );
       case 'hoso':
-        return Profile();
+        return Profile(
+          informationUser,
+          () => updateCurrentItem(
+              IDComponent().password, NameComponent().password),
+        );
       case 'lichsu':
         return History(
-          () =>
-              updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
-          history,
+          (orderId) => getDataDetailHistoryAPI(orderId.toString()),
+          histories,
+          informationUser,
         );
       case 'chitietsanpham':
         return ProductDetail(
@@ -356,16 +401,119 @@ class _IndexState extends State<Index> {
         return CheckingOrder(
           currentParent,
           (id, name) => {updateCurrentItem(id, name)},
+          history,
+          informationUser,
         );
       case 'chinhsuahoso':
         updateCurrentParent(
             CurrentParent(IDComponent().hoso, NameComponent().hoso));
+        forwardUserEditProfile();
         return ProfileDetail(
-            currentParent,
-            (id, name) => {updateCurrentItem(id, name)},
-            user,
-            isPasswordUser,
-            () => {setState(() => isPasswordUser = !isPasswordUser)});
+          currentParent,
+          (id, name) => {updateCurrentItem(id, name)},
+          userEditProfile,
+          isPasswordUser,
+          () => {setState(() => isPasswordUser = !isPasswordUser)},
+          (data) => handleEditProfile(data),
+          modalEditProfile,
+          errorFullname,
+          errorEmail,
+        );
+      case 'thaydoimatkhau':
+        updateCurrentParent(
+            CurrentParent(IDComponent().hoso, NameComponent().hoso));
+        return PasswordChange(
+          currentParent,
+          (id, name) => {updateCurrentItem(id, name)},
+          userPassword,
+          modalPassword,
+          (data) => handleUpdatePassword(data),
+          errorPassword,
+          errorNewPassword,
+          errorConfirmPassword,
+          passwordInvalid,
+          newPasswordInvalid,
+          confirmPasswordInvalid,
+          showPassword,
+          () => setState(() => showPassword = !showPassword),
+        );
+    }
+  }
+
+  // Profile
+  UserEdit userEditProfile = UserEdit();
+  bool isPasswordUser = true;
+  bool modalEditProfile = false;
+  bool modalPassword = false;
+  bool errorFullname = false;
+  bool errorEmail = false;
+
+  bool errorPassword = false;
+  bool errorNewPassword = false;
+  bool errorConfirmPassword = false;
+
+  bool passwordInvalid = false;
+  bool newPasswordInvalid = false;
+  bool confirmPasswordInvalid = false;
+
+  bool showPassword = true;
+  bool showNewPassword = false;
+  bool showConfirmPassword = false;
+
+  // profile password
+  UserPassword userPassword = UserPassword();
+
+  void forwardUserEditProfile() {
+    userEditProfile.userId = userId;
+    userEditProfile.fullname.text = informationUser?['fullname'];
+    userEditProfile.email.text = informationUser?['email'];
+    userEditProfile.address.text =
+        informationUser?['address'] == null ? '' : informationUser?['address'];
+    userEditProfile.phone.text =
+        informationUser?['phone'] == null ? '' : informationUser?['phone'];
+  }
+
+  void handleEditProfile(UserEdit data) async {
+    if (data.fullname.text.isEmpty) {
+      setState(() => errorFullname = true);
+      return;
+    }
+    if (data.email.text.isEmpty) {
+      setState(() => errorEmail = true);
+      return;
+    }
+    setState(() => modalEditProfile = true);
+    var res = await ServiceUser()
+        .postEditProfile(UserMapping().MapServiceEditProfile(data));
+
+    Authenticate().setToken(res);
+    getUserId();
+    getInformationUser();
+
+    Future.delayed(
+        const Duration(seconds: 2),
+        () => {
+              updateCurrentItem(IDComponent().hoso, NameComponent().hoso),
+              setState(() => {
+                    modalEditProfile = false,
+                    errorFullname = false,
+                    errorEmail = false
+                  })
+            });
+  }
+
+  void handleUpdatePassword(UserPassword data) async {
+    if (data.password.text.isEmpty) {
+      setState(() => errorPassword = true);
+      return;
+    }
+    if (data.newPassword.text.isEmpty) {
+      setState(() => errorNewPassword = true);
+      return;
+    }
+    if (data.confirmPassword.text.isEmpty) {
+      setState(() => errorConfirmPassword = true);
+      return;
     }
   }
 
@@ -499,7 +647,7 @@ class _IndexState extends State<Index> {
   }
 
   void getDataViewScreenProduct(String id) {
-    if (products.length > 0) {
+    if (products.isNotEmpty) {
       updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham);
       setState(() => currentCategoryItem = id);
       return;
@@ -512,11 +660,13 @@ class _IndexState extends State<Index> {
             updateCurrentItem(IDComponent().sanpham, NameComponent().sanpham));
   }
 
+  bool checkAccess = false;
   void getDataViewHistory() {
-    if (history.length > 0) {
+    if (histories.isNotEmpty || checkAccess == true) {
       updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu);
       return;
     }
+    checkAccess = true;
     getDataOrders();
     Future.delayed(const Duration(seconds: 1),
         () => updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu));

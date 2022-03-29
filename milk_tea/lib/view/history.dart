@@ -6,8 +6,10 @@ import 'package:milk_tea/pattern/custom-color.dart';
 class History extends StatelessWidget {
   final Function nextStep;
   final List<dynamic> history;
+  final Map<dynamic, dynamic>? informationUser;
 
-  const History(this.nextStep, this.history, {Key? key}) : super(key: key);
+  const History(this.nextStep, this.history, this.informationUser, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +45,8 @@ class History extends StatelessWidget {
                               'Điểm của bạn', 20, false, 0)
                         ]),
                         Row(children: [
-                          TextLabel(false, true, false, false, false, '8700',
-                              32, false, 0)
+                          TextLabel(false, true, false, false, false,
+                              informationUser?['score'], 32, false, 0)
                         ]),
                         SizedBox(height: 10),
                         Row(children: [
@@ -80,13 +82,13 @@ class History extends StatelessWidget {
                     20, true, 0)
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.only(top: 15),
               child: Column(
                 children: [
                   ...history.map((item) => GestureDetector(
-                        onTap: () => nextStep(),
+                        onTap: () => nextStep(item['id']),
                         child: Padding(
                           padding: EdgeInsets.only(top: 10),
                           child: Column(

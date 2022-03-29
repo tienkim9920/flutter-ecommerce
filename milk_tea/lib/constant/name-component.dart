@@ -11,6 +11,7 @@ class IDComponent {
   String kiemtra = 'kiemtra';
   String chinhsuahoso = 'chinhsuahoso';
   String loading = 'loading';
+  String password = 'thaydoimatkhau';
 }
 
 class NameComponent {
@@ -25,4 +26,5 @@ class NameComponent {
   String kiemtra = 'Kiểm tra đơn hàng';
   String chinhsuahoso = 'Chỉnh sửa hồ sơ';
   String loading = 'loading';
+  String password = 'Thay đổi mật khẩu';
 }

@@ -8,8 +8,12 @@ import 'package:milk_tea/pattern/custom-color.dart';
 class CheckingOrder extends StatelessWidget {
   final CurrentParent currentParent;
   final Function backStep;
+  final Map history;
+  final Map<dynamic, dynamic>? informationUser;
 
-  const CheckingOrder(this.currentParent, this.backStep, {Key? key})
+  const CheckingOrder(
+      this.currentParent, this.backStep, this.history, this.informationUser,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -48,43 +52,54 @@ class CheckingOrder extends StatelessWidget {
                         ),
                         Positioned(
                             child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
-                          width: 22,
-                          height: 22,
+                          margin: EdgeInsets.fromLTRB(12, 20, 0, 0),
+                          width: history['delivery'] == '0' ? 18 : 16,
+                          height: history['delivery'] == '0' ? 18 : 16,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            color: Color.fromRGBO(CustomColor().R,
-                                CustomColor().G, CustomColor().B, 1),
+                            color: history['delivery'] == '0'
+                                ? Color.fromRGBO(CustomColor().R,
+                                    CustomColor().G, CustomColor().B, 1)
+                                : Colors.grey,
                           ),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 110, 0, 0),
-                          width: 16,
-                          height: 16,
+                          width: history['delivery'] == '1' ? 18 : 16,
+                          height: history['delivery'] == '1' ? 18 : 16,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
-                            color: Colors.grey,
+                            color: history['delivery'] == '1'
+                                ? Color.fromRGBO(CustomColor().R,
+                                    CustomColor().G, CustomColor().B, 1)
+                                : Colors.grey,
                           ),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 200, 0, 0),
-                          width: 16,
-                          height: 16,
+                          width: history['delivery'] == '2' ? 18 : 16,
+                          height: history['delivery'] == '2' ? 18 : 16,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
-                            color: Colors.grey,
+                            color: history['delivery'] == '2'
+                                ? Color.fromRGBO(CustomColor().R,
+                                    CustomColor().G, CustomColor().B, 1)
+                                : Colors.grey,
                           ),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 290, 0, 0),
-                          width: 16,
-                          height: 16,
+                          width: history['delivery'] == '3' ? 18 : 16,
+                          height: history['delivery'] == '3' ? 18 : 16,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
-                            color: Colors.grey,
+                            color: history['delivery'] == '3'
+                                ? Color.fromRGBO(CustomColor().R,
+                                    CustomColor().G, CustomColor().B, 1)
+                                : Colors.grey,
                           ),
                         )),
                       ],
@@ -99,26 +114,58 @@ class CheckingOrder extends StatelessWidget {
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
-                          child: TextLabel(false, false, true, false, false,
-                              "Đang xác nhận đơn hàng", 18, false, 0),
+                          child: TextLabel(
+                              false,
+                              false,
+                              history['delivery'] == '0' ? true : false,
+                              false,
+                              false,
+                              "Đang xác nhận đơn hàng",
+                              18,
+                              false,
+                              0),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 107, 0, 0),
-                          child: TextLabel(false, false, false, false, true,
-                              "Đang xử lý đơn hàng", 18, false, 0),
+                          child: TextLabel(
+                              false,
+                              false,
+                              history['delivery'] == '1' ? true : false,
+                              false,
+                              true,
+                              "Đang xử lý đơn hàng",
+                              18,
+                              false,
+                              0),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 197, 0, 0),
-                          child: TextLabel(false, false, false, false, true,
-                              "Đang vận chuyện lý đơn hàng", 18, false, 0),
+                          child: TextLabel(
+                              false,
+                              false,
+                              history['delivery'] == '2' ? true : false,
+                              false,
+                              true,
+                              "Đang vận chuyện lý đơn hàng",
+                              18,
+                              false,
+                              0),
                         )),
                         Positioned(
                             child: Container(
                           margin: EdgeInsets.fromLTRB(12, 287, 0, 0),
-                          child: TextLabel(false, false, false, false, true,
-                              "Hoàn thành", 18, false, 0),
+                          child: TextLabel(
+                              false,
+                              false,
+                              history['delivery'] == '3' ? true : false,
+                              false,
+                              true,
+                              "Hoàn thành",
+                              18,
+                              false,
+                              0),
                         )),
                       ],
                     ),
@@ -149,21 +196,38 @@ class CheckingOrder extends StatelessWidget {
                               height: 50,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
+                          Container(
+                            width: 160,
+                            padding: EdgeInsets.only(left: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    TextLabel(false, true, false, false, false,
-                                        "Nguyễn Kim Tiền", 18, false, 0),
+                                    TextLabel(
+                                        false,
+                                        true,
+                                        false,
+                                        false,
+                                        false,
+                                        informationUser?['fullname'],
+                                        18,
+                                        false,
+                                        0),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    TextLabel(false, true, false, false, false,
-                                        "Điểm của bạn 500", 16, false, 0),
+                                    TextLabel(
+                                        false,
+                                        true,
+                                        false,
+                                        false,
+                                        false,
+                                        "Điểm tích lũy ${informationUser?['score']}",
+                                        16,
+                                        false,
+                                        0),
                                   ],
                                 )
                               ],
@@ -174,7 +238,7 @@ class CheckingOrder extends StatelessWidget {
                             child: Image.asset('assets/phone.png'),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 10),
+                            padding: EdgeInsets.only(left: 7),
                             child: Image.asset('assets/chat.png'),
                           ),
                         ],
@@ -209,7 +273,9 @@ class CheckingOrder extends StatelessWidget {
                                       false,
                                       true,
                                       false,
-                                      "299 Nguyễn Thị Minh Khai",
+                                      history['address']
+                                          .toString()
+                                          .split(',')[0],
                                       18,
                                       false,
                                       0),
@@ -220,7 +286,7 @@ class CheckingOrder extends StatelessWidget {
                                     TextLabel(false, false, false, false, true,
                                         "Tổng đơn hàng: ", 15, false, 0),
                                     TextLabel(true, false, false, false, true,
-                                        '70000', 15, false, 0),
+                                        history['total'], 15, false, 0),
                                   ],
                                 )
                               ],

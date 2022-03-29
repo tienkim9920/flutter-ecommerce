@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/button-white.dart';
 import 'package:milk_tea/component/custom-product.dart';
 import 'package:milk_tea/component/text-label.dart';
@@ -15,9 +12,10 @@ class Cart extends StatelessWidget {
   final Function downCount;
   final String total;
   final Function onDelete;
+  final Function onViewDetail;
 
   const Cart(this.carts, this.productId, this.upCount, this.downCount,
-      this.total, this.onDelete,
+      this.total, this.onDelete, this.onViewDetail,
       {Key? key})
       : super(key: key);
 
@@ -56,7 +54,8 @@ class Cart extends StatelessWidget {
                                 color: Color.fromRGBO(CustomColor().R,
                                     CustomColor().G, CustomColor().B, 1),
                                 icon: Icons.more_horiz,
-                                onTap: () => print('Xem'),
+                                onTap: () =>
+                                    onViewDetail(item['product']['id']),
                               ),
                               IconSlideAction(
                                 caption: 'Xóa',
