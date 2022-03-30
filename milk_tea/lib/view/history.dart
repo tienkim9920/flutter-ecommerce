@@ -6,7 +6,7 @@ import 'package:milk_tea/pattern/custom-color.dart';
 class History extends StatelessWidget {
   final Function nextStep;
   final List<dynamic> history;
-  final Map<dynamic, dynamic>? informationUser;
+  final Map<dynamic, dynamic> informationUser;
 
   const History(this.nextStep, this.history, this.informationUser, {Key? key})
       : super(key: key);
@@ -46,7 +46,7 @@ class History extends StatelessWidget {
                         ]),
                         Row(children: [
                           TextLabel(false, true, false, false, false,
-                              informationUser?['score'], 32, false, 0)
+                              informationUser['score'].toString(), 32, false, 0)
                         ]),
                         SizedBox(height: 10),
                         Row(children: [

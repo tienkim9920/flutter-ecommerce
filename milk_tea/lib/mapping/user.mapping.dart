@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:milk_tea/models-interface/user-edit.interface.dart';
+import 'package:milk_tea/models-interface/user-password.interface.dart';
 import 'package:milk_tea/models-interface/user.interface.dart';
 import 'package:milk_tea/models/user.model.dart';
 import 'package:milk_tea/pattern/user-edit.dart';
@@ -36,6 +37,16 @@ class UserMapping {
     user.email = model.email.text;
     user.address = model.address.text;
     user.phone = model.phone.text;
+
+    return json.encode(user.toJson());
+  }
+
+  dynamic MapServiceEditPassword(UserPassword model) {
+    UserPasswordInterface user = UserPasswordInterface();
+    user.userId = model.userId;
+    user.password = model.password.text;
+    user.newPassword = model.newPassword.text;
+    user.confirmPassword = model.confirmPassword.text;
 
     return json.encode(user.toJson());
   }

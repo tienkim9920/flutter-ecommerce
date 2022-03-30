@@ -10,6 +10,7 @@ import 'package:milk_tea/constant/route.dart';
 import 'package:milk_tea/mapping/user.mapping.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
 import 'package:milk_tea/pattern/user-login.dart';
+import 'package:milk_tea/screen/index.dart';
 import 'package:milk_tea/screen/signup.dart';
 import 'package:milk_tea/service/user.service.dart';
 import 'package:milk_tea/store/authenticate.store.dart';
@@ -61,7 +62,14 @@ class _SignInState extends State<SignIn> {
               else
                 {
                   Authenticate().setToken(res),
-                  Navigator.pushNamed(context, Routes().index),
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: Index(),
+                          childCurrent: widget,
+                          type: PageTransitionType.rightToLeftJoined,
+                          duration: Duration(milliseconds: 300),
+                          reverseDuration: Duration(milliseconds: 300))),
                 },
               setState(() => spinnerLoading = false)
             });

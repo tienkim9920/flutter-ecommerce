@@ -9,7 +9,7 @@ class CheckingOrder extends StatelessWidget {
   final CurrentParent currentParent;
   final Function backStep;
   final Map history;
-  final Map<dynamic, dynamic>? informationUser;
+  final Map<dynamic, dynamic> informationUser;
 
   const CheckingOrder(
       this.currentParent, this.backStep, this.history, this.informationUser,
@@ -210,7 +210,7 @@ class CheckingOrder extends StatelessWidget {
                                         false,
                                         false,
                                         false,
-                                        informationUser?['fullname'],
+                                        informationUser['fullname'],
                                         18,
                                         false,
                                         0),
@@ -224,7 +224,7 @@ class CheckingOrder extends StatelessWidget {
                                         false,
                                         false,
                                         false,
-                                        "Điểm tích lũy ${informationUser?['score']}",
+                                        "Điểm tích lũy ${informationUser['score'].toString()}",
                                         16,
                                         false,
                                         0),

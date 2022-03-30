@@ -6,8 +6,10 @@ class Menu extends StatelessWidget {
   final String currentItem;
   final List<MenuItem> menuItems;
   final ValueChanged<MenuItem> onSelectItem;
+  final Function onLogout;
 
-  const Menu(this.currentItem, this.menuItems, this.onSelectItem, {Key? key})
+  const Menu(this.currentItem, this.menuItems, this.onSelectItem, this.onLogout,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -70,9 +72,7 @@ class Menu extends StatelessWidget {
                     title: Text('Đăng xuất',
                         style: GoogleFonts.quicksand(
                             color: Color.fromRGBO(180, 180, 180, 1))),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => onLogout(),
                   ),
                 ],
               ),

@@ -10,6 +10,10 @@ class Authenticate {
     storage.setItem('jwt', token);
   }
 
+  void clearToken() {
+    storage.deleteItem('jwt');
+  }
+
   dynamic getToken() {
     Map<String, dynamic> payload = Jwt.parseJwt(storage.getItem('jwt'));
     return payload['user'];

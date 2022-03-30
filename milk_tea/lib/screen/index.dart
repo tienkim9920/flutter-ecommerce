@@ -48,7 +48,7 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   final LocalStorage storage = LocalStorage('auth');
   String? userId;
-  Map<dynamic, dynamic>? informationUser;
+  late Map<dynamic, dynamic> informationUser;
 
   // Change Current Screen
   String currentItem = IDComponent().loading;
@@ -139,6 +139,8 @@ class _IndexState extends State<Index> {
   void getDetailHistory(String orderId) async {
     var res = await ServiceOrder().getDetail(orderId);
     history = res;
+    print("142");
+    print(history);
     arrayDetailHistory.add(history);
   }
 
@@ -301,8 +303,7 @@ class _IndexState extends State<Index> {
         total = CartOrder().totalCarts();
         return Cart(
           carts,
-          (productId) => updateCurrentItem(
-              IDComponent().checkout, NameComponent().checkout), // click order
+          (productId) => handleRedirectCheckout(), // click order
           (up) => increaseCount(up),
           (down) => decreaseCount(down),
           total.toString(),
@@ -386,7 +387,7 @@ class _IndexState extends State<Index> {
           currentParent,
           (id, name) => {updateCurrentItem(id, name)}, // backStep
           checkoutItem,
-          (CheckoutItem informationUser) => {
+          () => {
             setState(() => modalCheckout = false),
             updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra),
           },
@@ -394,6 +395,8 @@ class _IndexState extends State<Index> {
           (data) => handleCheckout(data),
           total.toString(),
           loadingCheckout,
+          errorPhoneCheckout,
+          errorAddressCheckout,
         );
       case 'kiemtra':
         updateCurrentParent(
@@ -436,8 +439,19 @@ class _IndexState extends State<Index> {
           confirmPasswordInvalid,
           showPassword,
           () => setState(() => showPassword = !showPassword),
+          showNewPassword,
+          () => setState(() => showNewPassword = !showNewPassword),
+          showConfirmPassword,
+          () => setState(() => showConfirmPassword = !showConfirmPassword),
         );
     }
+  }
+
+  void handleRedirectCheckout() {
+    if (carts.isEmpty) {
+      return;
+    }
+    updateCurrentItem(IDComponent().checkout, NameComponent().checkout);
   }
 
   // Profile
@@ -457,20 +471,20 @@ class _IndexState extends State<Index> {
   bool confirmPasswordInvalid = false;
 
   bool showPassword = true;
-  bool showNewPassword = false;
-  bool showConfirmPassword = false;
+  bool showNewPassword = true;
+  bool showConfirmPassword = true;
 
   // profile password
   UserPassword userPassword = UserPassword();
 
   void forwardUserEditProfile() {
     userEditProfile.userId = userId;
-    userEditProfile.fullname.text = informationUser?['fullname'];
-    userEditProfile.email.text = informationUser?['email'];
+    userEditProfile.fullname.text = informationUser['fullname'];
+    userEditProfile.email.text = informationUser['email'];
     userEditProfile.address.text =
-        informationUser?['address'] == null ? '' : informationUser?['address'];
+        informationUser['address'] == null ? '' : informationUser['address'];
     userEditProfile.phone.text =
-        informationUser?['phone'] == null ? '' : informationUser?['phone'];
+        informationUser['phone'] == null ? '' : informationUser['phone'];
   }
 
   void handleEditProfile(UserEdit data) async {
@@ -482,13 +496,19 @@ class _IndexState extends State<Index> {
       setState(() => errorEmail = true);
       return;
     }
-    setState(() => modalEditProfile = true);
+
     var res = await ServiceUser()
         .postEditProfile(UserMapping().MapServiceEditProfile(data));
 
-    Authenticate().setToken(res);
-    getUserId();
-    getInformationUser();
+    setInformationForUser(res);
+
+    setState(() {
+      modalEditProfile = true;
+      userEditProfile.fullname.text = data.fullname.text;
+      userEditProfile.address.text = data.address.text;
+      userEditProfile.email.text = data.email.text;
+      userEditProfile.phone.text = data.phone.text;
+    });
 
     Future.delayed(
         const Duration(seconds: 2),
@@ -503,6 +523,13 @@ class _IndexState extends State<Index> {
   }
 
   void handleUpdatePassword(UserPassword data) async {
+    setState(() => {
+          errorPassword = false,
+          errorNewPassword = false,
+          errorConfirmPassword = false,
+          confirmPasswordInvalid = false,
+          passwordInvalid = false,
+        });
     if (data.password.text.isEmpty) {
       setState(() => errorPassword = true);
       return;
@@ -515,6 +542,49 @@ class _IndexState extends State<Index> {
       setState(() => errorConfirmPassword = true);
       return;
     }
+
+    if (data.confirmPassword.text != data.newPassword.text) {
+      setState(
+          () => {confirmPasswordInvalid = true, errorConfirmPassword = true});
+      return;
+    }
+
+    setState(() => modalPassword = true);
+    data.userId = userId;
+    var res = await ServiceUser()
+        .postEditPassword(UserMapping().MapServiceEditPassword(data));
+
+    if (res == 'Password is invalid') {
+      setState(() => {
+            passwordInvalid = true,
+            errorPassword = true,
+            modalPassword = false
+          });
+      return;
+    }
+
+    setInformationForUser(res);
+
+    Future.delayed(
+        const Duration(seconds: 2),
+        () => {
+              updateCurrentItem(IDComponent().hoso, NameComponent().hoso),
+              setState(() => {
+                    modalPassword = false,
+                    showPassword = true,
+                    showNewPassword = true,
+                    showConfirmPassword = true,
+                  }),
+              userPassword.password.text = '',
+              userPassword.newPassword.text = '',
+              userPassword.confirmPassword.text = '',
+            });
+  }
+
+  void setInformationForUser(String res) {
+    Authenticate().setToken(res);
+    getUserId();
+    getInformationUser();
   }
 
   // get AppBar
@@ -562,7 +632,23 @@ class _IndexState extends State<Index> {
     );
   }
 
+  bool errorPhoneCheckout = false;
+  bool errorAddressCheckout = false;
+
   void handleCheckout(CheckoutItem data) async {
+    setState(() {
+      errorPhoneCheckout = false;
+      errorAddressCheckout = false;
+    });
+    if (data.phone.text.isEmpty) {
+      setState(() => errorPhoneCheckout = true);
+      return;
+    }
+    if (data.addressHome.text.isEmpty) {
+      setState(() => errorAddressCheckout = true);
+      return;
+    }
+
     setState(() => loadingCheckout = true);
     checkoutItem.addressShow = '${data.addressHome.text}, ${data.addressState}';
     OrderModel orderModel = OrderModel();
@@ -571,11 +657,13 @@ class _IndexState extends State<Index> {
     orderModel.total = CartOrder().totalCarts().toString();
     orderModel.delivery = '0';
     orderModel.pay = false;
-    orderModel.note = checkoutItem.note.text;
     orderModel.paymentId = '1';
     orderModel.userId = userId;
     if (checkoutItem.checkingCoupon == true) {
       orderModel.couponId = checkoutItem.couponId;
+    }
+    if (checkoutItem.note.text.isNotEmpty) {
+      orderModel.note = checkoutItem.note.text;
     }
     for (var i = 0; i < carts.length; i++) {
       Map orderDetailItem = {
@@ -592,8 +680,15 @@ class _IndexState extends State<Index> {
     Future.delayed(
         const Duration(seconds: 3),
         () => {
+              checkoutItem.addressHome.text = '',
+              checkoutItem.phone.text = '',
+              checkoutItem.coupon.text = '',
+              checkoutItem.checkingCoupon = false,
+              setInformationForUser(res['token']),
+              getDetailHistory(res['orderId'].toString()),
+              getDataOrders(),
+              CartOrder().clearCart(),
               setState(() => {modalCheckout = true, loadingCheckout = false}),
-              CartOrder().clearCart()
             });
   }
 
@@ -668,8 +763,11 @@ class _IndexState extends State<Index> {
     }
     checkAccess = true;
     getDataOrders();
-    Future.delayed(const Duration(seconds: 1),
-        () => updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu));
+    Future.delayed(
+        const Duration(seconds: 1),
+        () => {
+              updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu),
+            });
   }
 
   void changeViewScreen(String id, String title) {
@@ -691,7 +789,14 @@ class _IndexState extends State<Index> {
         break;
       case 'chitietsanpham':
         break;
+      case 'dangxuat':
+        break;
     }
+  }
+
+  void handleLogout() {
+    Navigator.pop(context);
+    Authenticate().clearToken();
   }
 
   @override
@@ -704,12 +809,14 @@ class _IndexState extends State<Index> {
       backgroundColor: Color.fromRGBO(4, 118, 78, 0.7),
       menuScreen: Builder(
         builder: (context) => Menu(
-            currentItem,
-            menuItems,
-            (item) => {
-                  changeViewScreen(item.id, item.title),
-                  ZoomDrawer.of(context)!.close()
-                }),
+          currentItem,
+          menuItems,
+          (item) => {
+            changeViewScreen(item.id, item.title),
+            ZoomDrawer.of(context)!.close()
+          },
+          () => handleLogout(),
+        ),
       ),
       mainScreen: Scaffold(
         appBar: getAppBar(),

@@ -29,4 +29,10 @@ class ServiceUser {
     );
     return response.body;
   }
+
+  Future<dynamic> postEditPassword(String request) async {
+    Response response = await post(Uri.parse('${url}/password'),
+        headers: headers, body: request);
+    return response.body;
+  }
 }

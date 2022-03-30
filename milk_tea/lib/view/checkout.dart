@@ -23,6 +23,8 @@ class Checkout extends StatelessWidget {
   final Function onChangeModal;
   final String total;
   final bool loadingCheckout;
+  final bool errorPhoneCheckout;
+  final bool errorAddressCheckout;
 
   const Checkout(
       this.currentParent,
@@ -33,6 +35,8 @@ class Checkout extends StatelessWidget {
       this.onChangeModal,
       this.total,
       this.loadingCheckout,
+      this.errorPhoneCheckout,
+      this.errorAddressCheckout,
       {Key? key})
       : super(key: key);
 
@@ -73,7 +77,7 @@ class Checkout extends StatelessWidget {
             ),
             SizedBox(height: 40),
             Input(checkoutItem.phone, 'Số điện thoại',
-                'Số điện thoại không được để trống', false),
+                'Số điện thoại không được để trống', errorPhoneCheckout),
             SizedBox(height: 25),
             Container(
               child: Column(children: [
@@ -107,7 +111,7 @@ class Checkout extends StatelessWidget {
             ),
             SizedBox(height: 25),
             Input(checkoutItem.addressHome, 'Địa chỉ nhận hàng',
-                'Địa chỉ nhận hàng không được để trống', false),
+                'Địa chỉ nhận hàng không được để trống', errorAddressCheckout),
             SizedBox(height: 25),
             Row(
               children: [
@@ -173,7 +177,7 @@ class Checkout extends StatelessWidget {
         if (loadingCheckout) ...[SpinnerLoading()],
         if (modalCheckout) ...[
           Modal('Bạn đã đặt hàng thành công', 'Kiểm tra đơn hàng',
-              () => gotoCheckingOrder(checkoutItem))
+              () => gotoCheckingOrder())
         ]
       ]),
     );

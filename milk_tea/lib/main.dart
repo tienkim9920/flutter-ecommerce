@@ -14,7 +14,7 @@ void main() {
       Routes().loading: (context) => Loading(),
       Routes().intro: (context) => Intro(),
       Routes().login: (context) => Login(),
-      Routes().signin: (context) => SignIn(),
+      Routes().ombee: (context) => SignIn(),
       Routes().signup: (context) => SignUp(),
       Routes().index: (context) => Index(),
     },

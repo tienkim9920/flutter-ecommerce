@@ -13,7 +13,7 @@ class ServiceOrder {
       headers: headers,
       body: request,
     );
-    return response.body;
+    return jsonDecode(response.body);
   }
 
   Future<dynamic> getListOrder(String? userId) async {

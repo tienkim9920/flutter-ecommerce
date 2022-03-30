@@ -23,6 +23,10 @@ class PasswordChange extends StatelessWidget {
   final bool confirmPasswordInvalid;
   final bool showPassword;
   final Function onShowPassword;
+  final bool showNewPassword;
+  final Function onShowNewPassword;
+  final bool showConfirmPassword;
+  final Function onShowConfirmPassword;
 
   const PasswordChange(
       this.currentParent,
@@ -38,6 +42,10 @@ class PasswordChange extends StatelessWidget {
       this.confirmPasswordInvalid,
       this.showPassword,
       this.onShowPassword,
+      this.showNewPassword,
+      this.onShowNewPassword,
+      this.showConfirmPassword,
+      this.onShowConfirmPassword,
       {Key? key})
       : super(key: key);
 
@@ -87,21 +95,32 @@ class PasswordChange extends StatelessWidget {
                 SizedBox(height: 50),
                 InputPassword(
                     userPassword.password,
-                    "Mật khẩu",
+                    "Mật khẩu hiện tại",
                     showPassword,
                     () => onShowPassword(),
                     passwordInvalid
-                        ? 'Vui lòng kiểm tra lại mật khẩu'
-                        : 'Mật khẩu không được để trống',
+                        ? 'Vui lòng kiểm tra lại mật khẩu hiện tại'
+                        : 'Mật khẩu hiện tại không được để trống',
                     errorPassword),
                 SizedBox(height: 20),
-                Input(userPassword.newPassword, 'Mật khẩu mới',
-                    'Mật khẩu mới không được để trống', errorNewPassword),
+                InputPassword(
+                    userPassword.newPassword,
+                    "Mật khẩu mới",
+                    showNewPassword,
+                    () => onShowNewPassword(),
+                    newPasswordInvalid
+                        ? 'Vui lòng kiểm tra lại mật khẩu mới'
+                        : 'Mật khẩu mới không được để trống',
+                    errorNewPassword),
                 SizedBox(height: 20),
-                Input(
+                InputPassword(
                     userPassword.confirmPassword,
-                    'Xác nhận mật khẩu mới',
-                    'Xác nhận mật khẩu không được để trống',
+                    "Xác nhận mật khẩu mới",
+                    showConfirmPassword,
+                    () => onShowConfirmPassword(),
+                    confirmPasswordInvalid
+                        ? 'Vui lòng kiểm tra lại xác nhận mật khẩu mới'
+                        : 'Xác nhận mật khẩu mới không được để trống',
                     errorConfirmPassword),
                 SizedBox(height: 35),
                 Button(0, 0, 'Thay đổi mật khẩu', CustomColor(),
