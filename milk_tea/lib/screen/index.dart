@@ -9,8 +9,10 @@ import 'package:localstorage/localstorage.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
+import 'package:milk_tea/mapping/feedback.mapping.dart';
 import 'package:milk_tea/mapping/order.mapping.dart';
 import 'package:milk_tea/mapping/user.mapping.dart';
+import 'package:milk_tea/models/feedback.model.dart';
 import 'package:milk_tea/models/order.model.dart';
 import 'package:milk_tea/pattern/category-item.dart';
 import 'package:milk_tea/pattern/checkout-item.dart';
@@ -19,6 +21,7 @@ import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/pattern/order-detail-item.dart';
 import 'package:milk_tea/pattern/user-edit.dart';
+import 'package:milk_tea/service/feedback.service.dart';
 import 'package:milk_tea/service/order.service.dart';
 import 'package:milk_tea/service/product.service.dart';
 import 'package:milk_tea/service/user.service.dart';
@@ -115,6 +118,11 @@ class _IndexState extends State<Index> {
   ];
   int countStar = 4;
   TextEditingController textComment = TextEditingController();
+  bool errorTextComment = false;
+  bool modalFeedback = false;
+  bool loadingFeedback = false;
+  List<dynamic> feedbacks = [];
+  List<dynamic> storeFeedbacks = [];
 
   // Cart
   List<dynamic> carts = CartOrder().getCart();
@@ -337,8 +345,10 @@ class _IndexState extends State<Index> {
           () => {setState(() => countProductDetail--)},
           () => {setState(() => countProductDetail++)},
           (id) => handlerCartOrder(id),
-          () => updateCurrentItem(
-              IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
+          () => {
+            updateCurrentItem(IDComponent().nhanxet, NameComponent().nhanxet),
+            handleDataFeedbacks(product['id'].toString())
+          }, // nextStep
           modalDetail,
           () => setState(() => modalDetail = false),
         );
@@ -346,40 +356,49 @@ class _IndexState extends State<Index> {
         updateCurrentParent(CurrentParent(
             IDComponent().chitietsanpham, NameComponent().chitietsanpham));
         return Comment(
-            product,
-            currentParent,
-            (id, name) => {
-                  updateCurrentItem(id, name),
-                  if (identify)
-                    {
-                      updateCurrentParent(CurrentParent(
-                          IDComponent().sanpham, NameComponent().sanpham))
-                    }
-                  else
-                    {
-                      updateCurrentParent(CurrentParent(
-                          IDComponent().trangchu, NameComponent().trangchu))
-                    }
-                }, // backStep
-            () => updateCurrentItem(
-                IDComponent().nhanxet, NameComponent().nhanxet), // nextStep
-            star,
-            (index) => {
-                  setState(() => {
-                        star[index]['status'] = !star[index]['status'],
-                        if (star[index]['status'])
-                          {countStar++}
-                        else
-                          {countStar--}
-                      })
-                },
-            countStar,
-            textComment,
-            (text) => print(text));
+          product,
+          currentParent,
+          (id, name) => {
+            updateCurrentItem(id, name),
+            if (identify)
+              {
+                updateCurrentParent(CurrentParent(
+                    IDComponent().sanpham, NameComponent().sanpham))
+              }
+            else
+              {
+                updateCurrentParent(CurrentParent(
+                    IDComponent().trangchu, NameComponent().trangchu))
+              }
+          }, // backStep
+          () => updateCurrentItem(
+              IDComponent().feedback, NameComponent().feedback), // nextStep
+          star,
+          (index) => {
+            setState(() => {
+                  star[index]['status'] = !star[index]['status'],
+                  if (star[index]['status']) {countStar++} else {countStar--}
+                })
+          },
+          countStar,
+          textComment,
+          (text) => handleComment(text),
+          errorTextComment,
+          modalFeedback,
+          () => {
+            setState(() => modalFeedback = false),
+          },
+          loadingFeedback,
+        );
       case 'feedback':
         updateCurrentParent(
             CurrentParent(IDComponent().nhanxet, NameComponent().nhanxet));
-        return FeedBack();
+        return FeedBack(
+          currentParent,
+          (id, name) => {updateCurrentItem(id, name)},
+          product['name'],
+          4,
+        );
       case 'checkout':
         updateCurrentParent(
             CurrentParent(IDComponent().giohang, NameComponent().giohang));
@@ -585,6 +604,50 @@ class _IndexState extends State<Index> {
     Authenticate().setToken(res);
     getUserId();
     getInformationUser();
+  }
+
+  void handleDataFeedbacks(String productId) {
+    bool flag = false;
+    for (var i = 0; i < storeFeedbacks.length; i++) {
+      if (storeFeedbacks[i]['productId'] == productId) {
+        feedbacks = storeFeedbacks[i]['feedbacks'];
+        flag = true;
+        return;
+      }
+    }
+
+    if (flag) {
+      return;
+    }
+
+    print("Goi api san pham");
+  }
+
+  void handleComment(String text) {
+    setState(() => errorTextComment = false);
+    if (text.isEmpty) {
+      setState(() => errorTextComment = true);
+      return;
+    }
+
+    FeedbackModel feedbackModel = FeedbackModel();
+    feedbackModel.content = text;
+    feedbackModel.star = countStar.toString();
+    feedbackModel.productId = product['id'].toString();
+    feedbackModel.userId = userId!;
+
+    setState(() => loadingFeedback = true);
+    var res = ServiceFeedback()
+        .postFeedback(FeedbackMapping().MapServiceFeedback(feedbackModel));
+
+    Future.delayed(
+        const Duration(seconds: 2),
+        () => {
+              setState(() => {
+                    loadingFeedback = false,
+                    modalFeedback = true,
+                  })
+            });
   }
 
   // get AppBar

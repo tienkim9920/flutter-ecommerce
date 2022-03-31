@@ -27,4 +27,5 @@ class NameComponent {
   String chinhsuahoso = 'Chỉnh sửa hồ sơ';
   String loading = 'loading';
   String password = 'Thay đổi mật khẩu';
+  String feedback = 'Danh sách đánh giá';
 }
