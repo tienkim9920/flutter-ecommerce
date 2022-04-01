@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart';
@@ -31,6 +32,22 @@ class ServiceProduct {
     Response response = await get(Uri.parse(url));
     List<dynamic> data = jsonDecode(response.body);
     return data;
+  }
+
+  Future<List<dynamic>> getSearchProducts(String query) async {
+    Response response = await get(Uri.parse(url));
+    List<dynamic> data = jsonDecode(response.body);
+    return data
+        .where((item) =>
+            item['name']
+                .toString()
+                .toLowerCase()
+                .contains(query.toString().toLowerCase()) &&
+            item['name']
+                .toString()
+                .toLowerCase()
+                .startsWith(query.toString().toLowerCase()))
+        .toList();
   }
 
   Future<dynamic> getCategories() async {

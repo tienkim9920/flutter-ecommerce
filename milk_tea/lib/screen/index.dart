@@ -195,6 +195,7 @@ class _IndexState extends State<Index> {
     getCountProduct();
     getUserId();
     getInformationUser();
+    getDataProducts();
     super.initState();
   }
 
@@ -289,7 +290,8 @@ class _IndexState extends State<Index> {
             (onInputSearch) => {print(onInputSearch)},
             slideProduct,
             countProduct,
-            (id) => getDataViewScreenProduct(id.toString()));
+            (id) => getDataViewScreenProduct(id.toString()),
+            products);
       case 'sanpham':
         updateCurrentParent(
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));

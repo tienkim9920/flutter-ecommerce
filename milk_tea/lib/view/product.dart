@@ -35,8 +35,8 @@ class Product extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 10.0),
-          InputSearch(
-              inputSearch, 'Tìm kiếm sản phẩm', (text) => onInputSearch(text)),
+          InputSearch(inputSearch, 'Tìm kiếm sản phẩm',
+              (text) => onInputSearch(text), products),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20.0),
             height: 30.0,
