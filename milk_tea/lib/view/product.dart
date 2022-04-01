@@ -95,6 +95,22 @@ class Product extends StatelessWidget {
                           '',
                           () => {},
                           () => {}))
+                    ] else if (currentCategoryItem == inputSearch.text) ...[
+                      ...products
+                          .where((item) => item['name']
+                              .toString()
+                              .toLowerCase()
+                              .contains(currentCategoryItem.toLowerCase()))
+                          .map((e) => CustomProduct(
+                              e,
+                              (id) => productId(id.toString()),
+                              false,
+                              '',
+                              '',
+                              '',
+                              () => {},
+                              () => {}))
+                          .toList()
                     ] else ...[
                       ...products
                           .where((item) =>

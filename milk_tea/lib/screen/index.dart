@@ -147,8 +147,6 @@ class _IndexState extends State<Index> {
   void getDetailHistory(String orderId) async {
     var res = await ServiceOrder().getDetail(orderId);
     history = res;
-    print("142");
-    print(history);
     arrayDetailHistory.add(history);
   }
 
@@ -188,6 +186,7 @@ class _IndexState extends State<Index> {
   void getDataOrders() async {
     var res = await ServiceOrder().getListOrder(userId);
     histories = res;
+    histories = reversedList(histories);
   }
 
   @override
@@ -302,7 +301,7 @@ class _IndexState extends State<Index> {
             setState(() => {currentCategoryItem = categoryItemId.toString()})
           },
           inputSearch,
-          (onInputSearch) => {print(onInputSearch)},
+          (onInputSearch) => getDataSearchProduct(onInputSearch),
           products,
           (productId) => {getDataDetailAPI(productId)},
         );
@@ -397,7 +396,7 @@ class _IndexState extends State<Index> {
           currentParent,
           (id, name) => {updateCurrentItem(id, name)},
           product['name'],
-          4,
+          feedbacks,
         );
       case 'checkout':
         updateCurrentParent(
@@ -606,7 +605,7 @@ class _IndexState extends State<Index> {
     getInformationUser();
   }
 
-  void handleDataFeedbacks(String productId) {
+  void handleDataFeedbacks(String productId) async {
     bool flag = false;
     for (var i = 0; i < storeFeedbacks.length; i++) {
       if (storeFeedbacks[i]['productId'] == productId) {
@@ -620,10 +619,19 @@ class _IndexState extends State<Index> {
       return;
     }
 
-    print("Goi api san pham");
+    var res = await ServiceFeedback().getFeedbacks(productId);
+    feedbacks = res;
+    feedbacks = reversedList(feedbacks);
+    Map data = {'productId': productId, 'feedbacks': res};
+    storeFeedbacks.add(data);
   }
 
-  void handleComment(String text) {
+  dynamic reversedList(List<dynamic> array) {
+    List<dynamic> reversedNew = array.reversed.toList();
+    return reversedNew;
+  }
+
+  void handleComment(String text) async {
     setState(() => errorTextComment = false);
     if (text.isEmpty) {
       setState(() => errorTextComment = true);
@@ -637,8 +645,16 @@ class _IndexState extends State<Index> {
     feedbackModel.userId = userId!;
 
     setState(() => loadingFeedback = true);
-    var res = ServiceFeedback()
+    var res = await ServiceFeedback()
         .postFeedback(FeedbackMapping().MapServiceFeedback(feedbackModel));
+
+    for (var i = 0; i < storeFeedbacks.length; i++) {
+      if (storeFeedbacks[i]['productId'] == product['id'].toString()) {
+        feedbacks.add(res);
+        storeFeedbacks[i]['feedbacks'] = feedbacks;
+        feedbacks = reversedList(feedbacks);
+      }
+    }
 
     Future.delayed(
         const Duration(seconds: 2),
@@ -646,6 +662,7 @@ class _IndexState extends State<Index> {
               setState(() => {
                     loadingFeedback = false,
                     modalFeedback = true,
+                    textComment.text = ''
                   })
             });
   }
@@ -747,9 +764,17 @@ class _IndexState extends State<Index> {
               checkoutItem.phone.text = '',
               checkoutItem.coupon.text = '',
               checkoutItem.checkingCoupon = false,
+              checkoutItem.note.text = '',
               setInformationForUser(res['token']),
-              getDetailHistory(res['orderId'].toString()),
-              getDataOrders(),
+              getDetailHistory(res['order']['id'].toString()),
+              if (histories.isEmpty)
+                {getDataOrders()}
+              else
+                {
+                  histories = reversedList(histories),
+                  histories.add(res['order']),
+                  histories = reversedList(histories),
+                },
               CartOrder().clearCart(),
               setState(() => {modalCheckout = true, loadingCheckout = false}),
             });
@@ -802,6 +827,10 @@ class _IndexState extends State<Index> {
     };
     CartOrder().addCart(data);
     setState(() => modalDetail = true);
+  }
+
+  void getDataSearchProduct(String keyword) {
+    setState(() => currentCategoryItem = keyword);
   }
 
   void getDataViewScreenProduct(String id) {

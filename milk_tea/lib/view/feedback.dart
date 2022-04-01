@@ -8,10 +8,10 @@ class FeedBack extends StatelessWidget {
   final CurrentParent currentParent;
   final Function backStep;
   final String productName;
-  final int count;
+  final List<dynamic> feedbacks;
 
   const FeedBack(
-      this.currentParent, this.backStep, this.productName, this.count,
+      this.currentParent, this.backStep, this.productName, this.feedbacks,
       {Key? key})
       : super(key: key);
 
@@ -73,256 +73,160 @@ class FeedBack extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 20),
-                      Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.only(top: 10),
-                            child: Column(children: [
-                              Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(80.0),
-                                        child: Image.asset(
-                                          'assets/avt.png',
-                                          width: 70,
-                                          height: 70,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 255,
-                                    child: Column(
+                      ...feedbacks
+                          .map(
+                            (feedback) => Column(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Column(children: [
+                                    Row(
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: TextLabel(
-                                              false,
-                                              false,
-                                              false,
-                                              true,
-                                              false,
-                                              'Sản phẩm thật tốt và chất lượng',
-                                              16,
-                                              false,
-                                              0),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                        Column(
                                           children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: TextLabel(
-                                                  false,
-                                                  false,
-                                                  false,
-                                                  false,
-                                                  true,
-                                                  'Nguyễn Kim Tiền',
-                                                  15,
-                                                  false,
-                                                  0),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(80.0),
+                                              child: feedback['user']['image']
+                                                          .toString() ==
+                                                      null.toString()
+                                                  ? Image.asset(
+                                                      'assets/avt.png',
+                                                      width: 70,
+                                                      height: 70,
+                                                    )
+                                                  : Image.network(
+                                                      feedback['user']['image'],
+                                                      width: 70,
+                                                      height: 70,
+                                                    ),
                                             ),
                                           ],
                                         ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: Row(
+                                        Container(
+                                          width: 255,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 15),
+                                                      child: TextLabel(
+                                                          false,
+                                                          false,
+                                                          false,
+                                                          true,
+                                                          false,
+                                                          feedback['content'],
+                                                          16,
+                                                          false,
+                                                          0),
+                                                    ),
+                                                  ]),
+                                              SizedBox(height: 5),
+                                              Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                    MainAxisAlignment.start,
                                                 children: [
-                                                  ...[1, 2, 3, 4, 5]
-                                                      .map((item) => count >=
-                                                              item
-                                                          ? Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left: 2),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/star-active.png',
-                                                                width: 15,
-                                                                height: 15,
-                                                              ))
-                                                          : Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left: 2),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/star-unactive.png',
-                                                                width: 15,
-                                                                height: 15,
-                                                              )))
-                                                      .toList()
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 15),
+                                                    child: TextLabel(
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        true,
+                                                        feedback['user']
+                                                            ['fullname'],
+                                                        15,
+                                                        false,
+                                                        0),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                            TextLabel(
-                                                false,
-                                                false,
-                                                false,
-                                                false,
-                                                true,
-                                                'Ngày tháng năm',
-                                                15,
-                                                false,
-                                                0)
-                                          ],
+                                              SizedBox(height: 5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 15),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        ...[1, 2, 3, 4, 5]
+                                                            .map((item) => int.parse(
+                                                                        feedback[
+                                                                            'star']) >=
+                                                                    item
+                                                                ? Padding(
+                                                                    padding: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                2),
+                                                                    child: Image
+                                                                        .asset(
+                                                                      'assets/star-active.png',
+                                                                      width: 15,
+                                                                      height:
+                                                                          15,
+                                                                    ))
+                                                                : Padding(
+                                                                    padding: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                2),
+                                                                    child: Image
+                                                                        .asset(
+                                                                      'assets/star-unactive.png',
+                                                                      width: 15,
+                                                                      height:
+                                                                          15,
+                                                                    )))
+                                                            .toList()
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  TextLabel(
+                                                      false,
+                                                      false,
+                                                      false,
+                                                      false,
+                                                      true,
+                                                      feedback['createdAt']
+                                                          .toString()
+                                                          .substring(0, 10),
+                                                      15,
+                                                      false,
+                                                      0)
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: .9,
-                                color: Color.fromARGB(255, 241, 241, 241),
-                              )
-                            ]),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.only(top: 10),
-                            child: Column(children: [
-                              Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(80.0),
-                                        child: Image.asset(
-                                          'assets/avt.png',
-                                          width: 70,
-                                          height: 70,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 255,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: TextLabel(
-                                              false,
-                                              false,
-                                              false,
-                                              true,
-                                              false,
-                                              'Sản phẩm thật tốt và chất lượng',
-                                              16,
-                                              false,
-                                              0),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: TextLabel(
-                                                  false,
-                                                  false,
-                                                  false,
-                                                  false,
-                                                  true,
-                                                  'Nguyễn Kim Tiền',
-                                                  15,
-                                                  false,
-                                                  0),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  ...[1, 2, 3, 4, 5]
-                                                      .map((item) => count >=
-                                                              item
-                                                          ? Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left: 2),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/star-active.png',
-                                                                width: 15,
-                                                                height: 15,
-                                                              ))
-                                                          : Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left: 2),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/star-unactive.png',
-                                                                width: 15,
-                                                                height: 15,
-                                                              )))
-                                                      .toList()
-                                                ],
-                                              ),
-                                            ),
-                                            TextLabel(
-                                                false,
-                                                false,
-                                                false,
-                                                false,
-                                                true,
-                                                'Ngày tháng năm',
-                                                15,
-                                                false,
-                                                0)
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: .9,
-                                color: Color.fromARGB(255, 241, 241, 241),
-                              )
-                            ]),
-                          ),
-                        ],
-                      ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: .9,
+                                      color: Color.fromARGB(255, 241, 241, 241),
+                                    )
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          )
+                          .toList()
                     ],
                   ),
                 )
