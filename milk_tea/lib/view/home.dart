@@ -15,10 +15,11 @@ class Home extends StatelessWidget {
   final List<dynamic> slideProduct;
   final List<dynamic> countProduct;
   final Function chooseCategory;
-  final List<dynamic> products;
+  final Function onRedirectProduct;
 
   const Home(this.productId, this.inputSearch, this.onInputSearch,
-      this.slideProduct, this.countProduct, this.chooseCategory, this.products,
+      this.slideProduct, this.countProduct, this.chooseCategory,
+      this.onRedirectProduct,
       {Key? key})
       : super(key: key);
 
@@ -34,7 +35,7 @@ class Home extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child: InputSearch(inputSearch, 'Tìm kiếm sản phẩm',
-                      (text) => onInputSearch(text), products),
+                      (text) => onInputSearch(text), (id) => onRedirectProduct(id)),
                 ),
                 Container(
                   width: 390,

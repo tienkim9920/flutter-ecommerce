@@ -9,6 +9,7 @@ class ServiceProduct {
   String url = '${Environment().http}/product';
   String urlCategory = '${Environment().http}/product-category';
   Map<String, String> headers = {"Content-type": "application/json"};
+  List<dynamic> searchProducts = [];
 
   Future<dynamic> getBanner() async {
     Response response = await get(Uri.parse('${url}/banner'));
@@ -36,8 +37,8 @@ class ServiceProduct {
 
   Future<List<dynamic>> getSearchProducts(String query) async {
     Response response = await get(Uri.parse(url));
-    List<dynamic> data = jsonDecode(response.body);
-    return data
+    searchProducts.isEmpty ? searchProducts = jsonDecode(response.body) : searchProducts;
+    return searchProducts
         .where((item) =>
             item['name']
                 .toString()

@@ -8,10 +8,10 @@ class InputSearch extends StatelessWidget {
   final TextEditingController inputText;
   final String placeHolder;
   final Function onInputSearch;
-  final List<dynamic> products;
+  final Function onRedirectProduct;
 
   const InputSearch(
-      this.inputText, this.placeHolder, this.onInputSearch, this.products,
+      this.inputText, this.placeHolder, this.onInputSearch, this.onRedirectProduct,
       {Key? key})
       : super(key: key);
 
@@ -52,19 +52,39 @@ class InputSearch extends StatelessWidget {
                       ),
                     )),
               ),
-              suggestionsCallback: (dynamic query) {
-                return ServiceProduct().getSearchProducts(query);
+              suggestionsCallback: (pattern) async {
+                return inputText.text.isNotEmpty ? await ServiceProduct().getSearchProducts(pattern) : [];
               },
-              itemBuilder: (context, dynamic product) {
-                return ListTile(
-                  title: product['name'],
-                );
+              itemBuilder: (context, dynamic suggestion) {
+                return inputText.text.isNotEmpty ? Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Image.network(suggestion['image'], width: 50, height: 50),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextLabel(false, false, false, true, false,
+                            suggestion['name'], 17, false, 0),
+                            TextLabel(true, false, false, false, true,
+                            suggestion['price'], 17, false, 0),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ) : Container();
               },
-              onSuggestionSelected: (dynamic product) {
-                inputText.text = product['name'];
+              onSuggestionSelected: (dynamic suggestion) {
+                onRedirectProduct(suggestion['id']);
               },
               noItemsFoundBuilder: (context) => Container(
                 height: 100,
+                color: Colors.white,
                 child: Center(
                   child: TextLabel(false, false, false, false, true,
                       'Không tìm thấy sản phẩm!', 20, false, 0),

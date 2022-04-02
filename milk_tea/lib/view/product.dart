@@ -16,6 +16,7 @@ class Product extends StatelessWidget {
   final Function onInputSearch;
   final List<dynamic> products;
   final Function productId;
+  final Function onRedirectProduct;
 
   const Product(
       this.categoryItem,
@@ -25,6 +26,7 @@ class Product extends StatelessWidget {
       this.onInputSearch,
       this.products,
       this.productId,
+      this.onRedirectProduct,
       {Key? key})
       : super(key: key);
 
@@ -36,7 +38,7 @@ class Product extends StatelessWidget {
         children: [
           SizedBox(height: 10.0),
           InputSearch(inputSearch, 'Tìm kiếm sản phẩm',
-              (text) => onInputSearch(text), products),
+              (text) => onInputSearch(text), (id) => onRedirectProduct(id)),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20.0),
             height: 30.0,
@@ -80,7 +82,7 @@ class Product extends StatelessWidget {
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height * .7796,
+              height: MediaQuery.of(context).size.height * .77,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(

@@ -195,7 +195,6 @@ class _IndexState extends State<Index> {
     getCountProduct();
     getUserId();
     getInformationUser();
-    getDataProducts();
     super.initState();
   }
 
@@ -287,11 +286,12 @@ class _IndexState extends State<Index> {
         return Home(
             (productId) => getDataDetailAPI(productId),
             inputSearch,
-            (onInputSearch) => {print(onInputSearch)},
+            (onInputSearch) => getDataSearchProduct(onInputSearch),
             slideProduct,
             countProduct,
             (id) => getDataViewScreenProduct(id.toString()),
-            products);
+            (id) => print(id),
+            );
       case 'sanpham':
         updateCurrentParent(
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
@@ -306,6 +306,7 @@ class _IndexState extends State<Index> {
           (onInputSearch) => getDataSearchProduct(onInputSearch),
           products,
           (productId) => {getDataDetailAPI(productId)},
+          (id) => print(id),
         );
       case 'giohang':
         carts = CartOrder().getCart();
@@ -832,6 +833,9 @@ class _IndexState extends State<Index> {
   }
 
   void getDataSearchProduct(String keyword) {
+    if (currentItem == IDComponent().trangchu){
+      getDataViewScreenProduct(currentCategoryItem);
+    }
     setState(() => currentCategoryItem = keyword);
   }
 
