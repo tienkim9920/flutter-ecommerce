@@ -290,7 +290,7 @@ class _IndexState extends State<Index> {
             slideProduct,
             countProduct,
             (id) => getDataViewScreenProduct(id.toString()),
-            (id) => print(id),
+            (id) => getDataDetailAPI(id.toString()),
             );
       case 'sanpham':
         updateCurrentParent(
@@ -306,7 +306,7 @@ class _IndexState extends State<Index> {
           (onInputSearch) => getDataSearchProduct(onInputSearch),
           products,
           (productId) => {getDataDetailAPI(productId)},
-          (id) => print(id),
+          (id) => getDataDetailAPI(id.toString()),
         );
       case 'giohang':
         carts = CartOrder().getCart();

@@ -23,7 +23,7 @@ class InputSearch extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: TypeAheadFormField(
+            child: TypeAheadField(
               textFieldConfiguration: TextFieldConfiguration(
                 controller: inputText,
                 decoration: InputDecoration(
@@ -52,11 +52,11 @@ class InputSearch extends StatelessWidget {
                       ),
                     )),
               ),
-              suggestionsCallback: (pattern) async {
-                return inputText.text.isNotEmpty ? await ServiceProduct().getSearchProducts(pattern) : [];
+              suggestionsCallback: (pattern) {
+                return ServiceProduct().getSearchProducts(pattern);
               },
               itemBuilder: (context, dynamic suggestion) {
-                return inputText.text.isNotEmpty ? Container(
+                return Container(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   color: Colors.white,
                   child: Row(
@@ -77,8 +77,10 @@ class InputSearch extends StatelessWidget {
                       )
                     ],
                   )
-                ) : Container();
+                );
               },
+              hideOnEmpty: true,
+              hideOnLoading: true,
               onSuggestionSelected: (dynamic suggestion) {
                 onRedirectProduct(suggestion['id']);
               },
