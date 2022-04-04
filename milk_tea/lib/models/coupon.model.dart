@@ -1,9 +1,7 @@
-class CouponModel{
-  late String id;
-  late String code;
-  late bool status;
-  late String promotion;
-  late String describe;
-  late String couponCategoryId;
-  late String userId;
+class CouponModel {
+  bool? status;
+  String? promotion;
+  String? describe;
+  String? couponCategoryId;
+  String? userId;
 }

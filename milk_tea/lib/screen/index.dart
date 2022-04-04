@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -9,9 +10,11 @@ import 'package:localstorage/localstorage.dart';
 import 'package:milk_tea/component/menu-widget.dart';
 import 'package:milk_tea/component/menu.dart';
 import 'package:milk_tea/constant/name-component.dart';
+import 'package:milk_tea/mapping/coupon.mapping.dart';
 import 'package:milk_tea/mapping/feedback.mapping.dart';
 import 'package:milk_tea/mapping/order.mapping.dart';
 import 'package:milk_tea/mapping/user.mapping.dart';
+import 'package:milk_tea/models/coupon.model.dart';
 import 'package:milk_tea/models/feedback.model.dart';
 import 'package:milk_tea/models/order.model.dart';
 import 'package:milk_tea/pattern/category-item.dart';
@@ -21,6 +24,7 @@ import 'package:milk_tea/pattern/menu-item.dart';
 import 'package:milk_tea/models/product.model.dart';
 import 'package:milk_tea/pattern/order-detail-item.dart';
 import 'package:milk_tea/pattern/user-edit.dart';
+import 'package:milk_tea/service/coupon.service.dart';
 import 'package:milk_tea/service/feedback.service.dart';
 import 'package:milk_tea/service/order.service.dart';
 import 'package:milk_tea/service/product.service.dart';
@@ -31,10 +35,12 @@ import 'package:milk_tea/view/cart.dart';
 import 'package:milk_tea/view/checking-order.dart';
 import 'package:milk_tea/view/checkout.dart';
 import 'package:milk_tea/view/comment.dart';
+import 'package:milk_tea/view/coupon.dart';
 import 'package:milk_tea/view/feedback.dart';
 import 'package:milk_tea/view/history.dart';
 import 'package:milk_tea/view/home.dart';
 import 'package:milk_tea/view/loading.dart';
+import 'package:milk_tea/view/lucky.dart';
 import 'package:milk_tea/view/password-change.dart';
 import 'package:milk_tea/view/product-detail.dart';
 import 'package:milk_tea/view/product.dart';
@@ -284,14 +290,14 @@ class _IndexState extends State<Index> {
         updateCurrentParent(
             CurrentParent(IDComponent().trangchu, NameComponent().trangchu));
         return Home(
-            (productId) => getDataDetailAPI(productId),
-            inputSearch,
-            (onInputSearch) => getDataSearchProduct(onInputSearch),
-            slideProduct,
-            countProduct,
-            (id) => getDataViewScreenProduct(id.toString()),
-            (id) => getDataDetailAPI(id.toString()),
-            );
+          (productId) => getDataDetailAPI(productId),
+          inputSearch,
+          (onInputSearch) => getDataSearchProduct(onInputSearch),
+          slideProduct,
+          countProduct,
+          (id) => getDataViewScreenProduct(id.toString()),
+          (id) => getDataDetailAPI(id.toString()),
+        );
       case 'sanpham':
         updateCurrentParent(
             CurrentParent(IDComponent().sanpham, NameComponent().sanpham));
@@ -335,6 +341,7 @@ class _IndexState extends State<Index> {
           (orderId) => getDataDetailHistoryAPI(orderId.toString()),
           histories,
           informationUser,
+          () => updateCurrentItem(IDComponent().coupon, NameComponent().coupon),
         );
       case 'chitietsanpham':
         return ProductDetail(
@@ -465,7 +472,86 @@ class _IndexState extends State<Index> {
           showConfirmPassword,
           () => setState(() => showConfirmPassword = !showConfirmPassword),
         );
+      case 'magiamgia':
+        updateCurrentParent(
+            CurrentParent(IDComponent().lichsu, NameComponent().lichsu));
+        return Coupon(
+          (id, name) => updateCurrentItem(id, name),
+          currentParent,
+          () => updateCurrentItem(
+              IDComponent().luckyspin, NameComponent().luckyspin),
+          coupons,
+        );
+      case 'luckyspin':
+        updateCurrentParent(
+            CurrentParent(IDComponent().coupon, NameComponent().coupon));
+        return Lucky(
+          currentParent,
+          (id, name) => {
+            updateCurrentItem(id, name),
+            selected = StreamController<int>(),
+          },
+          items,
+          selected,
+          () => handleStartLuckySpin(),
+          allowSpin,
+          errorSpin,
+          informationUser,
+          modalLucky,
+          () => setState(() => modalLucky = false),
+          describeLucky,
+        );
     }
+  }
+
+  bool allowSpin = true;
+  bool errorSpin = false;
+  bool modalLucky = false;
+  String describeLucky = '';
+  StreamController<int> selected = StreamController<int>();
+  List<dynamic> items = [
+    {'describe': 'Giảm 10%', 'promotion': '10', 'couponCategoryId': 2},
+    {'describe': 'Giảm 10%', 'promotion': '10', 'couponCategoryId': 2},
+    {'describe': 'Giảm 15K', 'promotion': '15', 'couponCategoryId': 1},
+    {'describe': 'Giảm 15K', 'promotion': '15', 'couponCategoryId': 1},
+    {'describe': 'Giảm 20%', 'promotion': '20', 'couponCategoryId': 2},
+    {'describe': 'Giảm 20K', 'promotion': '20', 'couponCategoryId': 1},
+    {'describe': 'Giảm 25K', 'promotion': '25', 'couponCategoryId': 1},
+    {'describe': 'Giảm 35K', 'promotion': '35', 'couponCategoryId': 1},
+    {'describe': 'Giảm 35%', 'promotion': '35', 'couponCategoryId': 2},
+  ];
+
+  List<dynamic> coupons = [];
+
+  void handleStartLuckySpin() async {
+    if (int.parse(informationUser['score'].toString()) <
+        int.parse(500.toString())) {
+      setState(() => errorSpin = true);
+      return;
+    }
+
+    dynamic index = Fortune.randomInt(0, items.length);
+    setState(() {
+      selected.add(index);
+      describeLucky = items[index]['describe'];
+      allowSpin = false;
+    });
+
+    CouponModel couponModel = CouponModel();
+    couponModel.status = false;
+    couponModel.promotion = items[index]['promotion'];
+    couponModel.describe = items[index]['describe'];
+    couponModel.couponCategoryId = items[index]['couponCategoryId'].toString();
+    couponModel.userId = userId;
+    var res = await ServiceCoupon()
+        .postCoupon(CouponMapping().MapServiceCoupon(couponModel));
+
+    Future.delayed(
+        const Duration(seconds: 5),
+        () => {
+              setState(() => {allowSpin = true, modalLucky = true}),
+              setInformationForUser(res['token'].toString()),
+            });
   }
 
   void handleRedirectCheckout() {
@@ -833,7 +919,7 @@ class _IndexState extends State<Index> {
   }
 
   void getDataSearchProduct(String keyword) {
-    if (currentItem == IDComponent().trangchu){
+    if (currentItem == IDComponent().trangchu) {
       getDataViewScreenProduct(currentCategoryItem);
     }
     setState(() => currentCategoryItem = keyword);
@@ -867,6 +953,8 @@ class _IndexState extends State<Index> {
               updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu),
             });
   }
+
+  void getDataViewCoupon() {}
 
   void changeViewScreen(String id, String title) {
     switch (id) {

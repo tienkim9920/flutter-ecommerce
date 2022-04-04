@@ -12,6 +12,8 @@ class IDComponent {
   String chinhsuahoso = 'chinhsuahoso';
   String loading = 'loading';
   String password = 'thaydoimatkhau';
+  String coupon = 'magiamgia';
+  String luckyspin = 'luckyspin';
 }
 
 class NameComponent {
@@ -28,4 +30,6 @@ class NameComponent {
   String loading = 'loading';
   String password = 'Thay đổi mật khẩu';
   String feedback = 'Danh sách đánh giá';
+  String coupon = 'Danh sách mã giảm giá';
+  String luckyspin = 'Vòng quay may mắn';
 }

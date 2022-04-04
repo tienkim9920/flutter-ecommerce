@@ -7,8 +7,11 @@ class History extends StatelessWidget {
   final Function nextStep;
   final List<dynamic> history;
   final Map<dynamic, dynamic> informationUser;
+  final Function nextCoupon;
 
-  const History(this.nextStep, this.history, this.informationUser, {Key? key})
+  const History(
+      this.nextStep, this.history, this.informationUser, this.nextCoupon,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -51,7 +54,7 @@ class History extends StatelessWidget {
                         SizedBox(height: 10),
                         Row(children: [
                           GestureDetector(
-                            onTap: () => print('123'),
+                            onTap: () => nextCoupon(),
                             child: Container(
                               width: 140,
                               height: 42,
