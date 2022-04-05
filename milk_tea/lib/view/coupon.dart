@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:milk_tea/component/navbar.dart';
+import 'package:milk_tea/component/text-error.dart';
 import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 
@@ -72,18 +74,25 @@ class Coupon extends StatelessWidget {
                                             16,
                                             false,
                                             0),
-                                        TextLabel(
-                                            false,
-                                            false,
-                                            !item['status'] ? true : false,
-                                            false,
-                                            item['status'] ? true : false,
-                                            !item['status']
-                                                ? 'Chưa sử dụng'
-                                                : 'Đã sử dụng',
-                                            16,
-                                            false,
-                                            0),
+                                        !item['status']
+                                            ? TextLabel(
+                                                false,
+                                                false,
+                                                true,
+                                                false,
+                                                false,
+                                                'Chưa sử dụng',
+                                                16,
+                                                false,
+                                                0)
+                                            : Text(
+                                                'Đã sử dụng',
+                                                textAlign: TextAlign.start,
+                                                style: GoogleFonts.quicksand(
+                                                  color: Colors.red[500],
+                                                  fontSize: 14,
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   ],

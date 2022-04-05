@@ -15,4 +15,10 @@ class ServiceCoupon {
     );
     return jsonDecode(response.body);
   }
+
+  Future<dynamic> getCoupons(String? userId) async {
+    Response response = await get(Uri.parse('${url}/${userId}'));
+    List<dynamic> data = jsonDecode(response.body);
+    return data;
+  }
 }

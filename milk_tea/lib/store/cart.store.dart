@@ -55,4 +55,16 @@ class CartOrder {
 
     return total;
   }
+
+  dynamic updateTotalCarts(dynamic coupon) {
+    int total = totalCarts();
+
+    if (coupon['couponCategoryId'] == 1) {
+      total -= int.parse(coupon['promotion']);
+    } else {
+      total -= ((total * int.parse(coupon['promotion'])) / 100).ceil();
+    }
+
+    return total;
+  }
 }

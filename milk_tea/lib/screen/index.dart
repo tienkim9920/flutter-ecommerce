@@ -138,6 +138,7 @@ class _IndexState extends State<Index> {
   CheckoutItem checkoutItem = CheckoutItem();
   bool modalCheckout = false;
   bool loadingCheckout = false;
+  bool modalApplyCoupon = false;
 
   // History
   List<dynamic> histories = [];
@@ -192,7 +193,12 @@ class _IndexState extends State<Index> {
   void getDataOrders() async {
     var res = await ServiceOrder().getListOrder(userId);
     histories = res;
-    histories = reversedList(histories);
+  }
+
+  void getDataCoupons() async {
+    var res = await ServiceCoupon().getCoupons(userId);
+    coupons = res;
+    coupons = reversedList(coupons);
   }
 
   @override
@@ -317,6 +323,9 @@ class _IndexState extends State<Index> {
       case 'giohang':
         carts = CartOrder().getCart();
         total = CartOrder().totalCarts();
+        if (coupons.isEmpty) {
+          getDataCoupons();
+        }
         return Cart(
           carts,
           (productId) => handleRedirectCheckout(), // click order
@@ -425,6 +434,12 @@ class _IndexState extends State<Index> {
           loadingCheckout,
           errorPhoneCheckout,
           errorAddressCheckout,
+          modalApplyCoupon,
+          () => {setState(() => modalApplyCoupon = !modalApplyCoupon)},
+          coupons,
+          checkoutItem.couponId,
+          (id) => handleChangeCouponId(id),
+          () => handleApplyCoupon(),
         );
       case 'kiemtra':
         updateCurrentParent(
@@ -512,16 +527,40 @@ class _IndexState extends State<Index> {
   List<dynamic> items = [
     {'describe': 'Giảm 10%', 'promotion': '10', 'couponCategoryId': 2},
     {'describe': 'Giảm 10%', 'promotion': '10', 'couponCategoryId': 2},
-    {'describe': 'Giảm 15K', 'promotion': '15', 'couponCategoryId': 1},
-    {'describe': 'Giảm 15K', 'promotion': '15', 'couponCategoryId': 1},
+    {'describe': 'Giảm 15K', 'promotion': '15000', 'couponCategoryId': 1},
+    {'describe': 'Giảm 15K', 'promotion': '15000', 'couponCategoryId': 1},
     {'describe': 'Giảm 20%', 'promotion': '20', 'couponCategoryId': 2},
-    {'describe': 'Giảm 20K', 'promotion': '20', 'couponCategoryId': 1},
-    {'describe': 'Giảm 25K', 'promotion': '25', 'couponCategoryId': 1},
-    {'describe': 'Giảm 35K', 'promotion': '35', 'couponCategoryId': 1},
+    {'describe': 'Giảm 20K', 'promotion': '20000', 'couponCategoryId': 1},
+    {'describe': 'Giảm 25K', 'promotion': '25000', 'couponCategoryId': 1},
+    {'describe': 'Giảm 35K', 'promotion': '35000', 'couponCategoryId': 1},
     {'describe': 'Giảm 35%', 'promotion': '35', 'couponCategoryId': 2},
   ];
 
   List<dynamic> coupons = [];
+
+  void handleApplyCoupon() {
+    if (checkoutItem.couponId == null) {
+      total = CartOrder().totalCarts();
+      setState(() => modalApplyCoupon = !modalApplyCoupon);
+      return;
+    }
+
+    int index = coupons.indexWhere((element) =>
+        element['id'].toString() == checkoutItem.couponId.toString());
+
+    setState(() => {
+          total = CartOrder().updateTotalCarts(coupons[index]),
+          modalApplyCoupon = !modalApplyCoupon,
+        });
+  }
+
+  void handleChangeCouponId(String id) {
+    if (checkoutItem.couponId == id) {
+      setState(() => checkoutItem.couponId = null);
+      return;
+    }
+    setState(() => checkoutItem.couponId = id);
+  }
 
   void handleStartLuckySpin() async {
     if (int.parse(informationUser['score'].toString()) <
@@ -549,8 +588,17 @@ class _IndexState extends State<Index> {
     Future.delayed(
         const Duration(seconds: 5),
         () => {
-              setState(() => {allowSpin = true, modalLucky = true}),
+              setState(() =>
+                  {allowSpin = true, modalLucky = true, errorSpin = false}),
               setInformationForUser(res['token'].toString()),
+              if (coupons.isEmpty)
+                {getDataCoupons()}
+              else
+                {
+                  coupons = reversedList(coupons),
+                  coupons.add(res['coupon']),
+                  coupons = reversedList(coupons),
+                },
             });
   }
 
@@ -823,12 +871,12 @@ class _IndexState extends State<Index> {
     OrderModel orderModel = OrderModel();
     orderModel.address = checkoutItem.addressShow;
     orderModel.phone = checkoutItem.phone.text;
-    orderModel.total = CartOrder().totalCarts().toString();
+    orderModel.total = total.toString();
     orderModel.delivery = '0';
     orderModel.pay = false;
     orderModel.paymentId = '1';
     orderModel.userId = userId;
-    if (checkoutItem.checkingCoupon == true) {
+    if (checkoutItem.couponId != null) {
       orderModel.couponId = checkoutItem.couponId;
     }
     if (checkoutItem.note.text.isNotEmpty) {
@@ -845,6 +893,9 @@ class _IndexState extends State<Index> {
 
     var res = await ServiceOrder()
         .postOrder(OrderMapping().MapServiceOrder(orderModel));
+
+    getDataCoupons();
+    checkoutItem.couponId = null;
 
     Future.delayed(
         const Duration(seconds: 3),
@@ -941,6 +992,9 @@ class _IndexState extends State<Index> {
 
   bool checkAccess = false;
   void getDataViewHistory() {
+    if (coupons.isEmpty) {
+      getDataCoupons();
+    }
     if (histories.isNotEmpty || checkAccess == true) {
       updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu);
       return;
@@ -948,13 +1002,11 @@ class _IndexState extends State<Index> {
     checkAccess = true;
     getDataOrders();
     Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(seconds: 2),
         () => {
               updateCurrentItem(IDComponent().lichsu, NameComponent().lichsu),
             });
   }
-
-  void getDataViewCoupon() {}
 
   void changeViewScreen(String id, String title) {
     switch (id) {

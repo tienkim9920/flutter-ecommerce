@@ -34,7 +34,7 @@ class Modal extends StatelessWidget {
                 TextLabel(
                     false, false, false, true, false, textMain, 22, false, 1),
                 SizedBox(height: 30),
-                ButtonCustom(textButton, () => excutive())
+                ButtonCustom(textButton, () => excutive(), 0)
               ],
             ),
           ),

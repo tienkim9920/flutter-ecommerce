@@ -213,7 +213,7 @@ class Profile extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 30),
-              ButtonCustom('Thay đổi mật khẩu', () => nextStep())
+              ButtonCustom('Thay đổi mật khẩu', () => nextStep(), 0)
             ],
           )
         ]),

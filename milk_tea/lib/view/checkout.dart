@@ -6,6 +6,7 @@ import 'package:milk_tea/component/button-icon.dart';
 import 'package:milk_tea/component/button.dart';
 import 'package:milk_tea/component/input-custom.dart';
 import 'package:milk_tea/component/input.dart';
+import 'package:milk_tea/component/modal-center.dart';
 import 'package:milk_tea/component/modal.dart';
 import 'package:milk_tea/component/navbar.dart';
 import 'package:milk_tea/component/spinner-loading.dart';
@@ -25,6 +26,12 @@ class Checkout extends StatelessWidget {
   final bool loadingCheckout;
   final bool errorPhoneCheckout;
   final bool errorAddressCheckout;
+  final bool modalApplyCoupon;
+  final Function openModalCoupon;
+  final List<dynamic> coupons;
+  final String? couponId;
+  final Function onChangeCouponId;
+  final Function applyCoupon;
 
   const Checkout(
       this.currentParent,
@@ -37,6 +44,12 @@ class Checkout extends StatelessWidget {
       this.loadingCheckout,
       this.errorPhoneCheckout,
       this.errorAddressCheckout,
+      this.modalApplyCoupon,
+      this.openModalCoupon,
+      this.coupons,
+      this.couponId,
+      this.onChangeCouponId,
+      this.applyCoupon,
       {Key? key})
       : super(key: key);
 
@@ -115,15 +128,18 @@ class Checkout extends StatelessWidget {
             SizedBox(height: 25),
             Row(
               children: [
-                InputCustom(checkoutItem.coupon, 'Mã giảm giá', 230),
-                Container(
-                  margin: EdgeInsets.only(top: 3),
-                  width: 123,
-                  child: ButtonCustom('Áp dụng', () => print('123')),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: TextLabel(false, false, false, true, false,
+                      'Áp dụng khuyến mãi: ', 16, false, 0),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: ButtonCustom('Chọn', () => openModalCoupon(), 123),
                 )
               ],
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 25),
             SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
@@ -178,7 +194,11 @@ class Checkout extends StatelessWidget {
         if (modalCheckout) ...[
           Modal('Bạn đã đặt hàng thành công', 'Kiểm tra đơn hàng',
               () => gotoCheckingOrder())
-        ]
+        ],
+        if (modalApplyCoupon) ...[
+          ModalCenter('Chọn phiếu giảm giá', () => openModalCoupon(), coupons,
+              couponId, (id) => onChangeCouponId(id), () => applyCoupon())
+        ],
       ]),
     );
   }
