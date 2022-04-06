@@ -37,6 +37,7 @@ class UserMapping {
     user.email = model.email.text;
     user.address = model.address.text;
     user.phone = model.phone.text;
+    user.image = model.avatar;
 
     return json.encode(user.toJson());
   }

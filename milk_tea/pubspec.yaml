@@ -41,6 +41,7 @@ dependencies:
   jwt_decode: ^0.3.1
   flutter_typeahead: ^3.2.4
   flutter_fortune_wheel: ^1.2.0
+  image_picker: ^0.8.5
 
 
   # The following adds the Cupertino Icons font to your application.

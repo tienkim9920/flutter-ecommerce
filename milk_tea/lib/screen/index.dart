@@ -1,10 +1,13 @@
-import 'dart:html';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:milk_tea/component/menu-widget.dart';
@@ -464,6 +467,8 @@ class _IndexState extends State<Index> {
           modalEditProfile,
           errorFullname,
           errorEmail,
+          (gallery) => getImageGallery(gallery),
+          (camera) => getImageCamera(camera),
         );
       case 'thaydoimatkhau':
         updateCurrentParent(
@@ -517,6 +522,20 @@ class _IndexState extends State<Index> {
           describeLucky,
         );
     }
+  }
+
+  void getImageGallery(XFile picker) async {
+    File file = File(picker.path);
+    setState(() {
+      userEditProfile.avatarTemp = file;
+    });
+  }
+
+  void getImageCamera(XFile picker) async {
+    File file = File(picker.path);
+    setState(() {
+      userEditProfile.avatarTemp = file;
+    });
   }
 
   bool allowSpin = true;
@@ -640,6 +659,8 @@ class _IndexState extends State<Index> {
         informationUser['address'] == null ? '' : informationUser['address'];
     userEditProfile.phone.text =
         informationUser['phone'] == null ? '' : informationUser['phone'];
+    userEditProfile.avatar =
+        informationUser['image'] == null ? null : informationUser['image'];
   }
 
   void handleEditProfile(UserEdit data) async {

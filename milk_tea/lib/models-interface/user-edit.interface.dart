@@ -4,6 +4,7 @@ class UserEditInterface {
   String? email;
   String? address;
   String? phone;
+  String? image;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -12,6 +13,7 @@ class UserEditInterface {
     data['email'] = this.email;
     data['address'] = this.address;
     data['phone'] = this.phone;
+    data['image'] = this.image;
     return data;
   }
 }

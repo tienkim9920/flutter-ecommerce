@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:milk_tea/component/button.dart';
 import 'package:milk_tea/component/input-hint.dart';
 import 'package:milk_tea/component/input-password.dart';
@@ -20,6 +21,8 @@ class ProfileDetail extends StatelessWidget {
   final bool modalEditProfile;
   final bool errorFullname;
   final bool errorEmail;
+  final Function getImageGallery;
+  final Function getImageCamera;
 
   const ProfileDetail(
       this.currentParent,
@@ -31,8 +34,21 @@ class ProfileDetail extends StatelessWidget {
       this.modalEditProfile,
       this.errorFullname,
       this.errorEmail,
+      this.getImageGallery,
+      this.getImageCamera,
       {Key? key})
       : super(key: key);
+
+  Future getImagefromGallery(ImageSource source,
+      {BuildContext? context}) async {
+    XFile? pickedFile = await user.image.pickImage(source: source);
+    getImageGallery(pickedFile);
+  }
+
+  Future getImagefromcamera(ImageSource source, {BuildContext? context}) async {
+    XFile? pickedFile = await user.image.pickImage(source: source);
+    getImageCamera(pickedFile);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +99,51 @@ class ProfileDetail extends StatelessWidget {
                       SizedBox(height: 40),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(80.0),
-                        child: Image.asset(
-                          'assets/avt.png',
-                          width: 110,
-                          height: 110,
-                        ),
+                        child: user.avatar == null
+                            ? user.avatarTemp == null
+                                ? Image.asset(
+                                    'assets/avt.png',
+                                    width: 110,
+                                    height: 110,
+                                  )
+                                : Image.network(
+                                    user.avatarTemp!.path,
+                                    width: 110,
+                                    height: 110,
+                                  )
+                            : Image.network(
+                                user.avatar!,
+                                width: 110,
+                                height: 110,
+                              ),
                       ),
                       SizedBox(height: 10),
-                      TextLabel(false, false, true, false, false,
-                          'Thay đổi ảnh đại diện', 16, false, 1),
+                      // Container(
+                      //   width: 130,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       FloatingActionButton(
+                      //         backgroundColor: Color.fromRGBO(CustomColor().R,
+                      //             CustomColor().G, CustomColor().B, 1),
+                      //         onPressed: () => getImagefromGallery(
+                      //             ImageSource.gallery,
+                      //             context: context),
+                      //         tooltip: "Pick Image form gallery",
+                      //         child: Icon(Icons.add_a_photo),
+                      //       ),
+                      //       FloatingActionButton(
+                      //         backgroundColor: Color.fromRGBO(CustomColor().R,
+                      //             CustomColor().G, CustomColor().B, 1),
+                      //         onPressed: () => getImagefromcamera(
+                      //             ImageSource.camera,
+                      //             context: context),
+                      //         tooltip: "Pick Image from camera",
+                      //         child: Icon(Icons.camera_alt),
+                      //       )
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ]),
