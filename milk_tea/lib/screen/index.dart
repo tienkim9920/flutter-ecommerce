@@ -157,7 +157,7 @@ class _IndexState extends State<Index> {
   void getDetailHistory(String orderId) async {
     var res = await ServiceOrder().getDetail(orderId);
     history = res;
-    arrayDetailHistory.add(history);
+    // arrayDetailHistory.add(history);
   }
 
   // GET method API Detail
@@ -271,16 +271,16 @@ class _IndexState extends State<Index> {
   // GET Data Detail History
   List<dynamic> arrayDetailHistory = [];
   void getDataDetailHistoryAPI(String orderId) {
-    bool flag = false;
-    arrayDetailHistory.forEach((element) => {
-          if (element['id'].toString() == orderId.toString())
-            {history = element, flag = true}
-        });
+    // bool flag = false;
+    // arrayDetailHistory.forEach((element) => {
+    //       if (element['id'].toString() == orderId.toString())
+    //         {history = element, flag = true}
+    //     });
 
-    if (flag) {
-      updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra);
-      return;
-    }
+    // if (flag) {
+    //   updateCurrentItem(IDComponent().kiemtra, NameComponent().kiemtra);
+    //   return;
+    // }
 
     getDetailHistory(orderId);
     Future.delayed(

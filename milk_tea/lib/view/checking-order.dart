@@ -4,6 +4,7 @@ import 'package:milk_tea/component/text-label.dart';
 import 'package:milk_tea/constant/name-component.dart';
 import 'package:milk_tea/pattern/current-parent.dart';
 import 'package:milk_tea/pattern/custom-color.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CheckingOrder extends StatelessWidget {
   final CurrentParent currentParent;
@@ -233,13 +234,19 @@ class CheckingOrder extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Image.asset('assets/phone.png'),
+                          GestureDetector(
+                            onTap: () async { await launch("tel://${informationUser['phone']}"); },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Image.asset('assets/phone.png'),
+                            ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 7),
-                            child: Image.asset('assets/chat.png'),
+                          GestureDetector(
+                            onTap: () async { await launch('mailto:tienkim9920@gmail.com?subject=Subject mail&body=Body mail'); },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 7),
+                              child: Image.asset('assets/chat.png'),
+                            ),
                           ),
                         ],
                       )
@@ -257,7 +264,10 @@ class CheckingOrder extends StatelessWidget {
                   )),
                   child: Column(
                     children: [
-                      Row(
+                      GestureDetector(
+                        onTap: () async { await launch(
+        'https://www.google.com/maps/place/${history['address']}'); },
+                        child: Row(
                         children: [
                           Image.asset('assets/location-checking.png'),
                           Padding(
@@ -294,35 +304,40 @@ class CheckingOrder extends StatelessWidget {
                           )
                         ],
                       ),
+                      ),
                       SizedBox(height: 30),
-                      Row(
-                        children: [
-                          Image.asset('assets/shop.png'),
-                          Padding(
-                            padding: EdgeInsets.only(left: 25),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 230,
-                                  child: TextLabel(
-                                      false,
-                                      false,
-                                      false,
-                                      true,
-                                      false,
-                                      "155 Nguyễn Thị Định",
-                                      18,
-                                      false,
-                                      0),
-                                ),
-                                SizedBox(height: 3),
-                                TextLabel(false, false, false, false, true,
-                                    "Ombee", 15, false, 0),
-                              ],
-                            ),
-                          )
-                        ],
+                      GestureDetector(
+                        onTap: () async { await launch(
+                                'https://www.google.com/maps/place/155 Nguyễn Thị Định, TP. Quy Nhơn, Tỉnh Bình Định'); } ,
+                        child: Row(
+                          children: [
+                            Image.asset('assets/shop.png'),
+                            Padding(
+                              padding: EdgeInsets.only(left: 25),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 230,
+                                    child: TextLabel(
+                                        false,
+                                        false,
+                                        false,
+                                        true,
+                                        false,
+                                        "155 Nguyễn Thị Định",
+                                        18,
+                                        false,
+                                        0),
+                                  ),
+                                  SizedBox(height: 3),
+                                  TextLabel(false, false, false, false, true,
+                                      "Ombee", 15, false, 0),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),
